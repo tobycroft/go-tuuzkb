@@ -29,7 +29,7 @@ const (
 	CMD_SET_PARA_CFG = 0x09
 
 	//获取字符串描述符配置
-	CMD_GET_USB_STRING_DESC = 0x0A
+	CMD_GET_USB_STRING = 0x0A
 
 	//设置字符串描述符配置
 	CMD_SET_USB_STRING = 0x0B
