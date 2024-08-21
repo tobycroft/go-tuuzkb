@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"main.go/define/cmd"
 )
 
 type Kb struct {
@@ -40,18 +39,6 @@ func (kb *Kb) CalcSum() {
 		sum = sum + b
 	}
 	err := binary.Write(&kb.Sendbuf, binary.BigEndian, sum&0xFF)
-	if err != nil {
-		panic(fmt.Sprintln("binary编译失败", err))
-	}
-}
-
-func (kb *Kb) CmdGetInfo() {
-	kb.CalcHead()
-	kb.Ctx.Cmd = cmd.CMD_GET_USB_STRING
-}
-
-func (kb *Kb) CmdGetUsb() {
-	err := binary.Write(&kb.Sendbuf, binary.BigEndian, &kb.Ctx)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
