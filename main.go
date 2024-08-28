@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/tarm/serial"
 	"log"
@@ -14,14 +15,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//txbuf := []byte{0xAA, 0x01, 0x0f, 0x00, 0x00, 0xBA}
-	ctx := datastruct.ClientTx{}
-	data := [0]byte{}
-	ctx.Len = byte(len(data))
+	kb := datastruct.Kb{Sendbuf: bytes.Buffer{}}
+	kb.CmdGetInfo()
+	fmt.Println(kb.Sendbuf.Bytes())
 
-	fmt.Println(sendbuf.Bytes())
-
-	n, err := s.Write(sendbuf.Bytes())
+	n, err := s.Write(kb.Sendbuf.Bytes())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,5 +30,4 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("%X\n", buf[:n])
-
 }
