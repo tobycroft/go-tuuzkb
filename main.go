@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/tarm/serial"
 	"log"
 	"main.go/datastruct"
@@ -16,10 +15,13 @@ func main() {
 	}
 
 	kb := datastruct.Kb{}
-	kb.CmdSetParaCfg()
+	//kb.CmdGetUsbString()
+	kb.CmdSetUsbString()
+	//kb.CmdSetParaCfg()
+	//kb.CmdReadMyHidData()
 	//kb.CmdSetDefaultCfg()
 	//kb.CmdReset()
-	fmt.Println(kb.Sendbuf.Bytes())
+	//fmt.Println(kb.Sendbuf.Bytes())
 
 	n, err := s.Write(kb.Sendbuf.Bytes())
 	if err != nil {
@@ -33,7 +35,7 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("%X\n", buf[:n])
-
+	kb.Crx.CmdGetUsbStringRecv(buf)
 	//kb = datastruct.Kb{}
 	////kb.CmdGetParaCfg()
 	//kb.CmdReset()

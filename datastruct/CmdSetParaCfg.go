@@ -57,7 +57,7 @@ func (kb *Kb) CmdSetParaCfg() *Kb {
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	fmt.Println(bb.Len())
+	//fmt.Println(bb.Len())
 	kb.data(pa).sum()
 	return kb
 }

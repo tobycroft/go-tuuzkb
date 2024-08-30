@@ -37,11 +37,13 @@ func (kb *Kb) data(data any) *Kb {
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	kb.Ctx.Len = byte(bb.Len())
+	kb.Ctx.Len = kb.Ctx.Len + byte(bb.Len())
 	err = binary.Write(&kb.Sendbuf, binary.BigEndian, kb.Ctx)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
+	//fmt.Println(bb.Len())
+	//fmt.Println(kb.Ctx.Len)
 	kb.Sendbuf.Write(bb.Bytes())
 	return kb
 }
@@ -50,7 +52,6 @@ func (kb *Kb) sum() *Kb {
 	sum := byte(0x00)
 	for _, b := range kb.Sendbuf.Bytes() {
 		sum = sum + (b)
-		fmt.Println(sum, b)
 	}
 	err := binary.Write(&kb.Sendbuf, binary.BigEndian, sum&0xff)
 	if err != nil {
