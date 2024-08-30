@@ -24,28 +24,35 @@ type ClientTx struct {
 }
 
 func (kb *Kb) head() *Kb {
+	kb.Sendbuf.Reset()
+	kb.Ctx = ClientTx{}
+	kb.Crx = ClientRx{}
 	kb.Ctx.Head = uint16(start1)<<8 | uint16(start2)
 	return kb
 }
 
-func (kb *Kb) data(data []byte) *Kb {
-	err := binary.Write(&kb.Sendbuf, binary.BigEndian, kb.Ctx)
+func (kb *Kb) data(data any) *Kb {
+	bb := bytes.Buffer{}
+	err := binary.Write(&bb, binary.BigEndian, data)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	err = binary.Write(&kb.Sendbuf, binary.BigEndian, data)
+	kb.Ctx.Len = byte(bb.Len())
+	err = binary.Write(&kb.Sendbuf, binary.BigEndian, kb.Ctx)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
+	kb.Sendbuf.Write(bb.Bytes())
 	return kb
 }
 
 func (kb *Kb) sum() *Kb {
 	sum := byte(0x00)
 	for _, b := range kb.Sendbuf.Bytes() {
-		sum = sum + b
+		sum = sum + (b)
+		fmt.Println(sum, b)
 	}
-	err := binary.Write(&kb.Sendbuf, binary.BigEndian, sum&0xFF)
+	err := binary.Write(&kb.Sendbuf, binary.BigEndian, sum&0xff)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"main.go/define/cmd"
+	"math/bits"
 )
 
 type Para struct {
@@ -14,7 +15,8 @@ type Para struct {
 	BaudRate             uint32 //4 个字节芯片串口通信波特率，高字节在前，默认为 0x00002580，即波特率为 9600bps
 	Blank1               uint16
 	SepDelay             uint16
-	PidVid               uint32
+	Pid                  uint16
+	Vid                  uint16
 	KeyboardDelay        uint16
 	KeyboardReleaseDelay uint16
 	EnterSignAuto        byte
@@ -22,20 +24,24 @@ type Para struct {
 	KeyboardFilter       uint64
 	UsbStringSign        byte
 	FastUploadSign       byte
-	Blank2               [12]byte
+	Blank2               uint64
+	Blank3               uint32
 }
 
 func (kb *Kb) CmdSetParaCfg() *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_SET_PARA_CFG
+
 	pa := Para{
-		Mode:                 SetModeHidRaw,
-		Cfg:                  SetCfgNorm,
-		ComAddress:           0x00,
-		BaudRate:             0x1c200,
+		Mode:       SetModeKeyMouse,
+		Cfg:        SetCfgNorm,
+		ComAddress: 0x00,
+		//BaudRate:             0x1c200,
+		BaudRate:             0x2580,
 		Blank1:               0x0000,
 		SepDelay:             0x1,
-		PidVid:               0x05ac<<16 | 0x0256,
+		Pid:                  bits.ReverseBytes16(0x05ac),
+		Vid:                  bits.ReverseBytes16(0x0256),
 		KeyboardDelay:        0x00,
 		KeyboardReleaseDelay: 0x01,
 		EnterSignAuto:        0x00,
@@ -43,14 +49,16 @@ func (kb *Kb) CmdSetParaCfg() *Kb {
 		KeyboardFilter:       0x0000000000000000,
 		UsbStringSign:        0x01,
 		FastUploadSign:       0x00,
+		Blank2:               0x00000000,
+		Blank3:               0x00000000,
 	}
 	bb := bytes.Buffer{}
 	err := binary.Write(&bb, binary.BigEndian, pa)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	fmt.Println(bb.Bytes())
-	kb.data(bb.Bytes()).sum()
+	fmt.Println(bb.Len())
+	kb.data(pa).sum()
 	return kb
 }
 func (rx *ClientRx) CmdSetParaCfgRecv(buf []byte) [50]byte {
