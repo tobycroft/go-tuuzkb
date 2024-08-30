@@ -25,14 +25,14 @@ func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) [50]byte {
 }
 
 const (
-	GetModeKeyMouse = 0x00
-	GetModeKey      = 0x01
-	GetModeMouse    = 0x02
-	GetModeHidRaw   = 0x03
+	GetModeKeyMouse = 0x80
+	GetModeKey      = 0x81
+	GetModeMouse    = 0x82
+	GetModeHidRaw   = 0x83
 )
 
 const (
-	GetCfgNorm       = 0x00
-	GetCfgASCII      = 0x01
-	GetCfgPassthough = 0x02
+	GetCfgNorm       = 0x80
+	GetCfgASCII      = 0x81
+	GetCfgPassthough = 0x82
 )
