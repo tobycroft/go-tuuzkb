@@ -10,7 +10,6 @@ import (
 type Usbstr struct {
 	HidStingType byte
 	HidLen       byte
-	Data         string
 }
 
 func (kb *Kb) CmdGetUsbString() *Kb {
@@ -25,7 +24,10 @@ func (rx *ClientRx) CmdGetUsbStringRecv(buf []byte) Usbstr {
 	binary.Read(bs, binary.BigEndian, &crx)
 	us := Usbstr{}
 	binary.Read(bs, binary.BigEndian, &us)
+	bt := make([]byte, us.HidLen)
+	binary.Read(bs, binary.BigEndian, &bt)
 	fmt.Println(crx)
 	fmt.Println(us)
+	fmt.Println(string(bt))
 	return us
 }
