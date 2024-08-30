@@ -7,12 +7,6 @@ import (
 	"main.go/define/cmd"
 )
 
-type Usbstr struct {
-	HidStingType byte
-	HidLen       byte
-	Data         string
-}
-
 func (kb *Kb) CmdSetUsbString() *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_SET_USB_STRING

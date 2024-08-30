@@ -15,8 +15,8 @@ func main() {
 	}
 
 	kb := datastruct.Kb{}
-	//kb.CmdGetUsbString()
-	kb.CmdSetUsbString()
+	kb.CmdGetUsbString()
+	//kb.CmdSetUsbString()
 	//kb.CmdSetParaCfg()
 	//kb.CmdReadMyHidData()
 	//kb.CmdSetDefaultCfg()
