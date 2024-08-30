@@ -7,6 +7,7 @@ import (
 	"main.go/define/cmd"
 )
 
+// 设置字符串描述符配置
 func (kb *Kb) CmdSetUsbString(HidStingType byte, str string) *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_SET_USB_STRING

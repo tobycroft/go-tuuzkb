@@ -1,10 +1,6 @@
 package datastruct
 
-import (
-	"bytes"
-	"encoding/binary"
-	"fmt"
-)
+import "log"
 
 type ClientRx struct {
 	Head uint16 // 帧头 (2个字节)
@@ -13,13 +9,13 @@ type ClientRx struct {
 	Len  byte   // 后续数据长度 (1个字节)
 }
 
-func (kb *Kb) Recv(buf []byte) [50]byte {
-	bs := bytes.NewReader(buf)
-	crx := ClientRx{}
-	binary.Read(bs, binary.BigEndian, &crx)
-	dats := [50]byte{}
-	binary.Read(bs, binary.BigEndian, &dats)
-	fmt.Println(crx)
-	fmt.Println(dats)
-	return dats
+func (kb *Kb) Recv() []byte {
+	buf := make([]byte, 128)
+	n, err := kb.SerialPort.Read(buf)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("%X\n", buf[:n])
+	return buf
 }
