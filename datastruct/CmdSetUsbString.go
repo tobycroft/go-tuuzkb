@@ -7,20 +7,19 @@ import (
 	"main.go/define/cmd"
 )
 
-func (kb *Kb) CmdSetUsbString() *Kb {
+func (kb *Kb) CmdSetUsbString(HidStingType byte, str string) *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_SET_USB_STRING
-	kb.Ctx.Len = 2
-	kb.data([]byte("2.4G Wireless Receiver")).sum()
+	//kb.Ctx.Len = 2
+	usbstr := Usbstr{
+		HidStingType: HidStingType,
+		HidLen:       0,
+	}
+	usbstr.HidLen = byte(len(str))
+	buf := bytes.Buffer{}
+	binary.Write(&buf, binary.BigEndian, usbstr)
+	buf.WriteString(str)
+	fmt.Println(string(buf.Bytes()))
+	kb.data(buf.Bytes()).send()
 	return kb
-}
-func (rx *ClientRx) CmdSetUsbStringRecv(buf []byte) string {
-	bs := bytes.NewReader(buf)
-	crx := ClientRx{}
-	binary.Read(bs, binary.BigEndian, &crx)
-	pa := [24]byte{}
-	binary.Read(bs, binary.BigEndian, &pa)
-	fmt.Println(crx)
-	fmt.Println(string(pa[2:]))
-	return string(pa[2:])
 }

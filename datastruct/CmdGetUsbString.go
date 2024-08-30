@@ -15,10 +15,10 @@ type Usbstr struct {
 func (kb *Kb) CmdGetUsbString() *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_GET_USB_STRING
-	kb.data([]byte{0x1}).sum()
+	kb.data([]byte{0x1}).send()
 	return kb
 }
-func (rx *ClientRx) CmdGetUsbStringRecv(buf []byte) Usbstr {
+func (rx *ClientRx) CmdGetUsbStringRecv(buf []byte) string {
 	bs := bytes.NewReader(buf)
 	crx := ClientRx{}
 	binary.Read(bs, binary.BigEndian, &crx)
@@ -29,5 +29,5 @@ func (rx *ClientRx) CmdGetUsbStringRecv(buf []byte) Usbstr {
 	fmt.Println(crx)
 	fmt.Println(us)
 	fmt.Println(string(bt))
-	return us
+	return string(bt)
 }

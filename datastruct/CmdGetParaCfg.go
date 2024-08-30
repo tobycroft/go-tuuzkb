@@ -10,7 +10,7 @@ import (
 func (kb *Kb) CmdGetParaCfg() *Kb {
 	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_GET_PARA_CFG
-	kb.data([]byte{}).sum()
+	kb.data([]byte{}).send()
 	return kb
 }
 func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) Para {

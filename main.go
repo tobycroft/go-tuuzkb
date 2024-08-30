@@ -14,19 +14,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	kb := datastruct.Kb{}
-	kb.CmdGetUsbString()
-	//kb.CmdSetUsbString()
+	kb := datastruct.Kb{
+		SerialPort: s,
+	}
+	//kb.CmdGetUsbString()
+	//kb.CmdSetUsbString(1, "2.4G Wireless Receiver")
 	//kb.CmdSetParaCfg()
 	//kb.CmdReadMyHidData()
 	//kb.CmdSetDefaultCfg()
-	//kb.CmdReset()
+	kb.CmdReset().Send()
 	//fmt.Println(kb.Sendbuf.Bytes())
-
-	n, err := s.Write(kb.Sendbuf.Bytes())
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	buf := make([]byte, 128)
 	n, err = s.Read(buf)
@@ -35,7 +32,7 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("%X\n", buf[:n])
-	kb.Crx.CmdGetUsbStringRecv(buf)
+	//kb.Crx.CmdGetUsbStringRecv(buf)
 	//kb = datastruct.Kb{}
 	////kb.CmdGetParaCfg()
 	//kb.CmdReset()

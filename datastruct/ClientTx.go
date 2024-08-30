@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/tarm/serial"
+	"log"
 )
 
 type Kb struct {
-	Sendbuf bytes.Buffer
-	Ctx     ClientTx
-	Crx     ClientRx
+	Sendbuf    bytes.Buffer
+	Ctx        ClientTx
+	Crx        ClientRx
+	SerialPort *serial.Port
 }
 
 const start1 = 0x57
@@ -24,9 +27,6 @@ type ClientTx struct {
 }
 
 func (kb *Kb) head() *Kb {
-	kb.Sendbuf.Reset()
-	kb.Ctx = ClientTx{}
-	kb.Crx = ClientRx{}
 	kb.Ctx.Head = uint16(start1)<<8 | uint16(start2)
 	return kb
 }
@@ -58,4 +58,15 @@ func (kb *Kb) sum() *Kb {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	return kb
+}
+
+func (kb *Kb) send() {
+	kb.sum()
+	_, err := kb.SerialPort.Write(kb.Sendbuf.Bytes())
+	kb.Ctx = ClientTx{}
+	kb.Crx = ClientRx{}
+	kb.Sendbuf.Reset()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

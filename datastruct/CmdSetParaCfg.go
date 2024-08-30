@@ -58,7 +58,7 @@ func (kb *Kb) CmdSetParaCfg() *Kb {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
-	kb.data(pa).sum()
+	kb.data(pa).send()
 	return kb
 }
 func (rx *ClientRx) CmdSetParaCfgRecv(buf []byte) [50]byte {
