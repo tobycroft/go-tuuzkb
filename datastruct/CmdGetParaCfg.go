@@ -13,15 +13,15 @@ func (kb *Kb) CmdGetParaCfg() *Kb {
 	kb.data([]byte{}).sum()
 	return kb
 }
-func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) [50]byte {
+func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) Para {
 	bs := bytes.NewReader(buf)
 	crx := ClientRx{}
 	binary.Read(bs, binary.BigEndian, &crx)
-	dats := [50]byte{}
-	binary.Read(bs, binary.BigEndian, &dats)
+	pa := Para{}
+	binary.Read(bs, binary.BigEndian, &pa)
 	fmt.Println(crx)
-	fmt.Println(dats)
-	return dats
+	fmt.Println(pa)
+	return pa
 }
 
 const (

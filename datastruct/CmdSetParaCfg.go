@@ -7,7 +7,7 @@ import (
 	"main.go/define/cmd"
 )
 
-type para struct {
+type Para struct {
 	Mode                 byte
 	Cfg                  byte
 	ComAddress           byte //字节窗口通信地址
@@ -21,7 +21,6 @@ type para struct {
 	EnterSign            uint64 //8个字节
 	KeyboardFilter       uint64
 	FastUploadSign       byte
-	Blank2               [12]byte
 }
 
 func (kb *Kb) CmdSetParaCfg() *Kb {
