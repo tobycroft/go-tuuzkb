@@ -22,12 +22,12 @@ type ClientTx struct {
 	Len  byte   // 后续数据长度 (1个字节)
 }
 
-func (kb *Kb) calcHead() *Kb {
+func (kb *Kb) head() *Kb {
 	kb.Ctx.Head = uint16(start1)<<8 | uint16(start2)
 	return kb
 }
 
-func (kb *Kb) calcData(data []byte) *Kb {
+func (kb *Kb) data(data []byte) *Kb {
 	err := binary.Write(&kb.Sendbuf, binary.BigEndian, kb.Ctx)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
@@ -39,7 +39,7 @@ func (kb *Kb) calcData(data []byte) *Kb {
 	return kb
 }
 
-func (kb *Kb) calcSum() *Kb {
+func (kb *Kb) sum() *Kb {
 	sum := byte(0x00)
 	for _, b := range kb.Sendbuf.Bytes() {
 		sum = sum + b

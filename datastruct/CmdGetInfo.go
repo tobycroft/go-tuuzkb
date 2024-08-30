@@ -5,8 +5,8 @@ import (
 )
 
 func (kb *Kb) CmdGetInfo() *Kb {
-	kb.calcHead()
+	kb.head()
 	kb.Ctx.Cmd = cmd.CMD_GET_USB_STRING
-	kb.calcData([]byte{}).calcSum()
+	kb.data([]byte{}).sum()
 	return kb
 }
