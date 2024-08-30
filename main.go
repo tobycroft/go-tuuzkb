@@ -16,7 +16,7 @@ func main() {
 	}
 
 	kb := datastruct.Kb{Sendbuf: bytes.Buffer{}}
-	kb.CmdGetParaCfg()
+	kb.CmdSetParaCfg()
 	fmt.Println(kb.Sendbuf.Bytes())
 
 	n, err := s.Write(kb.Sendbuf.Bytes())
@@ -24,12 +24,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	buf := make([]byte, 256)
+	buf := make([]byte, 128)
 	n, err = s.Read(buf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("%X\n", buf[:n])
-	kb.Crx.CmdGetParaCfgRecv(buf)
+	//kb.Crx.CmdGetParaCfgRecv(buf)
 
 }

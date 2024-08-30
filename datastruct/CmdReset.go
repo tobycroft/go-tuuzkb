@@ -4,9 +4,9 @@ import (
 	"main.go/define/cmd"
 )
 
-func (kb *Kb) CmdGetInfo() *Kb {
+func (kb *Kb) CmdReset() *Kb {
 	kb.head()
-	kb.Ctx.Cmd = cmd.CMD_GET_INFO
+	kb.Ctx.Cmd = cmd.CMD_RESET
 	kb.data([]byte{}).sum()
 	return kb
 }
