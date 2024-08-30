@@ -9,6 +9,7 @@ import (
 type Kb struct {
 	Sendbuf bytes.Buffer
 	Ctx     ClientTx
+	Crx     ClientRx
 }
 
 const start1 = 0x57

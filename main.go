@@ -16,7 +16,7 @@ func main() {
 	}
 
 	kb := datastruct.Kb{Sendbuf: bytes.Buffer{}}
-	kb.CmdReadMyHidData()
+	kb.CmdGetParaCfg()
 	fmt.Println(kb.Sendbuf.Bytes())
 
 	n, err := s.Write(kb.Sendbuf.Bytes())
@@ -30,4 +30,6 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Printf("%X\n", buf[:n])
+	kb.Crx.CmdGetParaCfgRecv(buf)
+
 }
