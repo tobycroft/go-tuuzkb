@@ -1,28 +1,31 @@
 package main
 
 import (
-	"fmt"
+	"github.com/tarm/serial"
 	"log"
-
-	gowinkey "github.com/pizixi/KeyBoardListen"
+	"main.go/datastruct"
 )
 
 func main() {
-
-	events := gowinkey.Listen()
-	for e := range events {
-		if e.State != 0 {
-			// log.Println("触发:", e.VirtualKey)
-			var pressKeys string
-			for key := range e.PressedKeys {
-				// fmt.Printf("Key: %s\n", key)
-				pressKeys += fmt.Sprintf("[%v] ", key)
-			}
-			if e.PressedKeys.ContainsAll(gowinkey.VK_LMENU, gowinkey.VK_Z) {
-				log.Println("快捷键alt+z被触发:", pressKeys)
-				// ...
-			}
-		}
+	//c := &serial.Config{Name: "/dev/ttyS5", Baud: 9600}
+	c := &serial.Config{Name: "/dev/ttyS5", Baud: 115200}
+	s, err := serial.OpenPort(c)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	kb := datastruct.Kb{
+		SerialPort: s,
+	}
+	kb.CmdGetUsbString()
+	//kb.CmdSetUsbString(1, "2.4G Wireless Receiver")
+	//kb.CmdSetParaCfg()
+	//kb.CmdReadMyHidData()
+	//kb.CmdSetDefaultCfg()
+	//kb.CmdReset()
+	//fmt.Println(kb.Sendbuf.Bytes())
+
+	kb.Crx.CmdGetUsbStringRecv(kb.Recv())
+	//kb.Recv()
 
 }
