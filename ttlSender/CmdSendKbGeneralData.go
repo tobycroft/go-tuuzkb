@@ -1,4 +1,4 @@
-package datastruct
+package ttlSender
 
 import "main.go/define/cmd"
 

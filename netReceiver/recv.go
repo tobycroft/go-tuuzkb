@@ -3,14 +3,21 @@ package netReceiver
 import (
 	"encoding/hex"
 	"fmt"
+	"net"
+	"sync"
 )
 
 type monitor struct {
 	MonitorPort    uint32
 	connMonitor    *net.UDPConn
-	mouseReport    chan datastruct.StandardMouseReport
-	keyboardReport chan datastruct.StandardKeyboardReport
+	keyboardReport chan StandardKeyboardReport
 	KeyState       keyboardState
+}
+
+type keyboardState struct {
+	waitGroup          sync.WaitGroup
+	currentFunctionKey uint8
+	state
 }
 
 func TtlRouter(Data []byte) {

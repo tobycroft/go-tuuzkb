@@ -1,4 +1,4 @@
-package datastruct
+package netReceiver
 
 type StandardKeyboardReport struct {
 	Buttons  uint8
