@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+type monitor struct {
+	MonitorPort    uint32
+	connMonitor    *net.UDPConn
+	mouseReport    chan datastruct.StandardMouseReport
+	keyboardReport chan datastruct.StandardKeyboardReport
+	KeyState       keyboardState
+}
+
 func TtlRouter(Data []byte) {
 	if len(Data) < 1 {
 		return
