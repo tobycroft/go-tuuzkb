@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-func (self *Km) MonitorKeyboard() {
+func (self *monitor) MonitorKeyboard() {
 	for client_tx := range self.keyboardReport {
 		self.KeyState.waitGroup = sync.WaitGroup{}
 		self.KeyState.waitGroup.Add(12)
@@ -20,16 +20,12 @@ func (self *Km) MonitorKeyboard() {
 		go self.keyboard_state4(client_tx.Data[3], keyPressed, keyStayPressed)
 		go self.keyboard_state5(client_tx.Data[4], keyPressed, keyStayPressed)
 		go self.keyboard_state6(client_tx.Data[5], keyPressed, keyStayPressed)
-		go self.keyboard_state7(client_tx.Data[6], keyPressed, keyStayPressed)
-		go self.keyboard_state8(client_tx.Data[7], keyPressed, keyStayPressed)
-		go self.keyboard_state9(client_tx.Data[8], keyPressed, keyStayPressed)
-		go self.keyboard_state10(client_tx.Data[9], keyPressed, keyStayPressed)
 		self.KeyState.waitGroup.Wait()
 		self.KeyChannel <- KeyAll{keyPressed, keyStayPressed}
 	}
 }
 
-func (self *Km) keyboard_state1(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state1(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state1.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下1:")
@@ -55,7 +51,7 @@ func (self *Km) keyboard_state1(key uint8, keypress *KeyPressed, keyStayPressed 
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *Km) keyboard_state2(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state2(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state2.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下2:")
@@ -81,7 +77,7 @@ func (self *Km) keyboard_state2(key uint8, keypress *KeyPressed, keyStayPressed 
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *Km) keyboard_state3(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state3(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state3.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下3:")
@@ -107,7 +103,7 @@ func (self *Km) keyboard_state3(key uint8, keypress *KeyPressed, keyStayPressed 
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *Km) keyboard_state4(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state4(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state4.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下4:")
@@ -133,7 +129,7 @@ func (self *Km) keyboard_state4(key uint8, keypress *KeyPressed, keyStayPressed 
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *Km) keyboard_state5(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state5(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state5.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下5:")
@@ -159,7 +155,7 @@ func (self *Km) keyboard_state5(key uint8, keypress *KeyPressed, keyStayPressed 
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *Km) keyboard_state6(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *monitor) keyboard_state6(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state6.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下6:")
@@ -178,110 +174,6 @@ func (self *Km) keyboard_state6(key uint8, keypress *KeyPressed, keyStayPressed 
 	} else if key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "按键保持6:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		keypress.KeyCurrent, keyStayPressed.KeyCurrent = key, key
-	}
-	self.KeyState.waitGroup.Done()
-}
-
-func (self *Km) keyboard_state7(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
-	if self.KeyState.state7.Button == hid.CmdNone && key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序按下7:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		self.KeyState.keyboard_keys(key, true, keypress)
-		self.KeyState.state7.Button = key
-		keypress.KeyDown, keyStayPressed.KeyDown = key, key
-	} else if key == hid.CmdNone && self.KeyState.state7.Button != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序松开7:")
-		}
-		//self.KeyState.keyboard_keys(self.KeyState.state7.Button, false, keypress)
-		self.KeyState.state7.Button = key
-		keypress.KeyUp, keyStayPressed.KeyUp = key, key
-	} else if key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "按键保持7:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		keypress.KeyCurrent, keyStayPressed.KeyCurrent = key, key
-	}
-	self.KeyState.waitGroup.Done()
-}
-
-func (self *Km) keyboard_state8(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
-	if self.KeyState.state8.Button == hid.CmdNone && key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序按下8:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		self.KeyState.keyboard_keys(key, true, keypress)
-		self.KeyState.state8.Button = key
-		keypress.KeyDown, keyStayPressed.KeyDown = key, key
-	} else if key == hid.CmdNone && self.KeyState.state8.Button != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序松开8:")
-		}
-		//self.KeyState.keyboard_keys(self.KeyState.state8.Button, false, keypress)
-		self.KeyState.state8.Button = key
-		keypress.KeyUp, keyStayPressed.KeyUp = key, key
-	} else if key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "按键保持8:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		keypress.KeyCurrent, keyStayPressed.KeyCurrent = key, key
-	}
-	self.KeyState.waitGroup.Done()
-}
-
-func (self *Km) keyboard_state9(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
-	if self.KeyState.state9.Button == hid.CmdNone && key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序按下9:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		self.KeyState.keyboard_keys(key, true, keypress)
-		self.KeyState.state9.Button = key
-		keypress.KeyDown, keyStayPressed.KeyDown = key, key
-	} else if key == hid.CmdNone && self.KeyState.state9.Button != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序松开9:")
-		}
-		//self.KeyState.keyboard_keys(self.KeyState.state9.Button, false, keypress)
-		self.KeyState.state9.Button = key
-		keypress.KeyUp, keyStayPressed.KeyUp = key, key
-	} else if key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "按键保持9:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		keypress.KeyCurrent, keyStayPressed.KeyCurrent = key, key
-	}
-	self.KeyState.waitGroup.Done()
-}
-
-func (self *Km) keyboard_state10(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
-	if self.KeyState.state10.Button == hid.CmdNone && key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序按下10:")
-		}
-		self.KeyState.keyboard_keys(key, true, keyStayPressed)
-		self.KeyState.keyboard_keys(key, true, keypress)
-		self.KeyState.state10.Button = key
-		keypress.KeyDown, keyStayPressed.KeyDown = key, key
-	} else if key == hid.CmdNone && self.KeyState.state10.Button != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "顺序松开10:")
-		}
-		//self.KeyState.keyboard_keys(self.KeyState.state10.Button, false, keypress)
-		self.KeyState.state10.Button = key
-		keypress.KeyUp, keyStayPressed.KeyUp = key, key
-	} else if key != hid.CmdNone {
-		if self.KeyState.KeyBoardDebug.MessagePress {
-			common.PrintRedis("Keyboard", "按键保持10:")
 		}
 		self.KeyState.keyboard_keys(key, true, keyStayPressed)
 		keypress.KeyCurrent, keyStayPressed.KeyCurrent = key, key

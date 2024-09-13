@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net"
-	"sync"
 )
 
 type monitor struct {
@@ -12,12 +11,6 @@ type monitor struct {
 	connMonitor    *net.UDPConn
 	keyboardReport chan StandardKeyboardReport
 	KeyState       keyboardState
-}
-
-type keyboardState struct {
-	waitGroup          sync.WaitGroup
-	currentFunctionKey uint8
-	state
 }
 
 func TtlRouter(Data []byte) {
