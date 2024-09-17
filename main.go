@@ -10,7 +10,7 @@ import (
 func main() {
 	//10.0.0.90
 	netwo := &net.TCPAddr{
-		IP:   net.ParseIP("10.0.0.90"),
+		IP:   net.ParseIP("10.0.0.91"),
 		Port: 6666,
 	}
 	ntt, err := net.DialTCP("tcp", nil, netwo)

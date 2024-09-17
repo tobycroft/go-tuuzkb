@@ -4,13 +4,36 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net"
+	"sync"
 )
 
-type monitor struct {
+type netReciever struct {
 	MonitorPort    uint32
 	connMonitor    *net.UDPConn
-	keyboardReport chan StandardKeyboardReport
 	KeyState       keyboardState
+	keyboardReport chan StandardKeyboardReport
+
+	IP             string
+	Port           int
+	UUID           string
+	SendHoldMode   bool //开启后模拟单线程模式
+	Queue          bool //开启后模拟单线程模式
+	SeparateQueue  bool //开启后模拟单线程模式
+	DebugClient    bool
+	DebugDelay     bool
+	KeyChannel     chan KeyAll
+	MouseChannel   chan any
+	KeyboardData   KeyboardData
+	CurrentPressed CurrentPressed
+	Fresh          bool //是否是第一次启动
+}
+
+type CurrentPressed struct {
+	sync.Map
+}
+
+func (self *netReciever) Ready() {
+
 }
 
 func TtlRouter(Data []byte) {
