@@ -1,7 +1,7 @@
 package netReceiver
 
 type StandardKeyboardReport struct {
-	ReportID uint8
 	Buttons  uint8
-	Data     [10]uint8
+	ReportID uint8
+	Data     [6]uint8
 }

@@ -1,13 +1,15 @@
 package netReceiver
 
 import (
+	"bytes"
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"net"
 	"sync"
 )
 
-type netReciever struct {
+type Reciever struct {
 	MonitorPort    uint32
 	connMonitor    *net.UDPConn
 	KeyState       keyboardState
@@ -25,18 +27,20 @@ type netReciever struct {
 	MouseChannel   chan any
 	KeyboardData   KeyboardData
 	CurrentPressed CurrentPressed
-	Fresh          bool //是否是第一次启动
 }
 
 type CurrentPressed struct {
 	sync.Map
 }
 
-func (self *netReciever) Ready() {
-
+func (self *Reciever) Ready() {
+	self.keyboardReport = make(chan StandardKeyboardReport)
+	self.KeyChannel = make(chan KeyAll)
+	self.MouseChannel = make(chan any)
+	go self.MonitorKeyboard()
 }
 
-func TtlRouter(Data []byte) {
+func (self *Reciever) TtlRouter(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}
@@ -63,6 +67,14 @@ func TtlRouter(Data []byte) {
 		break
 
 	case 0x01:
+		kbreport := StandardKeyboardReport{}
+		buf := bytes.NewReader(Data[1:9])
+		err := binary.Read(buf, binary.NativeEndian, &kbreport)
+		if err != nil {
+			panic(err.Error())
+		}
+		fmt.Println(kbreport)
+		self.keyboardReport <- kbreport
 		fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"main.go/action"
 	"main.go/netReceiver"
 	"net"
 	"time"
@@ -9,6 +10,7 @@ import (
 
 func main() {
 	//10.0.0.90
+
 	netwo := &net.TCPAddr{
 		IP:   net.ParseIP("10.0.0.91"),
 		Port: 6666,
@@ -17,6 +19,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
+
 	buff := make([]byte, 512)
 	tm := 0
 	go func() {
@@ -31,6 +34,10 @@ func main() {
 			}
 		}
 	}()
+	var ns netReceiver.Reciever
+	go ns.Ready()
+	var run action.Runnable
+	run.MainRun(&ns)
 	for {
 		_, err = ntt.Read(buff)
 		if err != nil {
@@ -41,7 +48,7 @@ func main() {
 		//fmt.Println(hex.EncodeToString(buff))
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			netReceiver.TtlRouter(ddd)
+			ns.TtlRouter(ddd)
 		}
 	}
 }

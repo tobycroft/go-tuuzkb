@@ -6,10 +6,10 @@ import (
 	"sync"
 )
 
-func (self *netReciever) MonitorKeyboard() {
+func (self *Reciever) MonitorKeyboard() {
 	for client_tx := range self.keyboardReport {
 		self.KeyState.waitGroup = sync.WaitGroup{}
-		self.KeyState.waitGroup.Add(12)
+		self.KeyState.waitGroup.Add(8)
 		keyPressed := &KeyPressed{KeyPressDebug: self.KeyState.KeyBoardDebug.MessagePress}
 		keyStayPressed := &KeyPressed{KeyPressDebug: self.KeyState.KeyBoardDebug.MessagePressAndHold}
 		go self.KeyState.keyboard_function(client_tx.Buttons, keyPressed)
@@ -25,7 +25,7 @@ func (self *netReciever) MonitorKeyboard() {
 	}
 }
 
-func (self *netReciever) keyboard_state1(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state1(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state1.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下1:")
@@ -51,7 +51,7 @@ func (self *netReciever) keyboard_state1(key uint8, keypress *KeyPressed, keySta
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *netReciever) keyboard_state2(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state2(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state2.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下2:")
@@ -77,7 +77,7 @@ func (self *netReciever) keyboard_state2(key uint8, keypress *KeyPressed, keySta
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *netReciever) keyboard_state3(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state3(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state3.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下3:")
@@ -103,7 +103,7 @@ func (self *netReciever) keyboard_state3(key uint8, keypress *KeyPressed, keySta
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *netReciever) keyboard_state4(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state4(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state4.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下4:")
@@ -129,7 +129,7 @@ func (self *netReciever) keyboard_state4(key uint8, keypress *KeyPressed, keySta
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *netReciever) keyboard_state5(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state5(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state5.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下5:")
@@ -155,7 +155,7 @@ func (self *netReciever) keyboard_state5(key uint8, keypress *KeyPressed, keySta
 	self.KeyState.waitGroup.Done()
 }
 
-func (self *netReciever) keyboard_state6(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
+func (self *Reciever) keyboard_state6(key uint8, keypress *KeyPressed, keyStayPressed *KeyPressed) {
 	if self.KeyState.state6.Button == hid.CmdNone && key != hid.CmdNone {
 		if self.KeyState.KeyBoardDebug.MessagePress {
 			common.PrintRedis("Keyboard", "顺序按下6:")
