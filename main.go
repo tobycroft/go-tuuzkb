@@ -37,7 +37,7 @@ func main() {
 	var ns netReceiver.Reciever
 	go ns.Ready()
 	var run action.Runnable
-	run.MainRun(&ns)
+	go run.MainRun(&ns)
 	for {
 		_, err = ntt.Read(buff)
 		if err != nil {
