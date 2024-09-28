@@ -11,11 +11,16 @@ import (
 func main() {
 	//10.0.0.90
 
-	netwo := &net.TCPAddr{
+	//listen, err := net.Listen("tcp", ":6666")
+	//if err != nil {
+	//	panic(err.Error())
+	//}
+	network := net.TCPAddr{
 		IP:   net.ParseIP("10.0.0.91"),
 		Port: 6666,
 	}
-	ntt, err := net.DialTCP("tcp", nil, netwo)
+
+	ntt, err := net.DialTCP("tcp", nil, &network)
 	if err != nil {
 		panic(err.Error())
 	}
