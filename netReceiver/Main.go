@@ -47,11 +47,11 @@ func (self *Reciever) TtlRouter(Data []byte) {
 	switch Data[0] {
 
 	case 0x81:
-		fmt.Println("链接")
+		go fmt.Println("链接")
 		break
 
 	case 0x82:
-		fmt.Println(Data[0], Data)
+		go fmt.Println(Data[0], Data)
 		break
 
 	case 0x80:
@@ -63,7 +63,7 @@ func (self *Reciever) TtlRouter(Data []byte) {
 		break
 
 	case 0x88:
-		fmt.Println("键值数据帧：", Data[1:])
+		go fmt.Println("键值数据帧：", Data[1:])
 		break
 
 	case 0x01:
@@ -73,9 +73,9 @@ func (self *Reciever) TtlRouter(Data []byte) {
 		if err != nil {
 			panic(err.Error())
 		}
-		fmt.Println(kbreport)
+		go fmt.Println(kbreport)
 		self.keyboardReport <- kbreport
-		fmt.Println("键盘数据帧：", Data[1:9])
+		go fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:
 		fmt.Println("鼠标数据帧2：", Data[1:5])

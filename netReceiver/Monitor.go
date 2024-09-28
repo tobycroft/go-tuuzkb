@@ -7,8 +7,8 @@ import (
 )
 
 func (self *Reciever) MonitorKeyboard() {
+	self.KeyState.waitGroup = sync.WaitGroup{}
 	for client_tx := range self.keyboardReport {
-		self.KeyState.waitGroup = sync.WaitGroup{}
 		self.KeyState.waitGroup.Add(8)
 		keyPressed := &KeyPressed{KeyPressDebug: self.KeyState.KeyBoardDebug.MessagePress}
 		keyStayPressed := &KeyPressed{KeyPressDebug: self.KeyState.KeyBoardDebug.MessagePressAndHold}
