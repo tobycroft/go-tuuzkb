@@ -73,9 +73,9 @@ func (self *Reciever) TtlRouter(Data []byte) {
 		if err != nil {
 			panic(err.Error())
 		}
-		go fmt.Println(kbreport)
+		//go fmt.Println(kbreport)
 		self.keyboardReport <- kbreport
-		go fmt.Println("键盘数据帧：", Data[1:9])
+		//go fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:
 		fmt.Println("鼠标数据帧2：", Data[1:5])
