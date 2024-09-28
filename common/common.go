@@ -14,7 +14,7 @@ func GetFunctionName(i interface{}) string {
 func PrintRedis(str string, promts ...any) {
 	ppp := fmt.Sprint(promts)
 	var ps Redis.PubSub
-	go ps.Publish(str, ppp)
+	ps.Publish(str, ppp)
 	//var rs Redis.Stream
 	//rs.New("knet").SetMaxLen(100).Publish(map[string]any{
 	//	str: ppp,
