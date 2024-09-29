@@ -15,9 +15,6 @@ type Reciever struct {
 	KeyState       keyboardState
 	keyboardReport chan StandardKeyboardReport
 
-	IP             string
-	Port           int
-	UUID           string
 	SendHoldMode   bool //开启后模拟单线程模式
 	Queue          bool //开启后模拟单线程模式
 	SeparateQueue  bool //开启后模拟单线程模式

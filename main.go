@@ -11,10 +11,13 @@ import (
 func main() {
 	//10.0.0.90
 
-	//listen, err := net.Listen("tcp", ":6666")
-	//if err != nil {
-	//	panic(err.Error())
-	//}
+	keyboard_server, err := net.Listen("tcp", ":6666")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	Conn, err := keyboard_server.Accept()
+
 	network := net.TCPAddr{
 		IP:   net.ParseIP("10.0.0.91"),
 		Port: 6666,
