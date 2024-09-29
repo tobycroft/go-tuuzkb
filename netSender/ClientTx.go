@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"log"
 )
 
 type NetSender struct {
@@ -58,12 +57,4 @@ func (kb *NetSender) sum() *NetSender {
 }
 
 func (kb *NetSender) send() {
-	kb.sum()
-	_, err := kb.SerialPort.Write(kb.Sendbuf.Bytes())
-	kb.Ctx = ClientTx{}
-	kb.Crx = ClientRx{}
-	kb.Sendbuf.Reset()
-	if err != nil {
-		log.Fatal(err)
-	}
 }
