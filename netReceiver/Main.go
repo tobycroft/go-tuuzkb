@@ -5,12 +5,9 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"net"
 )
 
 type Reciever struct {
-	MonitorPort    uint32
-	connMonitor    *net.UDPConn
 	KeyState       keyboardState
 	keyboardReport chan StandardKeyboardReport
 
