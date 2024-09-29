@@ -6,7 +6,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net"
-	"sync"
 )
 
 type Reciever struct {
@@ -15,19 +14,9 @@ type Reciever struct {
 	KeyState       keyboardState
 	keyboardReport chan StandardKeyboardReport
 
-	SendHoldMode   bool //开启后模拟单线程模式
-	Queue          bool //开启后模拟单线程模式
-	SeparateQueue  bool //开启后模拟单线程模式
-	DebugClient    bool
-	DebugDelay     bool
-	KeyChannel     chan KeyAll
-	MouseChannel   chan any
-	KeyboardData   KeyboardData
-	CurrentPressed CurrentPressed
-}
-
-type CurrentPressed struct {
-	sync.Map
+	KeyChannel   chan KeyAll
+	MouseChannel chan any
+	KeyboardData KeyboardData
 }
 
 func (self *Reciever) Ready() {

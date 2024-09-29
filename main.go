@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"main.go/action"
 	"main.go/netReceiver"
 	"net"
@@ -10,13 +11,23 @@ import (
 
 func main() {
 	//10.0.0.90
+	buff := make([]byte, 512)
 
 	keyboard_server, err := net.Listen("tcp", ":6666")
 	if err != nil {
 		panic(err.Error())
 	}
+	go func() {
+		for {
+			Conn, err := keyboard_server.Accept()
+			if err != nil {
+				panic(err.Error())
+			}
+			_, err = Conn.Read(buff)
+			fmt.Println(buff)
 
-	Conn, err := keyboard_server.Accept()
+		}
+	}()
 
 	network := net.TCPAddr{
 		IP:   net.ParseIP("10.0.0.91"),
@@ -28,7 +39,6 @@ func main() {
 		panic(err.Error())
 	}
 
-	buff := make([]byte, 512)
 	tm := 0
 	go func() {
 		time.Sleep(1 * time.Second)
