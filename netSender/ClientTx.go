@@ -7,7 +7,7 @@ import (
 )
 
 type NetSender struct {
-	Sendbuf bytes.Buffer
+	sendBuf bytes.Buffer
 	Ctx     ClientTx
 }
 
@@ -34,22 +34,22 @@ func (kb *NetSender) data(data any) *NetSender {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	kb.Ctx.Len = kb.Ctx.Len + byte(bb.Len())
-	err = binary.Write(&kb.Sendbuf, binary.BigEndian, kb.Ctx)
+	err = binary.Write(&kb.sendBuf, binary.BigEndian, kb.Ctx)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
 	//fmt.Println(kb.Ctx.Len)
-	kb.Sendbuf.Write(bb.Bytes())
+	kb.sendBuf.Write(bb.Bytes())
 	return kb
 }
 
 func (kb *NetSender) sum() *NetSender {
 	sum := byte(0x00)
-	for _, b := range kb.Sendbuf.Bytes() {
+	for _, b := range kb.sendBuf.Bytes() {
 		sum = sum + (b)
 	}
-	err := binary.Write(&kb.Sendbuf, binary.BigEndian, sum&0xff)
+	err := binary.Write(&kb.sendBuf, binary.BigEndian, sum&0xff)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
