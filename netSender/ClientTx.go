@@ -1,4 +1,4 @@
-package ttlSender
+package netSender
 
 import (
 	"bytes"
