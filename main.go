@@ -17,7 +17,7 @@ func main() {
 
 	Act := &action.Action{}
 	go Act.MainRun(ClientRx, ClientTx)
-	serverudp := netTcp.ServerUDP{
+	sudp := netTcp.ServerUDP{
 		SendServer: &net.UDPAddr{
 			IP:   net.ParseIP("10.0.0.90"),
 			Port: 6666,
@@ -25,6 +25,6 @@ func main() {
 		ClientTx: ClientTx,
 		ClientRx: ClientRx,
 	}
-	serverudp.Start()
+	sudp.Start()
 
 }
