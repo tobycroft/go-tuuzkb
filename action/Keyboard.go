@@ -13,22 +13,16 @@ func (self *Action) keyboard_runnable() {
 		if self.MaskingKeyBoard2(&c) > 0 {
 			self.ClientTx.CmdSendKbGeneralData(c)
 			fmt.Println("keybaordrecv", c)
-		} else {
-			//fmt.Println("keybaordrecv2", c.Ctrl, c)
 		}
 	}
 	panic("键盘通道意外结束")
 }
 
 func (self *Action) masking(key byte) byte {
-	switch key {
-
-	case hid.CmdErrorRollOver:
+	if hid.CmdErrorRollOver == key {
 		return 0x00
-
-	default:
-		return key
 	}
+	return key
 }
 
 func (self *Action) MaskingKeyBoard2(c *netSender.KeyboardData) int {
