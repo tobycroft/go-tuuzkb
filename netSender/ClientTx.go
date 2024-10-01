@@ -14,12 +14,16 @@ type ClientTx struct {
 	MouseTxChannel    chan any
 }
 
-type ClientRx struct {
-	keyboardMain chan KeyboardData
-	mouseMain    chan any
+func (self *ClientTx) Ready() {
 
-	KeyboardReport chan KeyboardData
-	MouseReport    chan any
+	self.MouseTxChannel = make(chan any)
+	self.KeyboardTxChannel = make(chan KeyboardData)
+
+	go func() {
+		for keyboard := range self.KeyboardTxChannel {
+
+		}
+	}()
 }
 
 const start1 = 0x57

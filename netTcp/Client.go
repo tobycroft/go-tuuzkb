@@ -3,13 +3,13 @@ package netTcp
 import (
 	"bytes"
 	"fmt"
-	"main.go/action"
 	"main.go/netReceiver"
+	"main.go/netSender"
 	"net"
 	"time"
 )
 
-func ClientRx() {
+func ClientRx() *netReceiver.ClientRx {
 
 	buff := make([]byte, 512)
 
@@ -36,26 +36,29 @@ func ClientRx() {
 			}
 		}
 	}()
-	var ns netReceiver.ClientRx
-	ns.Ready()
-	var run action.Runnable
-	go run.MainRun(&ns)
-	for {
-		_, err = ntt.Read(buff)
-		if err != nil {
-			panic(err.Error())
+	var rx netReceiver.ClientRx
+	rx.Ready()
+
+	go func() {
+		for {
+			_, err = ntt.Read(buff)
+			if err != nil {
+				panic(err.Error())
+			}
+			//fmt.Println(buff)
+			tm = tm + 1
+			//fmt.Println(hex.EncodeToString(buff))
+			slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
+			for _, ddd := range slice_byte {
+				rx.TtlRouter(ddd)
+			}
 		}
-		//fmt.Println(buff)
-		tm = tm + 1
-		//fmt.Println(hex.EncodeToString(buff))
-		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
-		for _, ddd := range slice_byte {
-			ns.TtlRouter(ddd)
-		}
-	}
+	}()
+
+	return &rx
 }
 
-func ClientTx() {
+func ClientTx() *netSender.ClientTx {
 	buff := make([]byte, 512)
 
 	network := net.TCPAddr{
@@ -63,7 +66,7 @@ func ClientTx() {
 		Port: 6666,
 	}
 
-	ntt, err := net.DialTCP("tcp", nil, &network)
+	sendChan, err := net.DialTCP("tcp", nil, &network)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -75,27 +78,29 @@ func ClientTx() {
 			//fmt.Println(tm)
 			tm = 0
 			time.Sleep(1 * time.Second)
-			_, err = ntt.Write([]byte{0x57, 0xab, 0x87})
+			_, err = sendChan.Write([]byte{0x57, 0xab, 0x87})
 			if err != nil {
 				panic(err.Error())
 			}
 		}
 	}()
-	var ns netReceiver.ClientRx
-	ns.Ready()
-	var run action.Runnable
-	go run.MainRun(&ns)
-	for {
-		_, err = ntt.Read(buff)
-		if err != nil {
-			panic(err.Error())
+	var tx netSender.ClientTx
+	tx.Ready()
+	go func() {
+		for {
+			_, err = sendChan.Read(buff)
+			if err != nil {
+				panic(err.Error())
+			}
+			//fmt.Println(buff)
+			tm = tm + 1
+			//fmt.Println(hex.EncodeToString(buff))
+			slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
+			for _, ddd := range slice_byte {
+				fmt.Println("rcv:", ddd)
+			}
 		}
-		//fmt.Println(buff)
-		tm = tm + 1
-		//fmt.Println(hex.EncodeToString(buff))
-		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
-		for _, ddd := range slice_byte {
-			fmt.Println("rcv:", ddd)
-		}
-	}
+	}()
+
+	return &tx
 }
