@@ -12,7 +12,7 @@ func (self *Action) keyboard_runnable() {
 		//fmt.Println("keybaordrecv", c.Ctrl, c)
 		if self.MaskingKeyBoard2(&c) > 0 {
 			self.ClientTx.CmdSendKbGeneralData(c)
-			fmt.Println("keybaordrecv", c.Ctrl, c)
+			fmt.Println("keybaordrecv", c)
 		} else {
 			//fmt.Println("keybaordrecv2", c.Ctrl, c)
 		}
@@ -63,7 +63,6 @@ func (self *Action) MaskingKeyBoard2(c *netSender.KeyboardData) int {
 	}
 
 	return num
-	//fmt.Println(self.Button, Btn)
 }
 
 //func (self *Action) MaskingKeyBoard(c *netSender.KeyboardData) bool {
