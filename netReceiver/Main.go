@@ -8,17 +8,16 @@ import (
 )
 
 type Reciever struct {
-	KeyState       keyboardState
-	keyboardReport chan StandardKeyboardReport
+	//KeyState       keyboardState
+	KeyboardReport chan KeyboardData
 
-	KeyChannel   chan KeyAll
+	//KeyChannel   chan KeyAll
 	MouseChannel chan any
-	KeyboardData KeyboardData
 }
 
 func (self *Reciever) Ready() {
-	self.keyboardReport = make(chan StandardKeyboardReport)
-	self.KeyChannel = make(chan KeyAll)
+	self.KeyboardReport = make(chan KeyboardData)
+	//self.KeyChannel = make(chan KeyAll)
 	self.MouseChannel = make(chan any)
 	go self.MonitorKeyboard()
 }
@@ -50,14 +49,14 @@ func (self *Reciever) TtlRouter(Data []byte) {
 		break
 
 	case 0x01:
-		kbreport := StandardKeyboardReport{}
+		kbreport := KeyboardData{}
 		buf := bytes.NewReader(Data[1:9])
 		err := binary.Read(buf, binary.NativeEndian, &kbreport)
 		if err != nil {
 			panic(err.Error())
 		}
 		//go fmt.Println(kbreport)
-		self.keyboardReport <- kbreport
+		self.KeyboardReport <- kbreport
 		//go fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:

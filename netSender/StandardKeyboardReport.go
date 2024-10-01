@@ -1,7 +1,7 @@
 package netSender
 
-type StandardKeyboardReport struct {
-	Buttons  uint8
-	ReportID uint8
-	Data     [6]uint8
+type KeyboardData struct {
+	Ctrl   byte
+	Resv   byte
+	Button [6]byte
 }
