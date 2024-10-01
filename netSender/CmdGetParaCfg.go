@@ -13,9 +13,9 @@ func (self *ClientTx) CmdGetParaCfg() *ClientTx {
 	self.data([]byte{}).send()
 	return self
 }
-func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) Para {
+func (self *ClientTx) CmdGetParaCfgRecv(buf []byte) Para {
 	bs := bytes.NewReader(buf)
-	crx := ClientRx{}
+	crx := sendData{}
 	binary.Read(bs, binary.BigEndian, &crx)
 	pa := Para{}
 	binary.Read(bs, binary.BigEndian, &pa)
