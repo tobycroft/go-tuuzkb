@@ -15,7 +15,7 @@ func (self *ClientTx) CmdSendKbGeneralData(keybytes KeyboardData) *ClientTx {
 	binary.Write(&buf, binary.BigEndian, keybytes)
 	//buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
-	//kb.data(buf.Bytes()).send()
+	//self.data(buf.Bytes()).send()
 	//self.data([]byte{}).send()
 	self.data(keybytes).send()
 

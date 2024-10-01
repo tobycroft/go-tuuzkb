@@ -1,4 +1,4 @@
-package ttlSender
+package netSender
 
 import (
 	"bytes"
@@ -8,10 +8,10 @@ import (
 )
 
 // 设置字符串描述符配置
-func (kb *Kb) CmdSetUsbString(HidStingType byte, str string) *Kb {
-	kb.head()
-	kb.Ctx.Cmd = cmd.CMD_SET_USB_STRING
-	//kb.Ctx.Len = 2
+func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
+	self.head()
+	self.sendData.Cmd = cmd.CMD_SET_USB_STRING
+	//self.sendData.Len = 2
 	usbstr := Usbstr{
 		HidStingType: HidStingType,
 		HidLen:       0,
@@ -21,6 +21,6 @@ func (kb *Kb) CmdSetUsbString(HidStingType byte, str string) *Kb {
 	binary.Write(&buf, binary.BigEndian, usbstr)
 	buf.WriteString(str)
 	fmt.Println(string(buf.Bytes()))
-	kb.data(buf.Bytes()).send()
-	return kb
+	self.data(buf.Bytes()).send()
+	return self
 }

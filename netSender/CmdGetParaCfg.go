@@ -1,4 +1,4 @@
-package ttlSender
+package netSender
 
 import (
 	"bytes"
@@ -7,11 +7,11 @@ import (
 	"main.go/define/cmd"
 )
 
-func (kb *Kb) CmdGetParaCfg() *Kb {
-	kb.head()
-	kb.Ctx.Cmd = cmd.CMD_GET_PARA_CFG
-	kb.data([]byte{}).send()
-	return kb
+func (self *ClientTx) CmdGetParaCfg() *ClientTx {
+	self.head()
+	self.sendData.Cmd = cmd.CMD_GET_PARA_CFG
+	self.data([]byte{}).send()
+	return self
 }
 func (rx *ClientRx) CmdGetParaCfgRecv(buf []byte) Para {
 	bs := bytes.NewReader(buf)

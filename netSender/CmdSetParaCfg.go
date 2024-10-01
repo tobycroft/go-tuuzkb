@@ -1,4 +1,4 @@
-package ttlSender
+package netSender
 
 import (
 	"bytes"
@@ -28,9 +28,9 @@ type Para struct {
 	Blank3               uint32
 }
 
-func (kb *Kb) CmdSetParaCfg() *Kb {
-	kb.head()
-	kb.Ctx.Cmd = cmd.CMD_SET_PARA_CFG
+func (self *ClientTx) CmdSetParaCfg() *ClientTx {
+	self.head()
+	self.sendData.Cmd = cmd.CMD_SET_PARA_CFG
 
 	pa := Para{
 		Mode:       SetModeKeyMouse,
@@ -58,8 +58,8 @@ func (kb *Kb) CmdSetParaCfg() *Kb {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
-	kb.data(pa).send()
-	return kb
+	self.data(pa).send()
+	return self
 }
 func (rx *ClientRx) CmdSetParaCfgRecv(buf []byte) [50]byte {
 	bs := bytes.NewReader(buf)

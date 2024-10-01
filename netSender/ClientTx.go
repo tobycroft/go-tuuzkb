@@ -50,7 +50,7 @@ func (self *ClientTx) data(data any) *ClientTx {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
-	//fmt.Println(kb.ClientTx.Len)
+	//fmt.Println(self.ClientTx.Len)
 	self.sendBuf.Write(bb.Bytes())
 	return self
 }
