@@ -12,6 +12,8 @@ type ServerUDP struct {
 
 	Conn net.PacketConn
 
+	Kb netReceiver.KeyBoard
+
 	ClientTx *netSender.ClientTx
 	ClientRx *netReceiver.ClientRx
 }
