@@ -8,24 +8,37 @@ import (
 
 func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
-		self.MaskingKeyBoard(&c)
 		self.ClientTx.CmdSendKbGeneralData(c)
-		fmt.Println("keybaordrecv", c.Ctrl, c.Button)
+		fmt.Println("keybaordrecv", c.Ctrl, c)
+		//if self.MaskingKeyBoard(&c) {
+		//	self.ClientTx.CmdSendKbGeneralData(c)
+		//	fmt.Println("keybaordrecv", c.Ctrl, c)
+		//}
 	}
 	panic("键盘通道意外结束")
 }
 
-func (self *Action) MaskingKeyBoard(c *netSender.KeyboardData) {
-	RearrangedButton := [6]byte{}
-	for i, button := range c.Button {
-		switch button {
-		case hid.CmdErrorRollOver:
-			break
-
-		default:
-			RearrangedButton[i] = button
-			break
+func (self *Action) MaskingKeyBoard(c *netSender.KeyboardData) bool {
+	Btn := []byte{}
+	for _, btn := range c.Button {
+		if self.masking(btn) {
+			return false
+		} else {
+			Btn = append(Btn, btn)
 		}
 	}
-	c.Button = RearrangedButton
+	self.Button = Btn
+	return true
+	//fmt.Println(self.Button, Btn)
+}
+
+func (self *Action) masking(key byte) bool {
+	switch key {
+
+	case hid.CmdErrorRollOver:
+		return true
+
+	default:
+		return false
+	}
 }

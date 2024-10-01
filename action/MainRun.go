@@ -3,7 +3,6 @@ package action
 import (
 	"main.go/netReceiver"
 	"main.go/netSender"
-	"sync"
 )
 
 type Action struct {
@@ -11,8 +10,7 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
-	Button  sync.Map
-	MaskKey []byte
+	Button []byte
 }
 
 func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
