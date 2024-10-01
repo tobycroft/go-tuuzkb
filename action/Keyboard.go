@@ -8,12 +8,12 @@ import (
 
 func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
-		self.ClientTx.CmdSendKbGeneralData(c)
-		fmt.Println("keybaordrecv", c.Ctrl, c)
-		//if self.MaskingKeyBoard(&c) {
-		//	self.ClientTx.CmdSendKbGeneralData(c)
-		//	fmt.Println("keybaordrecv", c.Ctrl, c)
-		//}
+		//self.ClientTx.CmdSendKbGeneralData(c)
+		//fmt.Println("keybaordrecv", c.Ctrl, c)
+		if self.MaskingKeyBoard(&c) {
+			self.ClientTx.CmdSendKbGeneralData(c)
+			fmt.Println("keybaordrecv", c.Ctrl, c)
+		}
 	}
 	panic("键盘通道意外结束")
 }
@@ -22,7 +22,7 @@ func (self *Action) MaskingKeyBoard(c *netSender.KeyboardData) bool {
 	Btn := []byte{}
 	for _, btn := range c.Button {
 		if self.masking(btn) {
-			return false
+			Btn = append(Btn, 0)
 		} else {
 			Btn = append(Btn, btn)
 		}
