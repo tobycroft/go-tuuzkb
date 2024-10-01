@@ -8,13 +8,20 @@ import (
 )
 
 type Reciever struct {
+	keyboardMain chan KeyboardData
+	mouseMain    chan any
+
+	MouseReport    chan any
 	KeyboardReport chan KeyboardData
-	MouseChannel   chan any
 }
 
 func (self *Reciever) Ready() {
+	self.keyboardMain = make(chan KeyboardData)
+	self.mouseMain = make(chan any)
+
+	self.MouseReport = make(chan any)
 	self.KeyboardReport = make(chan KeyboardData)
-	self.MouseChannel = make(chan any)
+
 }
 
 func (self *Reciever) TtlRouter(Data []byte) {
@@ -51,7 +58,7 @@ func (self *Reciever) TtlRouter(Data []byte) {
 			panic(err.Error())
 		}
 		//go fmt.Println(kbreport)
-		self.KeyboardReport <- kbreport
+		self.keyboardMain <- kbreport
 		//go fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:

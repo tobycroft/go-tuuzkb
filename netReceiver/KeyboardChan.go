@@ -5,7 +5,7 @@ import (
 )
 
 func (self *Reciever) MonitorKeyboard() {
-	for report := range self.KeyboardReport {
+	for report := range self.keyboardMain {
 		fmt.Println(report, report.Button, report.Ctrl)
 		//self.KeyState.waitGroup.Add(8)
 		//keyPressed := &KeyPressed{KeyPressDebug: self.KeyState.KeyBoardDebug.MessagePress}
