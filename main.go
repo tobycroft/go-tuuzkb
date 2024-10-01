@@ -1,6 +1,11 @@
 package main
 
-import "main.go/netTcp"
+import (
+	"main.go/action"
+	"main.go/netReceiver"
+	"main.go/netSender"
+	"main.go/netTcp"
+)
 
 func main() {
 	//10.0.0.90
@@ -10,6 +15,17 @@ func main() {
 	//rx.Run()
 	//var run action.Runnable
 	//go run.MainRun(&rx, &tx)
-	serverudp := netTcp.ServerUDP{}
+	ClientTx := &netSender.ClientTx{}
+	ClientRx := &netReceiver.ClientRx{}
+	ClientRx.Ready()
+	ClientTx.Ready()
+
+	action := &action.Action{}
+	go action.MainRun(ClientRx, ClientTx)
+	serverudp := netTcp.ServerUDP{
+		ClientTx: ClientTx,
+		ClientRx: ClientRx,
+	}
 	serverudp.Rx()
+
 }

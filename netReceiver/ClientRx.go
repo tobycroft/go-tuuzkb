@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"net"
 )
 
 type ClientRx struct {
@@ -22,9 +23,10 @@ func (self *ClientRx) Ready() {
 	self.MouseRxChannel = make(chan any)
 	self.KeyboardRxChannel = make(chan KeyboardData)
 
+	go self.RouterKeyboard()
 }
 
-func (self *ClientRx) MessageRouter(Data []byte) {
+func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 	if len(Data) < 1 {
 		return
 	}
@@ -68,7 +70,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		fmt.Println("鼠标数据帧4：", Data[1:8])
 
 	default:
-		fmt.Println(hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
+		fmt.Println("unreco:", Addr, hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
 
 	}
 }
