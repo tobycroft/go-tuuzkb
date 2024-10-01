@@ -31,6 +31,6 @@ func main() {
 		ClientTx: ClientTx,
 		ClientRx: ClientRx,
 	}
-	serverudp.Rx()
+	serverudp.Start()
 
 }

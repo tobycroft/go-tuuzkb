@@ -3,7 +3,6 @@ package netTcp
 import (
 	"bytes"
 	"fmt"
-	"main.go/netSender"
 	"net"
 	"time"
 )
@@ -34,8 +33,6 @@ func ClientTx() {
 			}
 		}
 	}()
-	var tx netSender.ClientTx
-	tx.Ready()
 	go func() {
 		for {
 			_, err = sendChan.Read(buff)

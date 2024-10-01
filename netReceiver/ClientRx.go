@@ -5,23 +5,24 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"main.go/netSender"
 	"net"
 )
 
 type ClientRx struct {
-	keyboardMain chan KeyboardData
+	keyboardMain chan netSender.KeyboardData
 	mouseMain    chan any
 
-	KeyboardRxChannel chan KeyboardData
+	KeyboardRxChannel chan netSender.KeyboardData
 	MouseRxChannel    chan any
 }
 
 func (self *ClientRx) Ready() {
-	self.keyboardMain = make(chan KeyboardData)
+	self.keyboardMain = make(chan netSender.KeyboardData)
 	self.mouseMain = make(chan any)
 
 	self.MouseRxChannel = make(chan any)
-	self.KeyboardRxChannel = make(chan KeyboardData)
+	self.KeyboardRxChannel = make(chan netSender.KeyboardData)
 
 	go self.RouterKeyboard()
 }
@@ -53,7 +54,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		break
 
 	case 0x01:
-		kbreport := KeyboardData{}
+		kbreport := netSender.KeyboardData{}
 		buf := bytes.NewReader(Data[1:9])
 		err := binary.Read(buf, binary.NativeEndian, &kbreport)
 		if err != nil {

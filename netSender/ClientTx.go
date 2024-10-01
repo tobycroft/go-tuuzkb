@@ -7,17 +7,17 @@ import (
 )
 
 type ClientTx struct {
-	sendBuf    bytes.Buffer
-	sendStruct sendData
+	sendBuf  bytes.Buffer
+	sendData sendData
 
-	KeyboardTxChannel chan KeyboardData
-	MouseTxChannel    chan any
+	TxChannel      chan []byte
+	MouseTxChannel chan any
 }
 
 func (self *ClientTx) Ready() {
 
 	self.MouseTxChannel = make(chan any)
-	self.KeyboardTxChannel = make(chan KeyboardData)
+	self.TxChannel = make(chan []byte)
 
 }
 
@@ -32,39 +32,43 @@ type sendData struct {
 	Len  byte   // 后续数据长度 (1个字节)
 }
 
-func (kb *ClientTx) head() *ClientTx {
-	kb.sendStruct.Head = uint16(start1)<<8 | uint16(start2)
-	return kb
+func (self *ClientTx) head() *ClientTx {
+	self.sendData = sendData{}
+	self.sendData.Head = uint16(start1)<<8 | uint16(start2)
+	return self
 }
 
-func (kb *ClientTx) data(data any) *ClientTx {
+func (self *ClientTx) data(data any) *ClientTx {
 	bb := bytes.Buffer{}
 	err := binary.Write(&bb, binary.BigEndian, data)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	kb.sendStruct.Len = kb.sendStruct.Len + byte(bb.Len())
-	err = binary.Write(&kb.sendBuf, binary.BigEndian, kb.sendStruct)
+	self.sendData.Len = self.sendData.Len + byte(bb.Len())
+	err = binary.Write(&self.sendBuf, binary.BigEndian, self.sendData)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
 	//fmt.Println(kb.ClientTx.Len)
-	kb.sendBuf.Write(bb.Bytes())
-	return kb
+	self.sendBuf.Write(bb.Bytes())
+	return self
 }
 
-func (kb *ClientTx) sum() *ClientTx {
+func (self *ClientTx) sum() *ClientTx {
 	sum := byte(0x00)
-	for _, b := range kb.sendBuf.Bytes() {
+	for _, b := range self.sendBuf.Bytes() {
 		sum = sum + (b)
 	}
-	err := binary.Write(&kb.sendBuf, binary.BigEndian, sum&0xff)
+	err := binary.Write(&self.sendBuf, binary.BigEndian, sum&0xff)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	return kb
+	return self
 }
 
-func (kb *ClientTx) send() {
+func (self *ClientTx) send() {
+	self.sum()
+	self.TxChannel <- self.sendBuf.Bytes()
+	self.sendBuf.Reset()
 }
