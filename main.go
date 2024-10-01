@@ -52,7 +52,7 @@ func main() {
 			}
 		}
 	}()
-	var ns netReceiver.Rx
+	var ns netReceiver.ClientRx
 	ns.Ready()
 	var run action.Runnable
 	go run.MainRun(&ns)
