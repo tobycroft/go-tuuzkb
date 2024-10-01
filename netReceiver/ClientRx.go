@@ -11,8 +11,8 @@ type Reciever struct {
 	keyboardMain chan KeyboardData
 	mouseMain    chan any
 
-	MouseReport    chan any
 	KeyboardReport chan KeyboardData
+	MouseReport    chan any
 }
 
 func (self *Reciever) Ready() {
@@ -22,6 +22,7 @@ func (self *Reciever) Ready() {
 	self.MouseReport = make(chan any)
 	self.KeyboardReport = make(chan KeyboardData)
 
+	go self.RouterKeyboard()
 }
 
 func (self *Reciever) TtlRouter(Data []byte) {
