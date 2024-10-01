@@ -1,22 +1,5 @@
 package netReceiver
 
-type MouseDebug struct {
-	MessageSend bool
-	MessageRecv bool
-}
-
-type KeyBoardDebug struct {
-	MessageSend         bool
-	MessageRecv         bool
-	MessagePress        bool
-	MessagePressAndHold bool
-}
-
-type KeyAll struct {
-	KeyPressed     *KeyPressed
-	KeyStayPressed *KeyPressed
-}
-
 type KeyPressed struct {
 	KeyCurrent    uint8
 	KeyDown       uint8

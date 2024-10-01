@@ -8,18 +8,13 @@ import (
 )
 
 type Reciever struct {
-	//KeyState       keyboardState
 	KeyboardReport chan KeyboardData
-
-	//KeyChannel   chan KeyAll
-	MouseChannel chan any
+	MouseChannel   chan any
 }
 
 func (self *Reciever) Ready() {
 	self.KeyboardReport = make(chan KeyboardData)
-	//self.KeyChannel = make(chan KeyAll)
 	self.MouseChannel = make(chan any)
-	//go self.MonitorKeyboard()
 }
 
 func (self *Reciever) TtlRouter(Data []byte) {
