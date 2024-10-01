@@ -15,8 +15,8 @@ func main() {
 	ClientRx.Ready()
 	ClientTx.Ready()
 
-	action := &action.Action{}
-	go action.MainRun(ClientRx, ClientTx)
+	Act := &action.Action{}
+	go Act.MainRun(ClientRx, ClientTx)
 	serverudp := netTcp.ServerUDP{
 		SendServer: &net.UDPAddr{
 			IP:   net.ParseIP("10.0.0.90"),
