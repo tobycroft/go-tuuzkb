@@ -10,9 +10,11 @@ func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		//self.ClientTx.CmdSendKbGeneralData(c)
 		//fmt.Println("keybaordrecv", c.Ctrl, c)
-		self.ClientTx.CmdSendKbGeneralData(c)
 		if self.MaskingKeyBoard2(&c) > 0 {
+			self.ClientTx.CmdSendKbGeneralData(c)
 			fmt.Println("keybaordrecv", c.Ctrl, c)
+		} else {
+			//fmt.Println("keybaordrecv2", c.Ctrl, c)
 		}
 	}
 	panic("键盘通道意外结束")
