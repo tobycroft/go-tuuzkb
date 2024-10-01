@@ -5,9 +5,14 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"net"
 )
 
 type ClientRx struct {
+	IP   string
+	Port int
+	Conn *net.TCPConn
+
 	keyboardMain chan KeyboardData
 	mouseMain    chan any
 
@@ -22,10 +27,9 @@ func (self *ClientRx) Ready() {
 	self.MouseRxChannel = make(chan any)
 	self.KeyboardRxChannel = make(chan KeyboardData)
 
-	go self.RouterKeyboard()
 }
 
-func (self *ClientRx) TtlRouter(Data []byte) {
+func (self *ClientRx) MessageRouter(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}

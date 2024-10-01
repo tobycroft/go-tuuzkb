@@ -4,9 +4,14 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"net"
 )
 
 type ClientTx struct {
+	IP   string
+	Port int
+	Conn *net.TCPConn
+
 	sendBuf    bytes.Buffer
 	sendStruct sendData
 
@@ -19,11 +24,6 @@ func (self *ClientTx) Ready() {
 	self.MouseTxChannel = make(chan any)
 	self.KeyboardTxChannel = make(chan KeyboardData)
 
-	go func() {
-		for keyboard := range self.KeyboardTxChannel {
-
-		}
-	}()
 }
 
 const start1 = 0x57

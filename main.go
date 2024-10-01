@@ -1,15 +1,15 @@
 package main
 
-import (
-	"main.go/action"
-	"main.go/netTcp"
-)
+import "main.go/netTcp"
 
 func main() {
 	//10.0.0.90
-	go netTcp.ClientTx()
-	netTcp.ClientRx()
-
-	var run action.Runnable
-	go run.MainRun(&rx, &tx)
+	//rx := netReceiver.ClientRx{}
+	//rx.IP = "10.0.0.91"
+	//rx.Port = 6666
+	//rx.Run()
+	//var run action.Runnable
+	//go run.MainRun(&rx, &tx)
+	serverudp := netTcp.ServerUDP{}
+	serverudp.Rx()
 }
