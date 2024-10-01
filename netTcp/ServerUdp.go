@@ -8,8 +8,9 @@ import (
 )
 
 type ServerUDP struct {
-	//IP   string
-	//Port int
+	SendServer net.Addr
+
+	Conn net.PacketConn
 
 	ClientTx *netSender.ClientTx
 	ClientRx *netReceiver.ClientRx
@@ -17,24 +18,20 @@ type ServerUDP struct {
 
 func (self *ServerUDP) Rx() *ServerUDP {
 	buff := make([]byte, 512)
-	Conn, err := net.ListenPacket("udp", ":6666")
+	var err error
+	self.Conn, err = net.ListenPacket("udp", ":6666")
 	if err != nil {
 		panic(err.Error())
 	}
 
 	for {
-		_, addr, err := Conn.ReadFrom(buff)
+		_, addr, err := self.Conn.ReadFrom(buff)
 		if err != nil {
 			panic(err.Error())
 		}
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			self.ClientRx.MessageRouter(ddd, addr)
+			self.ClientRx.MessageRouter(ddd, addr, self.Conn)
 		}
 	}
-}
-
-func (self *ServerUDP) Tx() *ServerUDP {
-	//buff := make([]byte, 512)
-	return self
 }

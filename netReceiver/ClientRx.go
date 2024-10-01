@@ -26,7 +26,7 @@ func (self *ClientRx) Ready() {
 	go self.RouterKeyboard()
 }
 
-func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
+func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.PacketConn) {
 	if len(Data) < 1 {
 		return
 	}
@@ -41,11 +41,11 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x80:
-		//fmt.Println("键值改变帧", Data[1:6])
+		//go fmt.Println("键值改变帧", Data[1:6])
 		break
 
 	case 0x86:
-		//fmt.Println("设备断开")
+		//go fmt.Println("设备断开")
 		break
 
 	case 0x88:
@@ -64,13 +64,13 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		//go fmt.Println("键盘数据帧：", Data[1:9])
 
 	case 0x02:
-		fmt.Println("鼠标数据帧2：", Data[1:5])
+		go fmt.Println("鼠标数据帧2：", Data[1:5])
 
 	case 0x04:
-		fmt.Println("鼠标数据帧4：", Data[1:8])
+		go fmt.Println("鼠标数据帧4：", Data[1:8])
 
 	default:
-		fmt.Println("unreco:", Addr, hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
+		go fmt.Println("unreco:", Addr, Data[:1], hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
 
 	}
 }
