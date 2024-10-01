@@ -10,7 +10,10 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
+	MaskKey []byte
+
 	Button
+	key
 }
 type Button struct {
 	Ctrl byte
