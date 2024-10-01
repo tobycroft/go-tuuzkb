@@ -1,6 +1,6 @@
 package netReceiver
 
-func (self *Reciever) RouterKeyboard() {
+func (self *Rx) RouterKeyboard() {
 	for report := range self.keyboardMain {
 		self.KeyboardReport <- report
 	}

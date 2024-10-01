@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-type Reciever struct {
+type Rx struct {
 	keyboardMain chan KeyboardData
 	mouseMain    chan any
 
@@ -15,7 +15,7 @@ type Reciever struct {
 	MouseReport    chan any
 }
 
-func (self *Reciever) Ready() {
+func (self *Rx) Ready() {
 	self.keyboardMain = make(chan KeyboardData)
 	self.mouseMain = make(chan any)
 
@@ -25,7 +25,7 @@ func (self *Reciever) Ready() {
 	go self.RouterKeyboard()
 }
 
-func (self *Reciever) TtlRouter(Data []byte) {
+func (self *Rx) TtlRouter(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}

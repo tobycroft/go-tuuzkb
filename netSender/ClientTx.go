@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-type NetSender struct {
+type Tx struct {
 	sendBuf bytes.Buffer
 	Ctx     ClientTx
 }
@@ -22,12 +22,12 @@ type ClientTx struct {
 	Len  byte   // 后续数据长度 (1个字节)
 }
 
-func (kb *NetSender) head() *NetSender {
+func (kb *Tx) head() *Tx {
 	kb.Ctx.Head = uint16(start1)<<8 | uint16(start2)
 	return kb
 }
 
-func (kb *NetSender) data(data any) *NetSender {
+func (kb *Tx) data(data any) *Tx {
 	bb := bytes.Buffer{}
 	err := binary.Write(&bb, binary.BigEndian, data)
 	if err != nil {
@@ -44,7 +44,7 @@ func (kb *NetSender) data(data any) *NetSender {
 	return kb
 }
 
-func (kb *NetSender) sum() *NetSender {
+func (kb *Tx) sum() *Tx {
 	sum := byte(0x00)
 	for _, b := range kb.sendBuf.Bytes() {
 		sum = sum + (b)
@@ -56,5 +56,5 @@ func (kb *NetSender) sum() *NetSender {
 	return kb
 }
 
-func (kb *NetSender) send() {
+func (kb *Tx) send() {
 }
