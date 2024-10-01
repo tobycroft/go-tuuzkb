@@ -19,7 +19,7 @@ func (self *Reciever) Ready() {
 	self.KeyboardReport = make(chan KeyboardData)
 	//self.KeyChannel = make(chan KeyAll)
 	self.MouseChannel = make(chan any)
-	go self.MonitorKeyboard()
+	//go self.MonitorKeyboard()
 }
 
 func (self *Reciever) TtlRouter(Data []byte) {
