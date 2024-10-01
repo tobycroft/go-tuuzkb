@@ -9,6 +9,17 @@ import (
 type ClientTx struct {
 	sendBuf    bytes.Buffer
 	sendStruct sendData
+
+	KeyboardTxChannel chan KeyboardData
+	MouseTxChannel    chan any
+}
+
+type ClientRx struct {
+	keyboardMain chan KeyboardData
+	mouseMain    chan any
+
+	KeyboardReport chan KeyboardData
+	MouseReport    chan any
 }
 
 const start1 = 0x57

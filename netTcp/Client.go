@@ -2,6 +2,7 @@ package netTcp
 
 import (
 	"bytes"
+	"fmt"
 	"main.go/action"
 	"main.go/netReceiver"
 	"net"
@@ -94,7 +95,7 @@ func ClientTx() {
 		//fmt.Println(hex.EncodeToString(buff))
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			ns.TtlRouter(ddd)
+			fmt.Println("rcv:", ddd)
 		}
 	}
 }

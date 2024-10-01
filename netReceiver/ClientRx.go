@@ -11,16 +11,16 @@ type ClientRx struct {
 	keyboardMain chan KeyboardData
 	mouseMain    chan any
 
-	KeyboardReport chan KeyboardData
-	MouseReport    chan any
+	KeyboardRxChannel chan KeyboardData
+	MouseRxChannel    chan any
 }
 
 func (self *ClientRx) Ready() {
 	self.keyboardMain = make(chan KeyboardData)
 	self.mouseMain = make(chan any)
 
-	self.MouseReport = make(chan any)
-	self.KeyboardReport = make(chan KeyboardData)
+	self.MouseRxChannel = make(chan any)
+	self.KeyboardRxChannel = make(chan KeyboardData)
 
 	go self.RouterKeyboard()
 }
