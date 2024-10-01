@@ -16,8 +16,8 @@ func (self *ClientTx) CmdSendKbGeneralData(keybytes KeyboardData) *ClientTx {
 	//buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
 	//kb.data(buf.Bytes()).send()
-	self.data([]byte{}).send()
-	//self.data(keybytes).send()
+	//self.data([]byte{}).send()
+	self.data(keybytes).send()
 
 	return self
 }
