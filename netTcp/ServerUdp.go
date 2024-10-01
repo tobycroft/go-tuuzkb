@@ -2,8 +2,6 @@ package netTcp
 
 import (
 	"bytes"
-	"encoding/hex"
-	"fmt"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
@@ -28,7 +26,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 
 	go func() {
 		for keyboard := range self.ClientTx.TxChannel {
-			fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
+			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 			self.Conn.WriteTo(keyboard, self.SendServer)
 		}
 	}()
@@ -44,7 +42,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 				self.ClientRx.MessageRouter(ddd, addr, self.Conn)
 			}
 		} else {
-			fmt.Println(addr.String(), hex.EncodeToString(buff))
+			//fmt.Println(addr.String(), hex.EncodeToString(buff))
 		}
 
 	}
