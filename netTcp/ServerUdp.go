@@ -9,8 +9,11 @@ import (
 )
 
 type ServerUDP struct {
-	ClientTx netSender.ClientTx
-	ClientRx netReceiver.ClientRx
+	IP       string
+	Port     int
+	Conn     *net.TCPConn
+	ClientTx *netSender.ClientTx
+	ClientRx *netReceiver.ClientRx
 }
 
 func (self *ServerUDP) Rx() *ServerUDP {

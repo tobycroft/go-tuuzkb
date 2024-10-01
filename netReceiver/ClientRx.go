@@ -5,14 +5,9 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
-	"net"
 )
 
 type ClientRx struct {
-	IP   string
-	Port int
-	Conn *net.TCPConn
-
 	keyboardMain chan KeyboardData
 	mouseMain    chan any
 

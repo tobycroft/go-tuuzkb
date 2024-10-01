@@ -4,14 +4,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"net"
 )
 
 type ClientTx struct {
-	IP   string
-	Port int
-	Conn *net.TCPConn
-
 	sendBuf    bytes.Buffer
 	sendStruct sendData
 
