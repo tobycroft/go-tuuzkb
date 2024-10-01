@@ -1,6 +1,6 @@
 package netReceiver
 
-type KeyPressed struct {
+type KeyBoard struct {
 	KeyCurrent    uint8
 	KeyDown       uint8
 	KeyUp         uint8
