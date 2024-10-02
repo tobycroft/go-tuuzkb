@@ -13,6 +13,8 @@ type Action struct {
 
 	MaskKey sync.Map
 
+	CurrentPressed sync.Map
+
 	button
 	key
 }

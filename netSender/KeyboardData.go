@@ -7,8 +7,10 @@ package netSender
 //}
 
 type KeyboardData struct {
-	Ctrl    byte
-	Resv    byte
+	Ctrl byte
+
+	Resv byte
+
 	Button0 byte
 	Button1 byte
 	Button2 byte

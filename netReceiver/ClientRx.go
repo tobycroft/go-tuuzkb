@@ -15,6 +15,7 @@ type ClientRx struct {
 
 	KeyboardRxChannel chan netSender.KeyboardData
 	MouseRxChannel    chan any
+	keys              netSender.KeyboardData
 }
 
 func (self *ClientRx) Ready() {
