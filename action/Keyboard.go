@@ -2,7 +2,6 @@ package action
 
 import (
 	"fmt"
-	"main.go/common"
 	"main.go/define/hid"
 	"main.go/netSender"
 )
@@ -14,6 +13,7 @@ func (self *Action) keyboard_runnable() {
 		self.ClientTx.CmdSendKbGeneralData(c)
 		go self.kb_actvate(c)
 		go self.kb_banSomeKeys(c)
+		go self.kb_reboot(c)
 		fmt.Println("keybaordrecv", c)
 	}
 	panic("键盘通道意外结束")
@@ -37,17 +37,17 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPause)
 		self.kb_add_masking(hid.CmdScrollLock)
 		self.kb_add_masking(hid.CmdRightControl)
-		fmt.Println("bankey")
+		//fmt.Println("bankey")
+		self.MaskKey.Range(func(key, value interface{}) bool {
+			fmt.Println("bankey", key, value)
+			return true
+		})
 	}
 }
 
 func (self *Action) kb_reboot(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPrintScreen) {
-		self.Button2
-	}
-	if c.RightCtrl && c.RightAlt && d.Application && d.PrintScreen {
-		go self.Km.KmNetReboot()
-		common.PrintRedis("manual reboot")
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+		self.ClientTx.CmdReset()
 	}
 }
 
