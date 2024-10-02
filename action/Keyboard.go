@@ -31,10 +31,6 @@ func (self *Action) kb_actvate(c netSender.KeyboardData) {
 }
 
 func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
-		self.kb_reboot()
-		return
-	}
 	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
 		self.kb_add_masking(hid.CmdApplication)
 		self.kb_add_masking(hid.CmdPrintScreen)
@@ -49,32 +45,11 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 	}
 }
 
-func (self *Action) kb_reboot() {
-	self.ClientTx.CmdReset()
+func (self *Action) kb_reboot(c netSender.KeyboardData) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+		self.ClientTx.CmdReset()
+	}
 }
-
-//func (self *Action) test_key(c, d *function.KeyPressed) {
-//	if c.RightCtrl && c.PauseBreak {
-//		//self.km.KmNetReboot()
-//		//self.km.KmNetMouseWheel(1)
-//		//time.Sleep(100 * time.Millisecond)
-//		//self.km.KmNetMouseWheel(-1)
-//		//self.km.KmNetMouseWheel(1)
-//		t := float64(250)
-//		start := time.Now().UnixMilli()
-//		for i := float64(0); i < t; i++ {
-//			self.Km.KmNetKeyDown(hid.CmdQ)
-//			self.Km.KmNetKeyUp(hid.CmdQ)
-//			self.Km.KmNetKeyDown(hid.CmdR)
-//			self.Km.KmNetKeyUp(hid.CmdR)
-//			//self.qe_auto()
-//		}
-//		end := float64(time.Now().UnixMilli() - start)
-//		de := end / (t * 4)
-//		qps := ((t * 4) / end) * 1000
-//		common.PrintRedis("时间使用:", end, time.Duration(end)*time.Millisecond, "总次数:", 4*t, "单次执行耗时ms:", de, "每秒QPS:", qps, "实际执行:", qps/2)
-//	}
-//}
 
 func (self *Action) kb_add_masking(mask_key byte) {
 	self.MaskKey.Store(mask_key, true)
