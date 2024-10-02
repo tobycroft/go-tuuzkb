@@ -51,6 +51,11 @@ func (self *Action) kb_reboot(c netSender.KeyboardData) {
 	}
 }
 
+func (self *Action) kb_test(c netSender.KeyboardData) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdA) {
+	}
+}
+
 func (self *Action) kb_add_masking(mask_key byte) {
 	self.MaskKey.Store(mask_key, true)
 }
