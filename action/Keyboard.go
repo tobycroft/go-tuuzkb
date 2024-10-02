@@ -31,6 +31,10 @@ func (self *Action) kb_actvate(c netSender.KeyboardData) {
 }
 
 func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+		self.kb_reboot()
+		return
+	}
 	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
 		self.kb_add_masking(hid.CmdApplication)
 		self.kb_add_masking(hid.CmdPrintScreen)
@@ -45,10 +49,8 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 	}
 }
 
-func (self *Action) kb_reboot(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
-		self.ClientTx.CmdReset()
-	}
+func (self *Action) kb_reboot() {
+	self.ClientTx.CmdReset()
 }
 
 //func (self *Action) test_key(c, d *function.KeyPressed) {
