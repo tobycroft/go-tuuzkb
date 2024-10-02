@@ -97,6 +97,10 @@ func (self *Action) kb_actvate(c netSender.KeyboardData) {
 	}
 }
 
+func (self *Action) kb_add_masking(mask_key byte) {
+	self.MaskKey.Store(mask_key, true)
+}
+
 func (self *Action) kb_banSomeKeys(c, d *function.KeyPressed) {
 	if c.RightCtrl && c.RightAlt && c.ScrollLock {
 		//self.km.KmNetSetVidPid(0x05ac, 0x0256)
