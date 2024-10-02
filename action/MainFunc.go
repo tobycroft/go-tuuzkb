@@ -3,26 +3,24 @@ package action
 import "main.go/netSender"
 
 func (self *Action) checkKeyIsPressed(c netSender.KeyboardData, Ctrl byte, Btn ...byte) bool {
-	switch Btn[0] {
-	case c.Button0:
-		return c.Ctrl == Ctrl
+	num := 0
+	for _, btn := range Btn {
+		if c.Ctrl == Ctrl {
+			switch btn {
+			case c.Button0, c.Button1, c.Button2, c.Button3, c.Button4, c.Button5:
+				num += 1
+				break
 
-	case c.Button1:
-		return c.Ctrl == Ctrl
+			default:
+				break
+			}
+		}
 
-	case c.Button2:
-		return c.Ctrl == Ctrl
+	}
 
-	case c.Button3:
-		return c.Ctrl == Ctrl
-
-	case c.Button4:
-		return c.Ctrl == Ctrl
-
-	case c.Button5:
-		return c.Ctrl == Ctrl
-
-	default:
+	if num == len(Btn) {
+		return true
+	} else {
 		return false
 	}
 }

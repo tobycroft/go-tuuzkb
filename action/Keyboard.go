@@ -37,13 +37,13 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPause)
 		self.kb_add_masking(hid.CmdScrollLock)
 		self.kb_add_masking(hid.CmdRightControl)
-		fmt.Println("ban")
+		fmt.Println("bankey")
 	}
 }
 
 func (self *Action) kb_reboot(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
-
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPrintScreen) {
+		self.Button2
 	}
 	if c.RightCtrl && c.RightAlt && d.Application && d.PrintScreen {
 		go self.Km.KmNetReboot()

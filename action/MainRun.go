@@ -15,19 +15,7 @@ type Action struct {
 
 	CurrentPressed sync.Map
 
-	button
 	key
-}
-
-type button struct {
-	Ctrl byte
-
-	Button0 byte
-	Button1 byte
-	Button2 byte
-	Button3 byte
-	Button4 byte
-	Button5 byte
 }
 
 func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
