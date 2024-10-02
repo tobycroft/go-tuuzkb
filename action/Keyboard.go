@@ -5,87 +5,18 @@ import (
 	"main.go/common"
 	"main.go/define/hid"
 	"main.go/netSender"
-	"time"
 )
 
 func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		//self.ClientTx.CmdSendKbGeneralData(c)
 		//fmt.Println("keybaordrecv", c.Ctrl, c)
-		if self.maskingKeyBoard2(&c) > 0 {
-			self.ClientTx.CmdSendKbGeneralData(c)
-			go self.kb_actvate(c)
-			//go self.kb_banSomeKeys(c)
-			fmt.Println("keybaordrecv", c)
-		}
+		self.ClientTx.CmdSendKbGeneralData(c)
+		go self.kb_actvate(c)
+		go self.kb_banSomeKeys(c)
+		fmt.Println("keybaordrecv", c)
 	}
 	panic("键盘通道意外结束")
-}
-
-func (self *Action) banKey(key byte) byte {
-	if hid.CmdErrorRollOver == key {
-		return 0x00
-	}
-	return key
-}
-
-func (self *Action) checkKeyIsPressed(c netSender.KeyboardData, Ctrl, Btn byte) bool {
-	switch Btn {
-	case c.Button0:
-		return c.Ctrl == Ctrl
-
-	case c.Button1:
-		return c.Ctrl == Ctrl
-
-	case c.Button2:
-		return c.Ctrl == Ctrl
-
-	case c.Button3:
-		return c.Ctrl == Ctrl
-
-	case c.Button4:
-		return c.Ctrl == Ctrl
-
-	case c.Button5:
-		return c.Ctrl == Ctrl
-
-	default:
-		return false
-	}
-}
-
-func (self *Action) maskingKeyBoard2(c *netSender.KeyboardData) int {
-	num := 0
-	if self.Ctrl != c.Ctrl {
-		self.Ctrl = c.Ctrl
-		num += 1
-	}
-	if self.Button0 != self.banKey(c.Button0) {
-		self.Button0 = self.banKey(c.Button0)
-		num += 1
-	}
-	if self.Button1 != self.banKey(c.Button1) {
-		self.Button1 = self.banKey(c.Button1)
-		num += 1
-	}
-	if self.Button2 != self.banKey(c.Button2) {
-		self.Button2 = self.banKey(c.Button2)
-		num += 1
-	}
-	if self.Button3 != self.banKey(c.Button3) {
-		self.Button3 = self.banKey(c.Button3)
-		num += 1
-	}
-	if self.Button4 != self.banKey(c.Button4) {
-		self.Button4 = self.banKey(c.Button4)
-		num += 1
-	}
-	if self.Button5 != self.banKey(c.Button5) {
-		self.Button5 = self.banKey(c.Button5)
-		num += 1
-	}
-
-	return num
 }
 
 func (self *Action) kb_actvate(c netSender.KeyboardData) {
@@ -101,43 +32,19 @@ func (self *Action) kb_actvate(c netSender.KeyboardData) {
 
 func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
-		fmt.Println("bbb")
-	}
-	if c.RightCtrl && c.RightAlt && c.ScrollLock {
-		//self.km.KmNetSetVidPid(0x05ac, 0x0256)
-		//self.km.KmNetSetVidPid(0x05ac, 0x0256)
 		self.kb_add_masking(hid.CmdApplication)
 		self.kb_add_masking(hid.CmdPrintScreen)
 		self.kb_add_masking(hid.CmdPause)
 		self.kb_add_masking(hid.CmdScrollLock)
 		self.kb_add_masking(hid.CmdRightControl)
-		self.kb_add_masking(1)
-		fmt.Println("Re ban")
-		//c.RightCtrl && c.RightAlt && c.PauseBreak
-	} else if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPause) {
-		go self.test_key(c, d)
-	}
-}
-
-func (self *Action) kb_banKey_direct() {
-	for {
-		time.Sleep(1 * time.Second)
-		if self.Km.Fresh {
-			self.Km.Fresh = false
-			time.Sleep(2 * time.Second)
-			self.kb_add_masking(hid.CmdApplication)
-			self.kb_add_masking(hid.CmdPrintScreen)
-			self.kb_add_masking(hid.CmdPause)
-			self.kb_add_masking(hid.CmdScrollLock)
-			self.kb_add_masking(hid.CmdRightControl)
-			self.kb_add_masking(1)
-			go self.Km.KmNetLcdPicture_tempSet("Key", "AutoBan", "Complete", 5*time.Second)
-		}
+		fmt.Println("ban")
 	}
 }
 
 func (self *Action) kb_reboot(c netSender.KeyboardData) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
 
+	}
 	if c.RightCtrl && c.RightAlt && d.Application && d.PrintScreen {
 		go self.Km.KmNetReboot()
 		common.PrintRedis("manual reboot")
