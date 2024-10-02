@@ -21,14 +21,14 @@ func (self *Action) keyboard_runnable() {
 	panic("键盘通道意外结束")
 }
 
-func (self *Action) masking(key byte) byte {
+func (self *Action) banKey(key byte) byte {
 	if hid.CmdErrorRollOver == key {
 		return 0x00
 	}
 	return key
 }
 
-func (self *Action) checkKeyIsPressed(Ctrl, Btn byte, c netSender.KeyboardData) bool {
+func (self *Action) checkKeyIsPressed(c netSender.KeyboardData, Ctrl, Btn byte) bool {
 	switch Btn {
 	case c.Button0:
 		return c.Ctrl == Ctrl
@@ -59,28 +59,28 @@ func (self *Action) maskingKeyBoard2(c *netSender.KeyboardData) int {
 		self.Ctrl = c.Ctrl
 		num += 1
 	}
-	if self.Button0 != self.masking(c.Button0) {
-		self.Button0 = self.masking(c.Button0)
+	if self.Button0 != self.banKey(c.Button0) {
+		self.Button0 = self.banKey(c.Button0)
 		num += 1
 	}
-	if self.Button1 != self.masking(c.Button1) {
-		self.Button1 = self.masking(c.Button1)
+	if self.Button1 != self.banKey(c.Button1) {
+		self.Button1 = self.banKey(c.Button1)
 		num += 1
 	}
-	if self.Button2 != self.masking(c.Button2) {
-		self.Button2 = self.masking(c.Button2)
+	if self.Button2 != self.banKey(c.Button2) {
+		self.Button2 = self.banKey(c.Button2)
 		num += 1
 	}
-	if self.Button3 != self.masking(c.Button3) {
-		self.Button3 = self.masking(c.Button3)
+	if self.Button3 != self.banKey(c.Button3) {
+		self.Button3 = self.banKey(c.Button3)
 		num += 1
 	}
-	if self.Button4 != self.masking(c.Button4) {
-		self.Button4 = self.masking(c.Button4)
+	if self.Button4 != self.banKey(c.Button4) {
+		self.Button4 = self.banKey(c.Button4)
 		num += 1
 	}
-	if self.Button5 != self.masking(c.Button5) {
-		self.Button5 = self.masking(c.Button5)
+	if self.Button5 != self.banKey(c.Button5) {
+		self.Button5 = self.banKey(c.Button5)
 		num += 1
 	}
 
@@ -88,20 +88,13 @@ func (self *Action) maskingKeyBoard2(c *netSender.KeyboardData) int {
 }
 
 func (self *Action) kb_actvate(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(hid.RightCtrl+hid.RightAlt, hid.CmdScrollLock, c) {
-
-	}
-	if c.RightCtrl && c.ScrollLock && !c.RightAlt {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdScrollLock) {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(0)
-		function.LcdLine2 = Calc.Any2String(Endpoint_delay.Load()) + "|" + Calc.Any2String(Endpoint_BeforeDelay.Load())
-		go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
-		//common.PrintRedis("快捷键激活功能")
+		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
 	} else {
-		go self.key_main(c, d)
-		//common.PrintRedis("按下按键", c.RightCtrl, c.ScrollLock)
+		go self.key_main(c)
 	}
-
 }
 
 func (self *Action) kb_banSomeKeys(c, d *function.KeyPressed) {
