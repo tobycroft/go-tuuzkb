@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"main.go/netSender"
 	"net"
+	"sync"
 )
 
 type ClientRx struct {
@@ -15,7 +16,9 @@ type ClientRx struct {
 
 	KeyboardRxChannel chan netSender.KeyboardData
 	MouseRxChannel    chan any
-	keys              netSender.KeyboardData
+
+	keys           netSender.KeyboardData
+	CurrentPressed sync.Map
 }
 
 func (self *ClientRx) Ready() {
