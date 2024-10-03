@@ -21,7 +21,6 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData) int {
 		num += 1
 	}
 	if self.keys.Button0 != self.banKey(c.Button0) {
-
 		self.keys.Button0 = self.banKey(c.Button0)
 		num += 1
 	}
