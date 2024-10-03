@@ -19,6 +19,7 @@ type ClientRx struct {
 
 	keys           netSender.KeyboardData
 	CurrentPressed sync.Map
+	OriginCtrl     sync.Map
 }
 
 func (self *ClientRx) Ready() {

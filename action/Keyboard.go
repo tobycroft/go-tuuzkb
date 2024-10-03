@@ -15,6 +15,7 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys(c)
 		go self.kb_reboot(c)
 		fmt.Println("keybaordrecv", c)
+
 	}
 	panic("键盘通道意外结束")
 }
