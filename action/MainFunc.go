@@ -1,11 +1,18 @@
 package action
 
 import (
+	"fmt"
 	"main.go/netSender"
 )
 
-func (self *Action) kb_gen_output(c netSender.KeyboardData) (out netSender.KeyboardData2) {
+func (self *Action) SendKbGeneralDataRaw(c netSender.KeyboardData) (out netSender.KeyboardData2) {
 	out.Ctrl, out.Button, out.Resv = self.kb_washing(c)
+	if out.Resv != self.lastPress {
+		self.lastPress = out.Resv
+		out.Resv = 0x00
+		self.ClientTx.CmdSendKbGeneralDataRaw(out)
+		fmt.Println("keybaordsnd", out)
+	}
 	return out
 }
 

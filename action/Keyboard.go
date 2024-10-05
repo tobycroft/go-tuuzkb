@@ -7,17 +7,19 @@ import (
 )
 
 func (self *Action) keyboard_runnable() {
+	self.kb_add_masking(hid.CmdApplication, false)
+	self.kb_add_masking(hid.CmdPrintScreen, false)
+	self.kb_add_masking(hid.CmdPause, false)
+	self.kb_add_masking(hid.CmdScrollLock, false)
+	self.kb_add_masking(hid.RightCtrl, true)
+
 	for c := range self.ClientRx.KeyboardRxChannel {
 		fmt.Println("keybaordrecv", c)
 		go self.kb_actvate(c)
 		go self.kb_banSomeKeys(c)
 		go self.kb_reboot(c)
-		out := self.kb_gen_output(c)
-		if out.Resv != self.lastPress {
-			self.lastPress = out.Resv
-			self.ClientTx.CmdSendKbGeneralDataRaw(out)
-			fmt.Println("keybaordsnd", out)
-		}
+		go self.kb_unbanall(c)
+		self.SendKbGeneralDataRaw(c)
 
 	}
 	panic("键盘通道意外结束")
@@ -48,11 +50,12 @@ func (self *Action) kb_unbanall(c netSender.KeyboardData) {
 	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
 		self.Mask.Button.Clear()
 		self.Mask.Ctrl.Clear()
+		fmt.Println("unbanall")
 	}
 }
 
 func (self *Action) kb_reboot(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPause, hid.CmdScrollLock) {
 		self.ClientTx.CmdReset()
 	}
 }
