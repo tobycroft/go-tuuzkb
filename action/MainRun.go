@@ -11,8 +11,11 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
-	MaskKey sync.Map
-	OutPut  sync.Map
+	MaskButton sync.Map
+	MaskCtrl   sync.Map
+
+	OutButton sync.Map
+	OutCtrl   sync.Map
 
 	key
 }

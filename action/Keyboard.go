@@ -10,14 +10,18 @@ func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		//self.ClientTx.CmdSendKbGeneralData(c)
 		//fmt.Println("keybaordrecv", c.Ctrl, c)
-		self.ClientTx.CmdSendKbGeneralData(c)
 		go self.kb_actvate(c)
 		go self.kb_banSomeKeys(c)
 		go self.kb_reboot(c)
 		fmt.Println("keybaordrecv", c)
+		self.ClientTx.CmdSendKbGeneralData(c)
 
 	}
 	panic("键盘通道意外结束")
+}
+
+func (self *Action) kb_washing(c int16) {
+	self.MaskKey.Store(c, true)
 }
 
 func (self *Action) kb_actvate(c netSender.KeyboardData) {
