@@ -13,9 +13,10 @@ type Action struct {
 
 	key
 
-	Mask      mask
 	lastPress byte
 }
+
+var Mask = mask{}
 
 type mask struct {
 	Button sync.Map

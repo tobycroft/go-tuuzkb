@@ -26,7 +26,7 @@ func (self *Action) keyboard_runnable() {
 }
 
 func (self *Action) kb_actvate(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl, hid.CmdScrollLock) {
+	if self.checkKeyIsPressedByOrder(c, hid.RightCtrl, hid.CmdScrollLock) {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(0)
 		fmt.Println("aaa")
@@ -37,31 +37,32 @@ func (self *Action) kb_actvate(c netSender.KeyboardData) {
 }
 
 func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
+	if self.checkKeyIsPressedByOrder(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
 		self.kb_add_masking(hid.CmdApplication, false)
 		self.kb_add_masking(hid.CmdPrintScreen, false)
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
 		self.kb_add_masking(hid.RightCtrl, true)
+		fmt.Println("ban_all")
 	}
 }
 
 func (self *Action) kb_unbanall(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
-		self.Mask.Button.Clear()
-		self.Mask.Ctrl.Clear()
+	if self.checkKeyIsPressedByOrder(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+		Mask.Button.Clear()
+		Mask.Ctrl.Clear()
 		fmt.Println("unbanall")
 	}
 }
 
 func (self *Action) kb_reboot(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPause, hid.CmdScrollLock) {
+	if self.checkKeyIsPressedByOrder(c, hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPause, hid.CmdScrollLock) {
 		self.ClientTx.CmdReset()
 	}
 }
 
 func (self *Action) kb_test(c netSender.KeyboardData) {
-	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdA) {
+	if self.checkKeyIsPressedByOrder(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdA) {
 		fmt.Println("testa")
 	}
 }
