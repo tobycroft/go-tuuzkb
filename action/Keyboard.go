@@ -65,29 +65,3 @@ func (self *Action) kb_test(c netSender.KeyboardData) {
 		fmt.Println("testa")
 	}
 }
-
-func (self *Action) kb_add_masking(key byte, is_ctrl bool) {
-	if is_ctrl {
-		self.Mask.Ctrl.Store(key, true)
-	} else {
-		self.Mask.Button.Store(key, true)
-	}
-}
-
-func (self *Action) kb_remove_masking(key byte, is_ctrl bool) {
-	if is_ctrl {
-		self.Mask.Ctrl.Delete(key)
-	} else {
-		self.Mask.Button.Delete(key)
-	}
-}
-
-func (self *Action) kb_chec_mask(key byte, is_ctrl bool) bool {
-	if is_ctrl {
-		_, ok := self.Mask.Ctrl.Load(key)
-		return ok
-	} else {
-		_, ok := self.Mask.Button.Load(key)
-		return ok
-	}
-}

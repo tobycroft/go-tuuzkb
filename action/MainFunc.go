@@ -18,17 +18,6 @@ func (self *Action) checkKeyIsPressed(c netSender.KeyboardData, Ctrl byte, Btn .
 				num += 1
 			}
 		}
-		//for _, btn := range Btn {
-		//	switch btn {
-		//	case c.Button0, c.Button1, c.Button2, c.Button3, c.Button4, c.Button5:
-		//		num += 1
-		//		break
-		//
-		//	default:
-		//		break
-		//	}
-		//}
-
 	}
 
 	if num == len(Btn) {
@@ -77,4 +66,30 @@ func (self *Action) kb_washing(c netSender.KeyboardData) (Ctrl byte, Button [6]b
 	})
 	sum += Ctrl
 	return
+}
+
+func (self *Action) kb_add_masking(key byte, is_ctrl bool) {
+	if is_ctrl {
+		self.Mask.Ctrl.Store(key, true)
+	} else {
+		self.Mask.Button.Store(key, true)
+	}
+}
+
+func (self *Action) kb_remove_masking(key byte, is_ctrl bool) {
+	if is_ctrl {
+		self.Mask.Ctrl.Delete(key)
+	} else {
+		self.Mask.Button.Delete(key)
+	}
+}
+
+func (self *Action) kb_chec_mask(key byte, is_ctrl bool) bool {
+	if is_ctrl {
+		_, ok := self.Mask.Ctrl.Load(key)
+		return ok
+	} else {
+		_, ok := self.Mask.Button.Load(key)
+		return ok
+	}
 }
