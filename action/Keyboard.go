@@ -8,12 +8,10 @@ import (
 
 func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
-		//self.ClientTx.CmdSendKbGeneralData(c)
-		//fmt.Println("keybaordrecv", c.Ctrl, c)
+		fmt.Println("keybaordrecv", c)
 		go self.kb_actvate(c)
 		go self.kb_banSomeKeys(c)
 		go self.kb_reboot(c)
-		fmt.Println("keybaordrecv", c)
 		out := self.kb_gen_output(c)
 		if out.Resv != self.lastPress {
 			self.lastPress = out.Resv
