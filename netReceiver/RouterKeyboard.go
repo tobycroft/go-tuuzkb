@@ -87,51 +87,67 @@ func (self *ClientRx) ctrl_define(ctrl int16) byte {
 	switch ctrl {
 	case hid.LeftCtrl:
 		self.OriginCtrl.Store(hid.LeftCtrl, true)
+		break
 
 	case -hid.LeftCtrl:
 		self.OriginCtrl.Delete(hid.LeftCtrl)
+		break
 
 	case hid.RightCtrl:
 		self.OriginCtrl.Store(hid.RightCtrl, true)
+		break
 
 	case -hid.RightCtrl:
 		self.OriginCtrl.Delete(hid.RightCtrl)
+		break
 
 	case hid.LeftShift:
 		self.OriginCtrl.Store(hid.LeftShift, true)
+		break
 
 	case -hid.LeftShift:
 		self.OriginCtrl.Delete(hid.LeftShift)
+		break
 
 	case hid.RightShift:
 		self.OriginCtrl.Store(hid.RightShift, true)
+		break
 
 	case -hid.RightShift:
 		self.OriginCtrl.Delete(hid.RightShift)
+		break
 
 	case hid.LeftAlt:
 		self.OriginCtrl.Store(hid.LeftAlt, true)
+		break
 
 	case -hid.LeftAlt:
 		self.OriginCtrl.Delete(hid.LeftAlt)
+		break
 
 	case hid.RightAlt:
 		self.OriginCtrl.Store(hid.RightAlt, true)
+		break
 
 	case -hid.RightAlt:
 		self.OriginCtrl.Delete(hid.RightAlt)
+		break
 
 	case hid.LeftWindows:
 		self.OriginCtrl.Store(hid.LeftWindows, true)
+		break
 
 	case -hid.LeftWindows:
 		self.OriginCtrl.Delete(hid.LeftWindows)
+		break
 
 	case hid.RightWindows:
 		self.OriginCtrl.Store(hid.RightWindows, true)
+		break
 
 	case -hid.RightWindows:
 		self.OriginCtrl.Delete(hid.RightWindows)
+		break
 
 	}
 

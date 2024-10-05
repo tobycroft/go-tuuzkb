@@ -21,3 +21,15 @@ func (self *ClientTx) CmdSendKbGeneralData(keybytes KeyboardData) *ClientTx {
 
 	return self
 }
+
+// 发送 USB 键盘普通数据
+func (self *ClientTx) CmdSendKbGeneralDataRaw(keybytes KeyboardData2) *ClientTx {
+	self.head()
+	self.sendData.Cmd = cmd.CMD_SEND_KB_GENERAL_DATA
+
+	buf := bytes.Buffer{}
+	binary.Write(&buf, binary.BigEndian, keybytes)
+	self.data(keybytes).send()
+
+	return self
+}

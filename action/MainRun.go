@@ -11,13 +11,14 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
-	MaskButton sync.Map
-	MaskCtrl   sync.Map
-
-	OutButton sync.Map
-	OutCtrl   sync.Map
-
 	key
+
+	Mask mask
+}
+
+type mask struct {
+	Button sync.Map
+	Ctrl   sync.Map
 }
 
 func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
