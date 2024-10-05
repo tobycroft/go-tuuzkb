@@ -14,7 +14,7 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys(c)
 		go self.kb_reboot(c)
 		fmt.Println("keybaordrecv", c)
-		self.ClientTx.CmdSendKbGeneralDataRaw(c)
+		self.ClientTx.CmdSendKbGeneralDataRaw(self.kb_gen_output(c))
 
 	}
 	panic("键盘通道意外结束")
@@ -61,8 +61,9 @@ func (self *Action) kb_washing(c netSender.KeyboardData) (Ctrl byte, Button [6]b
 	return
 }
 
-func (self *Action) kb_gen_output(c *netSender.KeyboardData) *netSender.KeyboardData {
-	return c
+func (self *Action) kb_gen_output(c netSender.KeyboardData) (out netSender.KeyboardData2) {
+	out.Ctrl, out.Button = self.kb_washing(c)
+	return out
 }
 
 func (self *Action) kb_actvate(c netSender.KeyboardData) {

@@ -1,7 +1,6 @@
 package netReceiver
 
 import (
-	"fmt"
 	"main.go/define/hid"
 	"main.go/netSender"
 )
@@ -11,10 +10,6 @@ func (self *ClientRx) RouterKeyboard() {
 		//fmt.Println(report)
 		if self.maskingKeyBoard2(&report) > 0 {
 			self.KeyboardRxChannel <- report
-			self.OriginalButton.Range(func(key, value interface{}) bool {
-				fmt.Println("originctrl", key, value)
-				return true
-			})
 		}
 	}
 }
