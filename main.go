@@ -1,10 +1,13 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"main.go/action"
+	"main.go/config/app_conf"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"main.go/netTcp"
+	"main.go/route"
 	"net"
 )
 
@@ -25,6 +28,14 @@ func main() {
 		ClientTx: ClientTx,
 		ClientRx: ClientRx,
 	}
-	sudp.Start()
+	go sudp.Start()
+
+	mainroute := gin.Default()
+	//gin.SetMode(gin.ReleaseMode)
+	//gin.DefaultWriter = ioutil.Discard
+	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
+	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
+	route.OnRoute(mainroute)
+	mainroute.Run(":80")
 
 }
