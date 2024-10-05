@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"main.go/action"
 	"main.go/config/app_conf"
 	"main.go/netReceiver"
@@ -32,7 +33,8 @@ func main() {
 
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
-	//gin.DefaultWriter = ioutil.Discard
+	gin.SetMode(gin.TestMode)
+	gin.DefaultWriter = ioutil.Discard
 	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
 	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
 	route.OnRoute(mainroute)
