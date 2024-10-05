@@ -16,7 +16,9 @@ func (self *Action) keyboard_runnable() {
 		fmt.Println("keybaordrecv", c)
 		out := self.kb_gen_output(c)
 		if out.Resv != self.lastPress {
+			self.lastPress = out.Resv
 			self.ClientTx.CmdSendKbGeneralDataRaw(out)
+			fmt.Println("keybaordsnd", out)
 		}
 
 	}
@@ -41,6 +43,7 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
 		self.kb_add_masking(hid.RightCtrl, true)
+		self.kb_add_masking(hid.LeftWindows, true)
 		//fmt.Println("bankey")
 		self.Mask.Button.Range(func(key, value interface{}) bool {
 			fmt.Println("banbutton", key, value)

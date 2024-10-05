@@ -1,13 +1,11 @@
 package action
 
 import (
-	"fmt"
 	"main.go/netSender"
 )
 
 func (self *Action) kb_gen_output(c netSender.KeyboardData) (out netSender.KeyboardData2) {
 	out.Ctrl, out.Button, out.Resv = self.kb_washing(c)
-	fmt.Println("keybaordsnd", out)
 	return out
 }
 
