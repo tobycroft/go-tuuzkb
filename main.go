@@ -14,20 +14,18 @@ import (
 
 func main() {
 
-	ClientTx := &netSender.ClientTx{}
-	ClientRx := &netReceiver.ClientRx{}
-	ClientRx.Ready()
-	ClientTx.Ready()
+	netSender.Ctx.Ready()
+	netReceiver.Crx.Ready()
 
 	Act := &action.Action{}
-	go Act.MainRun(ClientRx, ClientTx)
+	go Act.MainRun(netReceiver.Crx, netSender.Ctx)
 	sudp := netTcp.ServerUDP{
 		SendServer: &net.UDPAddr{
 			IP:   net.ParseIP("10.0.0.90"),
 			Port: 6666,
 		},
-		ClientTx: ClientTx,
-		ClientRx: ClientRx,
+		ClientTx: netSender.Ctx,
+		ClientRx: netReceiver.Crx,
 	}
 	go sudp.Start()
 

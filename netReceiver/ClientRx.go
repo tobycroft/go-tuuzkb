@@ -10,6 +10,8 @@ import (
 	"sync"
 )
 
+var Crx = &ClientRx{}
+
 type ClientRx struct {
 	keyboardMain chan netSender.KeyboardData
 	mouseMain    chan any

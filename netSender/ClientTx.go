@@ -6,6 +6,8 @@ import (
 	"fmt"
 )
 
+var Ctx = &ClientTx{}
+
 type ClientTx struct {
 	sendBuf  bytes.Buffer
 	sendData sendData
