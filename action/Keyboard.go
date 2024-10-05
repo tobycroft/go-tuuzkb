@@ -41,7 +41,6 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
 		self.kb_add_masking(hid.RightCtrl, true)
-		self.kb_add_masking(hid.LeftWindows, true)
 		//fmt.Println("bankey")
 		self.Mask.Button.Range(func(key, value interface{}) bool {
 			fmt.Println("banbutton", key, value)
