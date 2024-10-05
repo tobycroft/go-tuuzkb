@@ -18,7 +18,7 @@ type ClientRx struct {
 	MouseRxChannel    chan any
 
 	keys           netSender.KeyboardData
-	CurrentPressed sync.Map
+	OriginalButton sync.Map
 	OriginCtrl     sync.Map
 }
 

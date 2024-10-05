@@ -12,6 +12,7 @@ type Action struct {
 	ClientTx *netSender.ClientTx
 
 	MaskKey sync.Map
+	OutPut  sync.Map
 
 	key
 }
