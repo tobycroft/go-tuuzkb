@@ -13,7 +13,8 @@ type Action struct {
 
 	key
 
-	Mask mask
+	Mask      mask
+	lastPress byte
 }
 
 type mask struct {

@@ -20,37 +20,37 @@ func (self *Action) keyboard_runnable() {
 	panic("键盘通道意外结束")
 }
 
-func (self *Action) kb_washing(c netSender.KeyboardData) (Ctrl byte, Button [6]byte) {
+func (self *Action) kb_washing(c netSender.KeyboardData) (Ctrl byte, Button [6]byte, sum byte) {
 	_, ok := self.Mask.Button.Load(c.Button0)
 	if !ok {
 		Button[0] = c.Button0
 	}
-
+	sum += Button[0]
 	_, ok = self.Mask.Button.Load(c.Button1)
 	if !ok {
 		Button[1] = c.Button1
 	}
-
+	sum += Button[1]
 	_, ok = self.Mask.Button.Load(c.Button2)
 	if !ok {
 		Button[2] = c.Button2
 	}
-
+	sum += Button[2]
 	_, ok = self.Mask.Button.Load(c.Button3)
 	if !ok {
 		Button[3] = c.Button3
 	}
-
+	sum += Button[3]
 	_, ok = self.Mask.Button.Load(c.Button4)
 	if !ok {
 		Button[4] = c.Button4
 	}
-
+	sum += Button[4]
 	_, ok = self.Mask.Button.Load(c.Button5)
 	if !ok {
 		Button[5] = c.Button5
 	}
-
+	sum += Button[5]
 	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {
 		_, ok = self.Mask.Ctrl.Load(key.(byte))
 		if !ok {
@@ -58,11 +58,13 @@ func (self *Action) kb_washing(c netSender.KeyboardData) (Ctrl byte, Button [6]b
 		}
 		return true
 	})
+	sum += Ctrl
 	return
 }
 
 func (self *Action) kb_gen_output(c netSender.KeyboardData) (out netSender.KeyboardData2) {
-	out.Ctrl, out.Button = self.kb_washing(c)
+	out.Ctrl, out.Button, out.Resv = self.kb_washing(c)
+	fmt.Println("keybaordsnd", out)
 	return out
 }
 
@@ -83,14 +85,14 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPrintScreen, false)
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
-		self.kb_add_masking(hid.CmdRightControl, true)
+		self.kb_add_masking(hid.RightCtrl, true)
 		//fmt.Println("bankey")
 		self.Mask.Button.Range(func(key, value interface{}) bool {
-			fmt.Println("bankey", key, value)
+			fmt.Println("banbutton", key, value)
 			return true
 		})
 		self.Mask.Ctrl.Range(func(key, value interface{}) bool {
-			fmt.Println("bankey", key, value)
+			fmt.Println("banctrl", key, value)
 			return true
 		})
 	}
