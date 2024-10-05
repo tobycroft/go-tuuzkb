@@ -81,67 +81,67 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData) int {
 func (self *ClientRx) ctrl_define(ctrl int16) byte {
 	switch ctrl {
 	case hid.LeftCtrl:
-		self.OriginCtrl.Store(hid.LeftCtrl, true)
+		self.OriginCtrl.Store(byte(hid.LeftCtrl), true)
 		break
 
 	case -hid.LeftCtrl:
-		self.OriginCtrl.Delete(hid.LeftCtrl)
+		self.OriginCtrl.Delete(byte(hid.LeftCtrl))
 		break
 
 	case hid.RightCtrl:
-		self.OriginCtrl.Store(hid.RightCtrl, true)
+		self.OriginCtrl.Store(byte(hid.RightCtrl), true)
 		break
 
 	case -hid.RightCtrl:
-		self.OriginCtrl.Delete(hid.RightCtrl)
+		self.OriginCtrl.Delete(byte(hid.RightCtrl))
 		break
 
 	case hid.LeftShift:
-		self.OriginCtrl.Store(hid.LeftShift, true)
+		self.OriginCtrl.Store(byte(hid.LeftShift), true)
 		break
 
 	case -hid.LeftShift:
-		self.OriginCtrl.Delete(hid.LeftShift)
+		self.OriginCtrl.Delete(byte(hid.LeftShift))
 		break
 
 	case hid.RightShift:
-		self.OriginCtrl.Store(hid.RightShift, true)
+		self.OriginCtrl.Store(byte(hid.RightShift), true)
 		break
 
 	case -hid.RightShift:
-		self.OriginCtrl.Delete(hid.RightShift)
+		self.OriginCtrl.Delete(byte(hid.RightShift))
 		break
 
 	case hid.LeftAlt:
-		self.OriginCtrl.Store(hid.LeftAlt, true)
+		self.OriginCtrl.Store(byte(hid.LeftAlt), true)
 		break
 
 	case -hid.LeftAlt:
-		self.OriginCtrl.Delete(hid.LeftAlt)
+		self.OriginCtrl.Delete(byte(hid.LeftAlt))
 		break
 
 	case hid.RightAlt:
-		self.OriginCtrl.Store(hid.RightAlt, true)
+		self.OriginCtrl.Store(byte(hid.RightAlt), true)
 		break
 
 	case -hid.RightAlt:
-		self.OriginCtrl.Delete(hid.RightAlt)
+		self.OriginCtrl.Delete(byte(hid.RightAlt))
 		break
 
 	case hid.LeftWindows:
-		self.OriginCtrl.Store(hid.LeftWindows, true)
+		self.OriginCtrl.Store(byte(hid.LeftWindows), true)
 		break
 
 	case -hid.LeftWindows:
-		self.OriginCtrl.Delete(hid.LeftWindows)
+		self.OriginCtrl.Delete(byte(hid.LeftWindows))
 		break
 
 	case hid.RightWindows:
-		self.OriginCtrl.Store(hid.RightWindows, true)
+		self.OriginCtrl.Store(byte(hid.RightWindows), true)
 		break
 
 	case -hid.RightWindows:
-		self.OriginCtrl.Delete(hid.RightWindows)
+		self.OriginCtrl.Delete(byte(hid.RightWindows))
 		break
 
 	}
