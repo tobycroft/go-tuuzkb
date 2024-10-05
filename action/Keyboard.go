@@ -41,15 +41,13 @@ func (self *Action) kb_banSomeKeys(c netSender.KeyboardData) {
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
 		self.kb_add_masking(hid.RightCtrl, true)
-		//fmt.Println("bankey")
-		self.Mask.Button.Range(func(key, value interface{}) bool {
-			fmt.Println("banbutton", key, value)
-			return true
-		})
-		self.Mask.Ctrl.Range(func(key, value interface{}) bool {
-			fmt.Println("banctrl", key, value)
-			return true
-		})
+	}
+}
+
+func (self *Action) kb_unbanall(c netSender.KeyboardData) {
+	if self.checkKeyIsPressed(c, hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+		self.Mask.Button.Clear()
+		self.Mask.Ctrl.Clear()
 	}
 }
 
