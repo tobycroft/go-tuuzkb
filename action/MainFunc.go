@@ -38,7 +38,7 @@ func (self *Action) SendKbGeneralDataRaw() {
 	}
 }
 
-func (self *Action) checkKeyIsPressedInAny(Ctrl byte, Btn ...byte) bool {
+func (self *Action) checkKeyPressedAny(Ctrl byte, Btn ...byte) bool {
 	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
 	if self.c.Ctrl == Ctrl {
 		for _, btn := range Btn {
