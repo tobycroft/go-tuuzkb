@@ -107,7 +107,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	case 0x88:
-		fmt.Println("键盘数据帧：", hex.EncodeToString(Data[2:]))
+		//fmt.Println("键盘数据帧：", hex.EncodeToString(Data[2:]))
 		netSender.CmdGetParaCfgRecv(Data[2:])
 		break
 

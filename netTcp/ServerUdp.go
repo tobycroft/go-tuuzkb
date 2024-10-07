@@ -19,7 +19,7 @@ type ServerUDP struct {
 }
 
 func (self *ServerUDP) Start() *ServerUDP {
-	buff := make([]byte, 256)
+	buff := make([]byte, 128)
 	var err error
 	self.Conn, err = net.ListenPacket("udp", ":6666")
 	if err != nil {

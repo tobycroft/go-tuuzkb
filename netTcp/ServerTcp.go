@@ -7,7 +7,7 @@ import (
 )
 
 func ServerRx() {
-	buff := make([]byte, 256)
+	buff := make([]byte, 128)
 	keyboard_server, err := net.Listen("tcp", ":6666")
 	if err != nil {
 		panic(err.Error())
