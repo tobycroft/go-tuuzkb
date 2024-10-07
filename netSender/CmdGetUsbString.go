@@ -31,9 +31,8 @@ func CmdGetUsbStringRecv(buf []byte) string {
 	binary.Read(bs, binary.BigEndian, &us)
 	bt := make([]byte, us.HidLen)
 	binary.Read(bs, binary.BigEndian, &bt)
-	fmt.Println("")
 	fmt.Println(crx)
 	fmt.Println(us)
-	fmt.Println(string(bt))
+	fmt.Println(string(bt[:us.HidLen]))
 	return string(bt)
 }

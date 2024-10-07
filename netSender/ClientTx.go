@@ -35,8 +35,9 @@ type sendData struct {
 }
 
 func (self *ClientTx) head() *ClientTx {
-	self.sendData = sendData{}
-	self.sendData.Head = uint16(start1)<<8 | uint16(start2)
+	self.sendData = sendData{
+		Head: uint16(start1)<<8 | uint16(start2),
+	}
 	return self
 }
 

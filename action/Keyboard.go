@@ -3,6 +3,7 @@ package action
 import (
 	"fmt"
 	"main.go/define/hid"
+	"time"
 )
 
 func (self *Action) keyboard_runnable() {
@@ -74,6 +75,7 @@ func (self *Action) kb_get_usbstring() {
 
 func (self *Action) kb_reboot() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
+		time.Sleep(2 * time.Second)
 		self.ClientTx.CmdReset()
 	}
 }

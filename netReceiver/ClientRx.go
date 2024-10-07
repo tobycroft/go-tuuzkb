@@ -107,11 +107,12 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	case 0x88:
-		fmt.Println("键值数据帧：", netSender.CmdGetParaCfgRecv(Data))
+		fmt.Println("键盘数据帧：", hex.EncodeToString(Data[2:]))
+		netSender.CmdGetParaCfgRecv(Data[2:])
 		break
 
 	case 0x8a:
-		fmt.Println("键值数据帧：", netSender.CmdGetUsbStringRecv(Data))
+		netSender.CmdGetUsbStringRecv(Data)
 		break
 
 	default:
