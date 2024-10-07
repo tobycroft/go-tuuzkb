@@ -17,7 +17,7 @@ func (self *ClientRx) RouterKeyboard() {
 func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	num := 0
 	if self.keys.Ctrl != c.Ctrl {
-		self.ctrl_define(int16(c.Ctrl) - int16(self.keys.Ctrl))
+		self.ctrl_define(c.Ctrl)
 		self.keys.Ctrl = c.Ctrl
 		num += 1
 	}
@@ -35,76 +35,41 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	return num
 }
 
-func (self *ClientRx) ctrl_define(ctrl int16) byte {
-	switch ctrl {
-	case hid.LeftCtrl:
+func (self *ClientRx) ctrl_define(ctrl byte) byte {
+	if ctrl&hid.LeftCtrl != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftCtrl), true)
-		break
+	}
 
-	case -hid.LeftCtrl:
-		self.OriginCtrl.Delete(byte(hid.LeftCtrl))
-		break
-
-	case hid.RightCtrl:
+	if ctrl&hid.RightCtrl != 0 {
 		self.OriginCtrl.Store(byte(hid.RightCtrl), true)
-		break
+	}
 
-	case -hid.RightCtrl:
-		self.OriginCtrl.Delete(byte(hid.RightCtrl))
-		break
-
-	case hid.LeftShift:
+	if ctrl&hid.LeftShift != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftShift), true)
-		break
+	}
 
-	case -hid.LeftShift:
-		self.OriginCtrl.Delete(byte(hid.LeftShift))
-		break
-
-	case hid.RightShift:
+	if ctrl&hid.RightShift != 0 {
 		self.OriginCtrl.Store(byte(hid.RightShift), true)
-		break
+	}
 
-	case -hid.RightShift:
-		self.OriginCtrl.Delete(byte(hid.RightShift))
-		break
-
-	case hid.LeftAlt:
+	if ctrl&hid.LeftAlt != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftAlt), true)
-		break
+	}
 
-	case -hid.LeftAlt:
-		self.OriginCtrl.Delete(byte(hid.LeftAlt))
-		break
-
-	case hid.RightAlt:
+	if ctrl&hid.RightAlt != 0 {
 		self.OriginCtrl.Store(byte(hid.RightAlt), true)
-		break
+	}
 
-	case -hid.RightAlt:
-		self.OriginCtrl.Delete(byte(hid.RightAlt))
-		break
-
-	case hid.LeftWindows:
+	if ctrl&hid.LeftWindows != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftWindows), true)
-		break
+	}
 
-	case -hid.LeftWindows:
-		self.OriginCtrl.Delete(byte(hid.LeftWindows))
-		break
-
-	case hid.RightWindows:
+	if ctrl&hid.RightWindows != 0 {
 		self.OriginCtrl.Store(byte(hid.RightWindows), true)
-		break
+	}
 
-	case -hid.RightWindows:
-		self.OriginCtrl.Delete(byte(hid.RightWindows))
-		break
-
-	case 0:
+	if ctrl == hid.CmdNone {
 		self.OriginCtrl.Clear()
-		break
-
 	}
 
 	return 0

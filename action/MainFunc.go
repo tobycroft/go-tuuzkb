@@ -27,7 +27,7 @@ func (self *Action) KeyUp(key byte) {
 	fmt.Println("keyboardAutoUP", out)
 }
 
-func (self *Action) SendKbGeneralDataRaw(c netSender.KeyboardData2) {
+func (self *Action) SendKbGeneralDataRaw() {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
 	go fmt.Println("keybaordsnd", out)
