@@ -19,7 +19,9 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys()
 		go self.kb_reboot()
 		go self.kb_unbanall()
-		go self.kb_test()
+		//go self.kb_test()
+		go self.key_main()
+		go self.qe_main()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -32,8 +34,6 @@ func (self *Action) kb_actvate() {
 		Endpoint_BeforeDelay.Store(0)
 		fmt.Println("aaa")
 		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
-	} else {
-		//go self.key_main()
 	}
 }
 

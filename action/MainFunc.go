@@ -38,6 +38,20 @@ func (self *Action) SendKbGeneralDataRaw() {
 	}
 }
 
+func (self *Action) checkKeyIsPressedInAny(Ctrl byte, Btn ...byte) bool {
+	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
+	if self.c.Ctrl == Ctrl {
+		for _, btn := range Btn {
+			for _, b := range btns {
+				if b == btn {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
 func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 	num := 0
 	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
