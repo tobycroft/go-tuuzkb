@@ -3,6 +3,7 @@ package netSender
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"main.go/define/cmd"
 )
 
@@ -35,6 +36,7 @@ func (self *ClientTx) CmdSendMsRelWheel(wheel int8) *ClientTx {
 		mousebyte.Wheel = byte(wheel) + 0x80
 	}
 	binary.Write(&buf, binary.BigEndian, mousebyte)
+	fmt.Println((buf.Bytes()))
 	self.data(mousebyte).send()
 
 	return self

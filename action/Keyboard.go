@@ -19,9 +19,10 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys()
 		go self.kb_reboot()
 		go self.kb_unbanall()
-		//go self.kb_test()
-		go self.key_main()
-		go self.qe_main()
+		go self.kb_test()
+		//go self.key_main()
+		//go self.qe_main()
+		//go self.whel_main()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -64,7 +65,6 @@ func (self *Action) kb_reboot() {
 
 func (self *Action) kb_test() {
 	if self.checkKeyIsPressedByOrder(0, hid.CmdScrollLock) {
-		self.KeyDown(hid.CmdA)
-		self.KeyUp(hid.CmdA)
+		self.ClientTx.CmdSendMsRelWheel(1)
 	}
 }
