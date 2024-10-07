@@ -19,10 +19,10 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys()
 		go self.kb_reboot()
 		go self.kb_unbanall()
-		go self.kb_test()
-		//go self.key_main()
-		//go self.qe_main()
-		//go self.whel_main()
+		//go self.kb_test()
+		go self.key_main()
+		go self.qe_main()
+		go self.whel_main()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -58,7 +58,7 @@ func (self *Action) kb_unbanall() {
 }
 
 func (self *Action) kb_reboot() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdPause, hid.CmdScrollLock) {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
 		self.ClientTx.CmdReset()
 	}
 }
