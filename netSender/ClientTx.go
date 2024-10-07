@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"time"
 )
 
 var Ctx = &ClientTx{}
@@ -72,5 +73,6 @@ func (self *ClientTx) sum() *ClientTx {
 func (self *ClientTx) send() {
 	self.sum()
 	self.TxChannel <- self.sendBuf.Bytes()
+	time.Sleep(1 * time.Millisecond)
 	self.sendBuf.Reset()
 }

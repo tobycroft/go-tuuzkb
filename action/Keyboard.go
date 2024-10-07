@@ -19,6 +19,7 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_banSomeKeys()
 		go self.kb_reboot()
 		go self.kb_unbanall()
+		go self.kb_test()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -62,7 +63,8 @@ func (self *Action) kb_reboot() {
 }
 
 func (self *Action) kb_test() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdA) {
-		fmt.Println("testa")
+	if self.checkKeyIsPressedByOrder(0, hid.CmdScrollLock) {
+		self.KeyDown(hid.CmdA)
+		self.KeyUp(hid.CmdA)
 	}
 }
