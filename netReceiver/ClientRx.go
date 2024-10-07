@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"main.go/define/hid"
 	"main.go/netSender"
 	"net"
 	"sync"
@@ -90,12 +91,23 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.PacketConn) {
 	switch Data[0] {
 
+	case 0x81:
+		//fmt.Println("9239:PowerUp:", hex.EncodeToString(Data[2:]))
+		fmt.Print("9239:Version:1.", Data[2]-0x30)
+		if Data[3] == 0x00 {
+			fmt.Print(":控制器识别失败")
+		} else {
+			fmt.Print(":控制器识别成功")
+		}
+		fmt.Println(":Lockers:", "Numlock:", Data[4]&hid.Bit0, "Capslock:", Data[4]&hid.Bit1, "Scrolllock:", Data[4]&hid.Bit2)
+		break
+
 	case 0x82:
 		//fmt.Println("CMD_SEND_KB_GENERAL_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
 		break
 
 	default:
-		go fmt.Println("rcv_unreco:", hex.EncodeToString(Data[:0]), hex.EncodeToString(Data[1:]))
+		go fmt.Println("rcv_unreco:", hex.EncodeToString(Data))
 
 	}
 }

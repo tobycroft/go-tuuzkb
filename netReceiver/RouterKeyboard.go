@@ -38,34 +38,50 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 func (self *ClientRx) ctrl_define(ctrl byte) byte {
 	if ctrl&hid.LeftCtrl != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftCtrl), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.LeftCtrl))
 	}
 
 	if ctrl&hid.RightCtrl != 0 {
 		self.OriginCtrl.Store(byte(hid.RightCtrl), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.RightCtrl))
 	}
 
 	if ctrl&hid.LeftShift != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftShift), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.LeftShift))
 	}
 
 	if ctrl&hid.RightShift != 0 {
 		self.OriginCtrl.Store(byte(hid.RightShift), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.RightShift))
 	}
 
 	if ctrl&hid.LeftAlt != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftAlt), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.LeftAlt))
 	}
 
 	if ctrl&hid.RightAlt != 0 {
 		self.OriginCtrl.Store(byte(hid.RightAlt), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.RightAlt))
 	}
 
 	if ctrl&hid.LeftWindows != 0 {
 		self.OriginCtrl.Store(byte(hid.LeftWindows), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.LeftWindows))
 	}
 
 	if ctrl&hid.RightWindows != 0 {
 		self.OriginCtrl.Store(byte(hid.RightWindows), true)
+	} else {
+		self.OriginCtrl.Delete(byte(hid.RightWindows))
 	}
 
 	if ctrl == hid.CmdNone {
