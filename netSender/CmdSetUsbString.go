@@ -13,8 +13,8 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	self.sendData.Cmd = cmd.CMD_SET_USB_STRING
 	//self.sendData.Len = 2
 	usbstr := Usbstr{
-		HidStingType: HidStingType,
-		HidLen:       0,
+		HidStringType: HidStingType,
+		HidLen:        0,
 	}
 	usbstr.HidLen = byte(len(str))
 	buf := bytes.Buffer{}

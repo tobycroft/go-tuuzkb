@@ -8,8 +8,8 @@ import (
 )
 
 type Usbstr struct {
-	HidStingType byte
-	HidLen       byte
+	HidStringType byte
+	HidLen        byte
 }
 
 // 获取字符串描述符配置
@@ -31,6 +31,7 @@ func CmdGetUsbStringRecv(buf []byte) string {
 	binary.Read(bs, binary.BigEndian, &us)
 	bt := make([]byte, us.HidLen)
 	binary.Read(bs, binary.BigEndian, &bt)
+	fmt.Println("")
 	fmt.Println(crx)
 	fmt.Println(us)
 	fmt.Println(string(bt))
