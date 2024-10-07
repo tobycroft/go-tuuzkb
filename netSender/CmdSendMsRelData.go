@@ -7,31 +7,35 @@ import (
 )
 
 // 发送 USB 键盘普通数据
-func (self *ClientTx) CmdSendMsRelData(keybytes KeyboardData) *ClientTx {
+func (self *ClientTx) CmdSendMsRelData(mousebyte MouseData) *ClientTx {
 	self.head()
 	self.sendData.Cmd = cmd.CMD_SEND_MS_REL_DATA
 
 	buf := bytes.Buffer{}
-	keybytes.Resv = 0x00
-	binary.Write(&buf, binary.BigEndian, keybytes)
+	binary.Write(&buf, binary.BigEndian, mousebyte)
 	//buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
 	//self.data(buf.Bytes()).send()
 	//self.data([]byte{}).send()
-	self.data(keybytes).send()
+	self.data(mousebyte).send()
 
 	return self
 }
 
 // 发送 USB 键盘普通数据
-func (self *ClientTx) CmdSendMsRelDataRaw(keybytes KeyboardData2) *ClientTx {
+func (self *ClientTx) CmdSendMsRelWheel(wheel int8) *ClientTx {
 	self.head()
 	self.sendData.Cmd = cmd.CMD_SEND_MS_REL_DATA
 
 	buf := bytes.Buffer{}
-	keybytes.Resv = 0x00
-	binary.Write(&buf, binary.BigEndian, keybytes)
-	self.data(keybytes).send()
+	mousebyte := MouseData{}
+	if wheel >= 0 {
+		mousebyte.Wheel = byte(wheel)
+	} else {
+		mousebyte.Wheel = byte(wheel) + 0x80
+	}
+	binary.Write(&buf, binary.BigEndian, mousebyte)
+	self.data(mousebyte).send()
 
 	return self
 }
