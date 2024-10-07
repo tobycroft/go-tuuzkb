@@ -14,7 +14,7 @@ func (self *Action) keyboard_runnable() {
 
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
-		fmt.Println("keybaordrecv", c)
+		//fmt.Println("keybaordrecv", c)
 		go self.kb_actvate()
 		go self.kb_banSomeKeys()
 		go self.kb_reboot()
@@ -33,7 +33,7 @@ func (self *Action) kb_actvate() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl, hid.CmdScrollLock) {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(0)
-		fmt.Println("aaa")
+		fmt.Println("Reset")
 		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
 	}
 }
