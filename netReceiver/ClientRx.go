@@ -13,23 +13,23 @@ import (
 var Crx = &ClientRx{}
 
 type ClientRx struct {
-	keyboardMain chan netSender.KeyboardData
+	keyboardMain chan netSender.KeyboardData2
 	mouseMain    chan any
 
-	KeyboardRxChannel chan netSender.KeyboardData
+	KeyboardRxChannel chan netSender.KeyboardData2
 	MouseRxChannel    chan any
 
-	keys           netSender.KeyboardData
+	keys           netSender.KeyboardData2
 	OriginalButton sync.Map
 	OriginCtrl     sync.Map
 }
 
 func (self *ClientRx) Ready() {
-	self.keyboardMain = make(chan netSender.KeyboardData)
+	self.keyboardMain = make(chan netSender.KeyboardData2)
 	self.mouseMain = make(chan any)
 
 	self.MouseRxChannel = make(chan any)
-	self.KeyboardRxChannel = make(chan netSender.KeyboardData)
+	self.KeyboardRxChannel = make(chan netSender.KeyboardData2)
 
 	go self.RouterKeyboard()
 }
@@ -39,6 +39,10 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		return
 	}
 	switch Data[0] {
+
+	case 0x00:
+		go self.Router9239(Data[1:], Addr, PackConn)
+		break
 
 	case 0x81:
 		go fmt.Println("链接")
@@ -61,7 +65,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		break
 
 	case 0x01:
-		kbreport := netSender.KeyboardData{}
+		kbreport := netSender.KeyboardData2{}
 		buf := bytes.NewReader(Data[1:9])
 		err := binary.Read(buf, binary.NativeEndian, &kbreport)
 		if err != nil {
@@ -78,7 +82,20 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		go fmt.Println("鼠标数据帧4：", Data[1:8])
 
 	default:
-		go fmt.Println("unreco:", Addr, Data[:1], hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
+		go fmt.Println("unreco:", Addr, Data[0], hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
+
+	}
+}
+
+func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.PacketConn) {
+	switch Data[0] {
+
+	case 0x82:
+		//fmt.Println("CMD_SEND_KB_GENERAL_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
+		break
+
+	default:
+		go fmt.Println("rcv_unreco:", hex.EncodeToString(Data[:0]), hex.EncodeToString(Data[1:]))
 
 	}
 }

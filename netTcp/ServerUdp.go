@@ -38,14 +38,14 @@ func (self *ServerUDP) Start() *ServerUDP {
 		if err != nil {
 			panic(err.Error())
 		}
-		if addr.String() == "10.0.0.91:6666" {
-			slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
-			for _, ddd := range slice_byte {
-				self.ClientRx.MessageRouter(ddd, addr, self.Conn)
-			}
-		} else {
-			//fmt.Println(addr.String(), hex.EncodeToString(buff))
+		//if addr.String() == "10.0.0.91:6666" {
+		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
+		for _, ddd := range slice_byte {
+			self.ClientRx.MessageRouter(ddd, addr, self.Conn)
 		}
+		//} else {
+		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
+		//}
 
 	}
 }

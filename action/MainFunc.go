@@ -27,19 +27,19 @@ func (self *Action) KeyUp(key byte) {
 	fmt.Println("keyboardAutoUP", out)
 }
 
-func (self *Action) SendKbGeneralDataRaw() {
+func (self *Action) SendKbGeneralDataRaw(c netSender.KeyboardData2) {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	if out.Resv != self.lastPressSum {
-		self.lastPressSum = out.Resv
+	go fmt.Println("keybaordsnd", out)
+	if out.Resv != self.lastPressSum.Load() {
+		self.lastPressSum.Store(out.Resv)
 		out.Resv = 0x00
 		self.ClientTx.CmdSendKbGeneralDataRaw(out)
-		fmt.Println("keybaordsnd", out)
 	}
 }
 
 func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
-	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
+	btns := self.c.Button
 	if self.c.Ctrl == Ctrl {
 		for _, btn := range Btn {
 			for _, b := range btns {
@@ -54,7 +54,7 @@ func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
+	btns := self.c.Button
 	if self.c.Ctrl == Ctrl {
 		for _, btn := range Btn {
 			for _, b := range btns {
@@ -73,7 +73,7 @@ func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	btns := [6]byte{self.c.Button0, self.c.Button1, self.c.Button2, self.c.Button3, self.c.Button4, self.c.Button5}
+	btns := self.c.Button
 	if self.c.Ctrl == Ctrl {
 		for i, btn := range Btn {
 			if btns[i] == btn {
@@ -89,38 +89,18 @@ func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 }
 
 func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
-	_, ok := Mask.Button.Load(self.c.Button0)
-	if !ok {
-		Button[0] = self.c.Button0
+	for i, button := range self.c.Button {
+		_, ok := Mask.Button.Load(button)
+		if !ok {
+			Button[i] = button
+		} else {
+			Button[i] = 0
+		}
+		sum += button
 	}
-	sum += Button[0]
-	_, ok = Mask.Button.Load(self.c.Button1)
-	if !ok {
-		Button[1] = self.c.Button1
-	}
-	sum += Button[1]
-	_, ok = Mask.Button.Load(self.c.Button2)
-	if !ok {
-		Button[2] = self.c.Button2
-	}
-	sum += Button[2]
-	_, ok = Mask.Button.Load(self.c.Button3)
-	if !ok {
-		Button[3] = self.c.Button3
-	}
-	sum += Button[3]
-	_, ok = Mask.Button.Load(self.c.Button4)
-	if !ok {
-		Button[4] = self.c.Button4
-	}
-	sum += Button[4]
-	_, ok = Mask.Button.Load(self.c.Button5)
-	if !ok {
-		Button[5] = self.c.Button5
-	}
-	sum += Button[5]
+
 	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {
-		_, ok = Mask.Ctrl.Load(key.(byte))
+		_, ok := Mask.Ctrl.Load(key.(byte))
 		if !ok {
 			Ctrl += key.(byte)
 		}

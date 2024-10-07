@@ -4,6 +4,7 @@ import (
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"sync"
+	"sync/atomic"
 )
 
 type Action struct {
@@ -14,8 +15,8 @@ type Action struct {
 	key
 
 	AutoPressed  sync.Map
-	lastPressSum byte
-	c            netSender.KeyboardData
+	lastPressSum atomic.Value
+	c            netSender.KeyboardData2
 }
 
 var Mask = mask{}

@@ -14,16 +14,16 @@ func (self *Action) keyboard_runnable() {
 
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
-		//fmt.Println("keybaordrecv", c)
-		go self.kb_actvate()
-		go self.kb_banSomeKeys()
-		go self.kb_reboot()
-		go self.kb_unbanall()
-		//go self.kb_test()
-		go self.key_main()
-		go self.qe_main()
-		go self.whel_main()
-		self.SendKbGeneralDataRaw()
+		fmt.Println("keybaordrecv", c)
+		//go self.kb_actvate()
+		//go self.kb_banSomeKeys()
+		//go self.kb_reboot()
+		//go self.kb_unbanall()
+		////go self.kb_test()
+		//go self.key_main()
+		//go self.qe_main()
+		//go self.whel_main()
+		self.SendKbGeneralDataRaw(c)
 
 	}
 	panic("键盘通道意外结束")

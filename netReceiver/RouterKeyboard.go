@@ -14,66 +14,23 @@ func (self *ClientRx) RouterKeyboard() {
 	}
 }
 
-func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData) int {
+func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	num := 0
 	if self.keys.Ctrl != c.Ctrl {
 		self.ctrl_define(int16(c.Ctrl) - int16(self.keys.Ctrl))
 		self.keys.Ctrl = c.Ctrl
 		num += 1
 	}
-	if self.keys.Button0 != self.banKey(c.Button0) {
-		if c.Button0 > self.keys.Button0 {
-			self.OriginalButton.Store(c.Button0, true)
-		} else if self.keys.Button0 > c.Button0 {
-			self.OriginalButton.Delete(self.keys.Button0)
+	for i, button := range c.Button {
+		if self.keys.Button[i] != self.banKey(button) {
+			if button > self.keys.Button[i] {
+				self.OriginalButton.Store(button, true)
+			} else if self.keys.Button[i] > button {
+				self.OriginalButton.Delete(self.keys.Button[i])
+			}
+			self.keys.Button[i] = self.banKey(button)
+			num += 1
 		}
-		self.keys.Button0 = self.banKey(c.Button0)
-		num += 1
-	}
-	if self.keys.Button1 != self.banKey(c.Button1) {
-		if c.Button1 > self.keys.Button1 {
-			self.OriginalButton.Store(c.Button1, true)
-		} else if self.keys.Button1 > c.Button1 {
-			self.OriginalButton.Delete(self.keys.Button1)
-		}
-		self.keys.Button1 = self.banKey(c.Button1)
-		num += 1
-	}
-	if self.keys.Button2 != self.banKey(c.Button2) {
-		if c.Button2 > self.keys.Button2 {
-			self.OriginalButton.Store(c.Button2, true)
-		} else if self.keys.Button2 > c.Button2 {
-			self.OriginalButton.Delete(self.keys.Button2)
-		}
-		self.keys.Button2 = self.banKey(c.Button2)
-		num += 1
-	}
-	if self.keys.Button3 != self.banKey(c.Button3) {
-		if c.Button3 > self.keys.Button3 {
-			self.OriginalButton.Store(c.Button3, true)
-		} else if self.keys.Button3 > c.Button3 {
-			self.OriginalButton.Delete(self.keys.Button3)
-		}
-		self.keys.Button3 = self.banKey(c.Button3)
-		num += 1
-	}
-	if self.keys.Button4 != self.banKey(c.Button4) {
-		if c.Button4 > self.keys.Button4 {
-			self.OriginalButton.Store(c.Button4, true)
-		} else if self.keys.Button4 > c.Button4 {
-			self.OriginalButton.Delete(self.keys.Button4)
-		}
-		self.keys.Button4 = self.banKey(c.Button4)
-		num += 1
-	}
-	if self.keys.Button5 != self.banKey(c.Button5) {
-		if c.Button5 > self.keys.Button5 {
-			self.OriginalButton.Store(c.Button5, true)
-		} else if self.keys.Button5 > c.Button5 {
-			self.OriginalButton.Delete(self.keys.Button5)
-		}
-		self.keys.Button5 = self.banKey(c.Button5)
-		num += 1
 	}
 	return num
 }
@@ -142,6 +99,10 @@ func (self *ClientRx) ctrl_define(ctrl int16) byte {
 
 	case -hid.RightWindows:
 		self.OriginCtrl.Delete(byte(hid.RightWindows))
+		break
+
+	case 0:
+		self.OriginCtrl.Clear()
 		break
 
 	}
