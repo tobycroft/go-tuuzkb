@@ -13,7 +13,9 @@ type Action struct {
 
 	key
 
-	lastPress byte
+	AutoPressed  sync.Map
+	lastPressSum byte
+	c            netSender.KeyboardData
 }
 
 var Mask = mask{}
