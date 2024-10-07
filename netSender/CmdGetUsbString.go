@@ -23,7 +23,7 @@ func (self *ClientTx) CmdGetUsbString() *ClientTx {
 }
 
 // 获取字符串描述符配置
-func (rx *ClientTx) CmdGetUsbStringRecv(buf []byte) string {
+func CmdGetUsbStringRecv(buf []byte) string {
 	bs := bytes.NewReader(buf)
 	crx := sendData{}
 	binary.Read(bs, binary.BigEndian, &crx)

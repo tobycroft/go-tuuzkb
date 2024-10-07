@@ -23,6 +23,9 @@ func (self *Action) keyboard_runnable() {
 		go self.key_main()
 		go self.qe_main()
 		go self.whel_main()
+
+		go self.kb_get_para()
+		go self.kb_get_usbstring()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -54,6 +57,18 @@ func (self *Action) kb_unbanall() {
 		Mask.Button.Clear()
 		Mask.Ctrl.Clear()
 		fmt.Println("unbanall")
+	}
+}
+
+func (self *Action) kb_get_para() {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdScrollLock) {
+		self.ClientTx.CmdGetParaCfg()
+	}
+}
+
+func (self *Action) kb_get_usbstring() {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen) {
+		self.ClientTx.CmdGetUsbString()
 	}
 }
 

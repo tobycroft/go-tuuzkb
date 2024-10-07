@@ -106,6 +106,14 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		//fmt.Println("CMD_SEND_KB_GENERAL_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
 		break
 
+	case 0x88:
+		fmt.Println("键值数据帧：", netSender.CmdGetParaCfgRecv(Data))
+		break
+
+	case 0x8a:
+		fmt.Println("键值数据帧：", netSender.CmdGetUsbStringRecv(Data))
+		break
+
 	default:
 		go fmt.Println("rcv_unreco:", hex.EncodeToString(Data))
 

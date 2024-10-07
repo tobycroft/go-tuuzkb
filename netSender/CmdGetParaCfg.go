@@ -13,14 +13,49 @@ func (self *ClientTx) CmdGetParaCfg() *ClientTx {
 	self.data([]byte{}).send()
 	return self
 }
-func (self *ClientTx) CmdGetParaCfgRecv(buf []byte) Para {
+func CmdGetParaCfgRecv(buf []byte) Para {
 	bs := bytes.NewReader(buf)
 	crx := sendData{}
 	binary.Read(bs, binary.BigEndian, &crx)
 	pa := Para{}
 	binary.Read(bs, binary.BigEndian, &pa)
-	fmt.Println(crx)
-	fmt.Println(pa)
+	switch pa.Mode {
+	case 0x00:
+		fmt.Println("工作模式：键盘鼠标")
+		break
+
+	case 0x01:
+		fmt.Println("工作模式：键盘")
+		break
+
+	case 0x02:
+		fmt.Println("工作模式：鼠标")
+		break
+
+	case 0x03:
+		fmt.Println("工作模式：HID Raw")
+		break
+	}
+
+	switch pa.Cfg {
+	case 0x00:
+		fmt.Println("配置：协议传输")
+		break
+
+	case 0x01:
+		fmt.Println("配置：ASCII")
+		break
+
+	case 0x02:
+		fmt.Println("配置：Passthough")
+		break
+	}
+
+	fmt.Println("通信地址:", pa.ComAddress)
+	fmt.Println("波特率:", pa.BaudRate)
+	fmt.Println("通信包间隔:", pa.SepDelay)
+	fmt.Println("PID:", pa.Pid, "VID:", pa.Vid)
+	fmt.Println("USB字符串:", pa.UsbStringSign)
 	return pa
 }
 
