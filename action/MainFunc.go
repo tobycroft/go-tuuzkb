@@ -16,7 +16,7 @@ func (self *Action) KeyDown(key byte) {
 		}
 	}
 	self.ClientTx.CmdSendKbGeneralDataRaw(out)
-	fmt.Println("keyboardAutoDN", out)
+	go fmt.Println("keyboardAutoDN", out)
 }
 
 func (self *Action) KeyUp(key byte) {
@@ -24,7 +24,7 @@ func (self *Action) KeyUp(key byte) {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
 	self.ClientTx.CmdSendKbGeneralDataRaw(out)
-	fmt.Println("keyboardAutoUP", out)
+	go fmt.Println("keyboardAutoUP", out)
 }
 
 func (self *Action) SendKbGeneralDataRaw() {
