@@ -29,14 +29,12 @@ func (self *ClientTx) CmdSendMsRelWheel(wheel int8) *ClientTx {
 	self.sendData.Cmd = cmd.CMD_SEND_MS_REL_DATA
 
 	buf := bytes.Buffer{}
-	mousebyte := MouseData{}
-	if wheel >= 0 {
-		mousebyte.Wheel = byte(wheel)
-	} else {
-		mousebyte.Wheel = byte(wheel) + 0x80
+	mousebyte := MouseData{
+		Resv:  0x01,
+		Wheel: byte(-wheel),
 	}
 	binary.Write(&buf, binary.BigEndian, mousebyte)
-	fmt.Println((buf.Bytes()))
+	fmt.Println(mousebyte)
 	self.data(mousebyte).send()
 
 	return self

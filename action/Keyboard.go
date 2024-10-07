@@ -65,6 +65,6 @@ func (self *Action) kb_reboot() {
 
 func (self *Action) kb_test() {
 	if self.checkKeyIsPressedByOrder(0, hid.CmdScrollLock) {
-		self.ClientTx.CmdSendMsRelWheel(1)
+		self.ClientTx.CmdSendMsRelWheel(-1)
 	}
 }
