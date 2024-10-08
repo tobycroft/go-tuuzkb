@@ -29,6 +29,12 @@ type mask struct {
 func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
 	self.ClientRx = clientrx
 	self.ClientTx = clienttx
+
+	self.ClientTx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
+	self.ClientTx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
+	self.ClientTx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")
+	go self.kb_banSomeKeys()
+
 	go self.mouse_runnable()
 	self.keyboard_runnable()
 	panic("runnable")

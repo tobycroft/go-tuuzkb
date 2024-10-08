@@ -8,7 +8,6 @@ import (
 )
 
 func (self *Action) keyboard_runnable() {
-	go self.kb_banSomeKeys()
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
 		//fmt.Println("keybaordrecv", c)
@@ -90,7 +89,7 @@ func (self *Action) kb_set_usbstring() {
 }
 
 func (self *Action) kb_reboot() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
+	if self.checkKeyIsPressedByOrder(hid.LeftCtrl+hid.LeftShift, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
 		time.Sleep(2 * time.Second)
 		self.ClientTx.CmdReset()
 	}

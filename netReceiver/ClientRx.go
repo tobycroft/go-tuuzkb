@@ -49,6 +49,10 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		self.Router9239(Data[2:], Addr, PackConn)
 		break
 
+	case 0x57:
+		self.Router9239(Data[2:], Addr, PackConn)
+		break
+
 	case 0x81:
 		go fmt.Println("链接")
 		break
@@ -90,7 +94,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		break
 
 	default:
-		go fmt.Println("main_unreco:", Addr, Data[0], hex.EncodeToString(Data[:2]), hex.EncodeToString(Data[1:]))
+		go fmt.Println("main_unreco:", Addr, Data[0], hex.EncodeToString(Data[:2]), hex.EncodeToString(Data))
 
 	}
 }
