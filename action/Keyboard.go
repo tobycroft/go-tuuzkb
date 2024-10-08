@@ -89,7 +89,7 @@ func (self *Action) kb_get_usbstring() {
 }
 
 func (self *Action) kb_set_usbstring() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.LeftCtrl+hid.RightShift, hid.CmdPrintScreen) {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift+hid.RightAlt, hid.CmdPrintScreen) {
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")

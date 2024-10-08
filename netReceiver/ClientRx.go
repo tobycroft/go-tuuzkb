@@ -42,7 +42,11 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 	switch Data[0] {
 
 	case 0x00:
-		go self.Router9239(Data[1:], Addr, PackConn)
+		self.Router9239(Data[1:], Addr, PackConn)
+		break
+
+	case 0xab:
+		self.Router9239(Data[2:], Addr, PackConn)
 		break
 
 	case 0x81:
@@ -75,15 +79,18 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		//go fmt.Println(kbreport)
 		self.keyboardMain <- kbreport
 		//go fmt.Println("键盘数据帧：", Data[1:9])
+		break
 
 	case 0x02:
 		go fmt.Println("鼠标数据帧2：", Data[1:5])
+		break
 
 	case 0x04:
 		go fmt.Println("鼠标数据帧4：", Data[1:8])
+		break
 
 	default:
-		go fmt.Println("unreco:", Addr, Data[0], hex.EncodeToString(Data[:1]), hex.EncodeToString(Data[1:]))
+		go fmt.Println("main_unreco:", Addr, Data[0], hex.EncodeToString(Data[:2]), hex.EncodeToString(Data[1:]))
 
 	}
 }
@@ -120,16 +127,18 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 
 	case 0x8a:
 		switch Data[2] {
+		//，0x00 表示厂商字符串描述符；0x01 表示产品字符串描述符；
+		//0x02 表示序列号字符串描述符
 		case 0x00:
-			fmt.Println("键盘数据帧0：", netSender.CmdGetUsbStringRecv(Data))
+			fmt.Println("键盘产商字符串描述符：", netSender.CmdGetUsbStringRecv(Data))
 			break
 
 		case 0x01:
-			fmt.Println("键盘数据帧1：", netSender.CmdGetUsbStringRecv(Data))
+			fmt.Println("键盘产品字符串描述符：", netSender.CmdGetUsbStringRecv(Data))
 			break
 
 		case 0x02:
-			fmt.Println("键盘数据帧2：", netSender.CmdGetUsbStringRecv(Data))
+			fmt.Println("键盘序列号字符串描述符：", netSender.CmdGetUsbStringRecv(Data))
 			break
 		}
 		//fmt.Println(hex.EncodeToString(Data), netSender.CmdGetUsbStringRecv(Data))
@@ -140,7 +149,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	default:
-		go fmt.Println("rcv_unreco:", hex.EncodeToString(Data))
+		go fmt.Println("9239_unreco:", hex.EncodeToString(Data))
 
 	}
 }
