@@ -9,8 +9,6 @@ import (
 
 // 设置字符串描述符配置
 func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_SET_USB_STRING
 	//self.sendData.Len = 2
 	usbstr := Usbstr{
 		HidStringType: HidStingType,
@@ -21,7 +19,7 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	binary.Write(&buf, binary.BigEndian, usbstr)
 	buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
-	self.data(buf.Bytes()).send()
+	self.head(cmd.CMD_SET_USB_STRING).data(buf.Bytes()).send()
 	time.Sleep(500 * time.Millisecond)
 	return self
 }

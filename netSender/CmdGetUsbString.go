@@ -16,9 +16,7 @@ type Usbstr struct {
 // 通过该命令向芯片获取当前所使
 // 用的 USB 字符串描述符配置
 func (self *ClientTx) CmdGetUsbString(HidStringType byte) *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_GET_USB_STRING
-	self.data([]byte{HidStringType}).send()
+	self.head(cmd.CMD_GET_USB_STRING).data([]byte{HidStringType}).send()
 	time.Sleep(500 * time.Millisecond)
 	return self
 }
@@ -27,8 +25,8 @@ func (self *ClientTx) CmdGetUsbString(HidStringType byte) *ClientTx {
 func CmdGetUsbStringRecv(buf []byte) string {
 	bs := bytes.NewReader(buf)
 	us := Usbstr{}
-	binary.Read(bs, binary.LittleEndian, &us)
+	binary.Read(bs, binary.BigEndian, &us)
 	bt := make([]byte, us.HidLen)
-	binary.Read(bs, binary.LittleEndian, &bt)
+	binary.Read(bs, binary.BigEndian, &bt)
 	return string(bt[2:us.HidLen])
 }

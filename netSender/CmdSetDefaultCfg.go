@@ -5,8 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdSetDefaultCfg() *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_SET_DEFAULT_CFG
-	self.data([]byte{}).send()
+	self.head(cmd.CMD_SET_DEFAULT_CFG).data([]byte{}).send()
 	return self
 }

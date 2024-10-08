@@ -5,8 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdGetInfo() *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_GET_INFO
-	self.data([]byte{}).send()
+	self.head(cmd.CMD_GET_INFO).data([]byte{}).send()
 	return self
 }

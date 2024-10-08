@@ -72,7 +72,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 	case 0x01:
 		kbreport := netSender.KeyboardData2{}
 		buf := bytes.NewReader(Data[1:9])
-		err := binary.Read(buf, binary.NativeEndian, &kbreport)
+		err := binary.Read(buf, binary.BigEndian, &kbreport)
 		if err != nil {
 			panic(err.Error())
 		}

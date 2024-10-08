@@ -9,9 +9,7 @@ import (
 )
 
 func (self *ClientTx) CmdGetParaCfg() *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_GET_PARA_CFG
-	self.data([]byte{}).send()
+	self.head(cmd.CMD_GET_PARA_CFG).data([]byte{}).send()
 	return self
 }
 func CmdGetParaCfgRecv(buf []byte) Para {

@@ -29,9 +29,6 @@ type Para struct {
 }
 
 func (self *ClientTx) CmdSetParaCfg() *ClientTx {
-	self.head()
-	self.sendData.Cmd = cmd.CMD_SET_PARA_CFG
-
 	pa := Para{
 		Mode:       SetModeKeyMouse,
 		Cfg:        SetCfgNorm,
@@ -58,7 +55,7 @@ func (self *ClientTx) CmdSetParaCfg() *ClientTx {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
-	self.data(pa).send()
+	self.head(cmd.CMD_SET_PARA_CFG).data(pa).send()
 	return self
 }
 func (self *ClientTx) CmdSetParaCfgRecv(buf []byte) [50]byte {
