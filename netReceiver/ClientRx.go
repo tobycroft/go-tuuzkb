@@ -114,6 +114,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		netSender.CmdGetParaCfgRecv(Data[2:])
 		break
 
+	case 0x85:
+		//fmt.Println("KBMS-操作成功")
+		break
+
 	case 0x8a:
 		netSender.CmdGetUsbStringRecv(Data)
 		break
