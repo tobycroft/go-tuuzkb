@@ -3,7 +3,6 @@ package netSender
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"main.go/define/cmd"
 	"time"
 )
@@ -21,7 +20,7 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	buf := bytes.Buffer{}
 	binary.Write(&buf, binary.BigEndian, usbstr)
 	buf.WriteString(str)
-	fmt.Println(string(buf.Bytes()))
+	//fmt.Println(string(buf.Bytes()))
 	self.data(buf.Bytes()).send()
 	time.Sleep(500 * time.Millisecond)
 	return self
