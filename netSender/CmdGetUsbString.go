@@ -19,7 +19,7 @@ func (self *ClientTx) CmdGetUsbString(HidStringType byte) *ClientTx {
 	self.head()
 	self.sendData.Cmd = cmd.CMD_GET_USB_STRING
 	self.data([]byte{HidStringType}).send()
-	time.Sleep(1 * time.Second)
+	time.Sleep(500 * time.Millisecond)
 	return self
 }
 

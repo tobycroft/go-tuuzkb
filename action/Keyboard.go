@@ -13,6 +13,8 @@ func (self *Action) keyboard_runnable() {
 	self.kb_add_masking(hid.CmdPause, false)
 	self.kb_add_masking(hid.CmdScrollLock, false)
 	self.kb_add_masking(hid.RightCtrl, true)
+	self.kb_add_masking(hid.RightShift, true)
+	self.kb_add_masking(hid.RightAlt, true)
 
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
@@ -27,7 +29,9 @@ func (self *Action) keyboard_runnable() {
 		go self.whel_main()
 
 		go self.kb_get_para()
+		go self.kb_set_para()
 		go self.kb_get_usbstring()
+		go self.kb_set_usbstring()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -50,12 +54,14 @@ func (self *Action) kb_banSomeKeys() {
 		self.kb_add_masking(hid.CmdPause, false)
 		self.kb_add_masking(hid.CmdScrollLock, false)
 		self.kb_add_masking(hid.RightCtrl, true)
+		self.kb_add_masking(hid.RightShift, true)
+		self.kb_add_masking(hid.RightAlt, true)
 		fmt.Println("ban_all")
 	}
 }
 
 func (self *Action) kb_unbanall() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdApplication, hid.CmdPrintScreen) {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
 		Mask.Button.Clear()
 		Mask.Ctrl.Clear()
 		fmt.Println("unbanall")
@@ -63,6 +69,12 @@ func (self *Action) kb_unbanall() {
 }
 
 func (self *Action) kb_get_para() {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdScrollLock) {
+		self.ClientTx.CmdGetParaCfg()
+	}
+}
+
+func (self *Action) kb_set_para() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdScrollLock) {
 		self.ClientTx.CmdGetParaCfg()
 	}
@@ -77,7 +89,7 @@ func (self *Action) kb_get_usbstring() {
 }
 
 func (self *Action) kb_set_usbstring() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdApplication, hid.CmdPrintScreen) {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.LeftCtrl+hid.RightShift, hid.CmdPrintScreen) {
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
 		self.ClientTx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")

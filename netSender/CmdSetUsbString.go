@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"main.go/define/cmd"
+	"time"
 )
 
 // 设置字符串描述符配置
@@ -22,6 +23,7 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	buf.WriteString(str)
 	fmt.Println(string(buf.Bytes()))
 	self.data(buf.Bytes()).send()
+	time.Sleep(500 * time.Millisecond)
 	return self
 }
 
