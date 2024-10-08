@@ -119,7 +119,20 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	case 0x8a:
-		go netSender.CmdGetUsbStringRecv(Data)
+		switch Data[2] {
+		case 0x00:
+			fmt.Println("键盘数据帧0：", netSender.CmdGetUsbStringRecv(Data))
+			break
+
+		case 0x01:
+			fmt.Println("键盘数据帧1：", netSender.CmdGetUsbStringRecv(Data))
+			break
+
+		case 0x02:
+			fmt.Println("键盘数据帧2：", netSender.CmdGetUsbStringRecv(Data))
+			break
+		}
+		//fmt.Println(hex.EncodeToString(Data), netSender.CmdGetUsbStringRecv(Data))
 		break
 
 	case 0xca:

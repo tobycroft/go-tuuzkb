@@ -24,3 +24,11 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	self.data(buf.Bytes()).send()
 	return self
 }
+
+// 0x00 表示厂商字符串描述符；0x01 表示产品字符串描述符；
+// 0x02 表示序列号字符串描述符
+const (
+	StrTypeManufacturer = 0x00
+	StrTypeProduct      = 0x01
+	StrTypeSerial       = 0x02
+)

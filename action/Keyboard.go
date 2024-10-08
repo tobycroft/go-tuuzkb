@@ -3,6 +3,7 @@ package action
 import (
 	"fmt"
 	"main.go/define/hid"
+	"main.go/netSender"
 	"time"
 )
 
@@ -69,7 +70,17 @@ func (self *Action) kb_get_para() {
 
 func (self *Action) kb_get_usbstring() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen) {
-		self.ClientTx.CmdGetUsbString()
+		self.ClientTx.CmdGetUsbString(netSender.StrTypeManufacturer)
+		self.ClientTx.CmdGetUsbString(netSender.StrTypeProduct)
+		self.ClientTx.CmdGetUsbString(netSender.StrTypeSerial)
+	}
+}
+
+func (self *Action) kb_set_usbstring() {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdApplication, hid.CmdPrintScreen) {
+		self.ClientTx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
+		self.ClientTx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
+		self.ClientTx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")
 	}
 }
 
