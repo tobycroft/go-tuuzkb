@@ -49,7 +49,7 @@ func (self *Action) kb_banSomeKeys() {
 	self.kb_add_masking(hid.CmdPause, false)
 	self.kb_add_masking(hid.CmdScrollLock, false)
 	self.kb_add_masking(hid.RightCtrl, true)
-	self.kb_add_masking(hid.RightShift, true)
+	//self.kb_add_masking(hid.RightShift, true)
 	self.kb_add_masking(hid.RightAlt, true)
 }
 

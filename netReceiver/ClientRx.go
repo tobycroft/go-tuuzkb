@@ -145,6 +145,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	case 0x8b:
+		if Data[1] == 0x01 {
+			go fmt.Println(hex.EncodeToString(Data))
+
+		}
 		break
 
 	case 0xca:
