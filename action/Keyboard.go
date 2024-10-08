@@ -8,19 +8,12 @@ import (
 )
 
 func (self *Action) keyboard_runnable() {
-	self.kb_add_masking(hid.CmdApplication, false)
-	self.kb_add_masking(hid.CmdPrintScreen, false)
-	self.kb_add_masking(hid.CmdPause, false)
-	self.kb_add_masking(hid.CmdScrollLock, false)
-	self.kb_add_masking(hid.RightCtrl, true)
-	self.kb_add_masking(hid.RightShift, true)
-	self.kb_add_masking(hid.RightAlt, true)
-
+	go self.kb_banSomeKeys()
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
 		//fmt.Println("keybaordrecv", c)
+		self.SendKbGeneralDataRaw()
 		go self.kb_actvate()
-		go self.kb_banSomeKeys()
 		go self.kb_reboot()
 		go self.kb_unbanall()
 		//go self.kb_test()
@@ -32,7 +25,10 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_set_para()
 		go self.kb_get_usbstring()
 		go self.kb_set_usbstring()
-		self.SendKbGeneralDataRaw()
+		if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
+			go self.kb_banSomeKeys()
+			fmt.Println("ban_all")
+		}
 
 	}
 	panic("键盘通道意外结束")
@@ -48,16 +44,13 @@ func (self *Action) kb_actvate() {
 }
 
 func (self *Action) kb_banSomeKeys() {
-	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
-		self.kb_add_masking(hid.CmdApplication, false)
-		self.kb_add_masking(hid.CmdPrintScreen, false)
-		self.kb_add_masking(hid.CmdPause, false)
-		self.kb_add_masking(hid.CmdScrollLock, false)
-		self.kb_add_masking(hid.RightCtrl, true)
-		self.kb_add_masking(hid.RightShift, true)
-		self.kb_add_masking(hid.RightAlt, true)
-		fmt.Println("ban_all")
-	}
+	self.kb_add_masking(hid.CmdApplication, false)
+	self.kb_add_masking(hid.CmdPrintScreen, false)
+	self.kb_add_masking(hid.CmdPause, false)
+	self.kb_add_masking(hid.CmdScrollLock, false)
+	self.kb_add_masking(hid.RightCtrl, true)
+	self.kb_add_masking(hid.RightShift, true)
+	self.kb_add_masking(hid.RightAlt, true)
 }
 
 func (self *Action) kb_unbanall() {
