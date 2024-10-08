@@ -158,6 +158,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		go fmt.Println("错误：", hex.EncodeToString(Data[2:2]))
 		break
 
+	case 0x8f:
+		fmt.Println("设备重启完成")
+		break
+
 	default:
 		go fmt.Println("9239_unreco:", hex.EncodeToString(Data))
 
