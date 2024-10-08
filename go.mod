@@ -47,6 +47,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pizixi/KeyBoardListen v0.0.0-20240120124838-d689152032e8 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
+	github.com/tobycroft/TuuzNet v1.4.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/vcaesar/keycode v0.10.1 // indirect
