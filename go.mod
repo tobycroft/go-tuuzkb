@@ -12,10 +12,9 @@ require (
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/redis/go-redis/v9 v9.6.1
-	github.com/robotn/gohook v0.41.0
 	github.com/shopspring/decimal v1.4.0
-	github.com/tarm/serial v0.0.0-20180830185346-98f6abe2eb07
 	github.com/tobycroft/Calc v1.3.5
+	github.com/tobycroft/TuuzNet v1.4.0
 	github.com/tobycroft/gorose-pro v1.14.1
 )
 
@@ -45,12 +44,9 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
-	github.com/pizixi/KeyBoardListen v0.0.0-20240120124838-d689152032e8 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
-	github.com/tobycroft/TuuzNet v1.4.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
-	github.com/vcaesar/keycode v0.10.1 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/image v0.19.0 // indirect
