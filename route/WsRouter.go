@@ -21,6 +21,10 @@ func MainWsRouter() {
 			websocket.Login(&c)
 			break
 
+		case "info":
+			websocket.Info(&c)
+			break
+
 		default:
 			Net.WsServer_WriteChannel <- c
 			break

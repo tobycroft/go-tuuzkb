@@ -11,7 +11,6 @@ func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
 		//fmt.Println("keybaordrecv", c)
-		self.SendKbGeneralDataRaw()
 		go self.kb_actvate()
 		go self.kb_reboot()
 		go self.kb_unbanall()
@@ -28,6 +27,7 @@ func (self *Action) keyboard_runnable() {
 			go self.kb_banSomeKeys()
 			fmt.Println("ban_all")
 		}
+		self.SendKbGeneralDataRaw()
 
 	}
 	panic("键盘通道意外结束")
