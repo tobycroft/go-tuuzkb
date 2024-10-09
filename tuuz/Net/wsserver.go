@@ -48,12 +48,6 @@ func (ws *WsServer) NewServer(w http.ResponseWriter, r *http.Request, responseHe
 	defer ws.Conn.Close()
 	for {
 		Type, message, err := ws.Conn.ReadMessage()
-		//if err != nil {
-		//	ws.err = err
-		//	WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: false}
-		//	log.Println("server-read-error:", err)
-		//	return
-		//}
 		switch Type {
 
 		case websocket.TextMessage:
@@ -79,7 +73,8 @@ func (ws *WsServer) NewServer(w http.ResponseWriter, r *http.Request, responseHe
 			break
 
 		case websocket.CloseMessage, -1:
-			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type, Status: false}
+			WsServer_WriteChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}
 			return
 
 		default:
