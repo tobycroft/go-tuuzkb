@@ -73,8 +73,23 @@ func (ws *WsServer) NewServer(w http.ResponseWriter, r *http.Request, responseHe
 			break
 
 		case websocket.CloseMessage, -1:
-			WsServer_WriteChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}
-			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}
+			go func() {
+				select {
+				case <-time.After(1 * time.Second):
+					break
+				case WsServer_WriteChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}:
+					break
+				}
+			}()
+
+			go func() {
+				select {
+				case <-time.After(1 * time.Second):
+					break
+				case WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Type: Type}:
+					break
+				}
+			}()
 			return
 
 		default:
@@ -116,10 +131,7 @@ func (ws *WsServer) send_data() {
 			break
 
 		case websocket.CloseMessage, -1:
-			err := c.Conn.WriteMessage(websocket.CloseMessage, []byte("close"))
-			if err != nil {
-				log.Println("server-close-error:", err)
-			}
+			c.Conn.WriteMessage(websocket.CloseMessage, []byte("close"))
 			return
 
 		default:
