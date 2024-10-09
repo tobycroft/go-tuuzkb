@@ -12,8 +12,8 @@ func Info(c *Net.WsData) {
 		"Endpoint_delay":        action.Endpoint_delay.Load(),
 		"Endpoint_BeforeDelay":  action.Endpoint_BeforeDelay.Load(),
 		"Endpoint_dynamic_mode": action.Endpoint_dynamic_mode.Load(),
-		"vhits":                 action.VHits.Load(),
-		"vlast":                 action.VLast.Load(),
+		"VHits":                 action.VHits.Load(),
+		"VLast":                 action.VLast.Load(),
 
 		"LCD1": action.LcdLine1,
 		"LCD2": action.LcdLine2,

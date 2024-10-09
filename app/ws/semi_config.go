@@ -7,16 +7,18 @@ import (
 )
 
 func SemiConfig(c *Net.WsData) {
-	a, err := sonic.Get(c.Message, "data")
+	a, err := sonic.Get(c.Message, "type")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	Net.WsServer_WriteChannel <- Net.WsData{
-		Conn:    c.Conn,
-		Type:    0,
-		Message: []byte(""),
-		Status:  true,
+	Type, err := a.String()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	switch Type {
+	case "Mode":
 	}
 	tjson, err := a.MarshalJSON()
 	if err != nil {
