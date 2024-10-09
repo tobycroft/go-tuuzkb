@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/app/websocket"
 )
-
-type route struct {
-	Route string
-}
 
 func MainWsRouter() {
 	for c := range Net.WsServer_ReadChannel {
@@ -23,6 +20,10 @@ func MainWsRouter() {
 		}
 		switch r {
 		case "login":
+			websocket.Login(&c)
+			break
+
+		default:
 			Net.WsServer_WriteChannel <- c
 			break
 		}
