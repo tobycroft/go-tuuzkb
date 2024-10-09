@@ -12,8 +12,6 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
-	key
-
 	AutoPressed  sync.Map
 	lastPressSum atomic.Value
 	c            netSender.KeyboardData2
