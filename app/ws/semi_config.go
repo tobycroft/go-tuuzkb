@@ -36,6 +36,11 @@ func SemiConfig(c *Net.WsData) {
 		action.SwitchMode()
 		break
 
+	case "Endpoint_dynamic_mode":
+		action.Endpoint_dynamic_mode.Store(Calc.Any2Int64(data["Endpoint_dynamic_mode"]))
+		action.SwitchDynamicMode()
+		break
+
 	default:
 		fmt.Println(c.Conn.RemoteAddr().String(), Type)
 		break
