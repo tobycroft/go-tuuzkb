@@ -2,11 +2,27 @@ package websocket
 
 import (
 	"fmt"
-	Net "github.com/tobycroft/TuuzNet"
+	"main.go/tuuz/Net"
 )
+
+type route struct {
+	Route string
+}
 
 func MainWsRouter() {
 	for c := range Net.WsServer_ReadChannel {
-		fmt.Println(c)
+		fmt.Println(c.Conn.RemoteAddr(), string(c.Message), c.Status)
+		//r := route{}
+		//err := sonic.Unmarshal(c.Message, &r)
+		//if err != nil {
+		//	//fmt.Println(err)
+		//	continue
+		//}
+		//
+		//switch r.Route {
+		//case "login":
+		//	Net.WsServer_WriteChannel <- c
+		//	break
+		//}
 	}
 }

@@ -2,15 +2,15 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	Net "github.com/tobycroft/TuuzNet"
 	v1 "main.go/route/v1"
+	"main.go/tuuz/Net"
 )
 
 func OnRoute(router *gin.Engine) {
 	router.Any("/", func(c *gin.Context) {
 		ws := Net.WsServer{}
-		ws.NewServer(c.Writer, c.Request, nil)
-		c.String(0, router.BasePath())
+		ws.NewServer(c.Writer, c.Request, c.Writer.Header())
+		//c.String(0, router.BasePath())
 	})
 	version1 := router.Group("/v1")
 	{

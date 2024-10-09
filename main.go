@@ -32,7 +32,7 @@ func main() {
 	go websocket.MainWsRouter()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
-	gin.SetMode(gin.TestMode)
+	//gin.SetMode(gin.TestMode)
 	gin.DefaultWriter = ioutil.Discard
 	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
 	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)

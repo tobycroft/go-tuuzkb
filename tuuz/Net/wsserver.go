@@ -33,14 +33,39 @@ func (ws *WsServer) NewServer(w http.ResponseWriter, r *http.Request, responseHe
 	}
 	go ws.send_data()
 	for {
-		_, message, err := ws.Conn.ReadMessage()
+		Type, message, err := ws.Conn.ReadMessage()
 		if err != nil {
 			ws.err = err
-			log.Println("server-read-error:", err)
 			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: false}
+			log.Println("server-read-error:", err)
 			return
 		}
-		WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: true}
+		switch Type {
+		case websocket.TextMessage:
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: true}
+			break
+
+		case websocket.BinaryMessage:
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: true}
+			break
+
+		case websocket.PingMessage:
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: true}
+			break
+
+		case websocket.PongMessage:
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: true}
+			break
+
+		case websocket.CloseMessage:
+			ws.Conn.Close()
+			WsServer_ReadChannel <- WsData{Conn: ws.Conn, Message: message, Status: false}
+			break
+
+		default:
+			break
+		}
+
 	}
 }
 
