@@ -1,9 +1,10 @@
 package route
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
-	"main.go/app/websocket"
+	"main.go/app/ws"
 )
 
 func MainWsRouter() {
@@ -18,15 +19,15 @@ func MainWsRouter() {
 		}
 		switch r {
 		case "login":
-			websocket.Login(&c)
+			ws.Login(&c)
 			break
 
 		case "info":
-			websocket.Info(&c)
+			ws.Info(&c)
 			break
 
 		default:
-			Net.WsServer_WriteChannel <- c
+			fmt.Println(c.Conn.RemoteAddr().String())
 			break
 		}
 	}
