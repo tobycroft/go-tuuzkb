@@ -53,9 +53,13 @@ func SemiConfig(c *Net.WsData) {
 		fmt.Println(c.Conn.RemoteAddr().String(), Type)
 		break
 	}
-	Net.WsServer_WriteChannel <- Net.WsData{
-		Conn:    c.Conn,
-		Type:    websocket.TextMessage,
-		Message: []byte("update"),
-	}
+	Net.WsConns.Range(func(key, value interface{}) bool {
+		Net.WsServer_WriteChannel <- Net.WsData{
+			Conn:    c.Conn,
+			Type:    websocket.TextMessage,
+			Message: []byte("update"),
+		}
+		return true
+	})
+
 }
