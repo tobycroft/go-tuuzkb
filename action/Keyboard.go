@@ -43,13 +43,13 @@ func (self *Action) kb_actvate() {
 }
 
 func (self *Action) kb_banSomeKeys() {
-	self.kb_add_masking(hid.CmdApplication, false)
-	self.kb_add_masking(hid.CmdPrintScreen, false)
-	self.kb_add_masking(hid.CmdPause, false)
-	self.kb_add_masking(hid.CmdScrollLock, false)
-	self.kb_add_masking(hid.RightCtrl, true)
-	//self.kb_add_masking(hid.RightShift, true)
-	self.kb_add_masking(hid.RightAlt, true)
+	kb_add_masking(hid.CmdApplication, false)
+	kb_add_masking(hid.CmdPrintScreen, false)
+	kb_add_masking(hid.CmdPause, false)
+	kb_add_masking(hid.CmdScrollLock, false)
+	kb_add_masking(hid.RightCtrl, true)
+	//kb_add_masking(hid.RightShift, true)
+	kb_add_masking(hid.RightAlt, true)
 }
 
 func (self *Action) kb_unbanall() {

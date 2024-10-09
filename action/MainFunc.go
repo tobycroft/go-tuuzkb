@@ -110,7 +110,7 @@ func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
 	return
 }
 
-func (self *Action) kb_add_masking(key byte, is_ctrl bool) {
+func kb_add_masking(key byte, is_ctrl bool) {
 	if is_ctrl {
 		Mask.Ctrl.Store(key, true)
 	} else {
@@ -118,7 +118,7 @@ func (self *Action) kb_add_masking(key byte, is_ctrl bool) {
 	}
 }
 
-func (self *Action) kb_remove_masking(key byte, is_ctrl bool) {
+func kb_remove_masking(key byte, is_ctrl bool) {
 	if is_ctrl {
 		Mask.Ctrl.Delete(key)
 	} else {
@@ -126,7 +126,7 @@ func (self *Action) kb_remove_masking(key byte, is_ctrl bool) {
 	}
 }
 
-func (self *Action) kb_chec_mask(key byte, is_ctrl bool) bool {
+func kb_chec_mask(key byte, is_ctrl bool) bool {
 	if is_ctrl {
 		_, ok := Mask.Ctrl.Load(key)
 		return ok

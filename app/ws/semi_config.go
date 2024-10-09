@@ -3,7 +3,10 @@ package ws
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
+	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/action"
 )
 
 func SemiConfig(c *Net.WsData) {
@@ -17,20 +20,29 @@ func SemiConfig(c *Net.WsData) {
 		fmt.Println(err)
 		return
 	}
+	d, err := sonic.Get(c.Message, "data")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	data, err := d.Map()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	switch Type {
 	case "Mode":
+		action.Mode.Store(Calc.Any2Int64(data["Mode"]))
+		action.SwitchMode()
+		break
+
+	default:
+		fmt.Println(c.Conn.RemoteAddr().String(), Type)
+		break
 	}
-	tjson, err := a.MarshalJSON()
-	if err != nil {
-		fmt.Println(err)
-		return
+	Net.WsServer_WriteChannel <- Net.WsData{
+		Conn:    c.Conn,
+		Type:    websocket.TextMessage,
+		Message: []byte("update"),
 	}
-	ld := &loginData{}
-	err = sonic.Unmarshal(tjson, &ld)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(ld)
-	//jsonObj := sonic.Unmarshal(c.Message, &loginData{})
 }
