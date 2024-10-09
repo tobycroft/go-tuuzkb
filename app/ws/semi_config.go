@@ -41,6 +41,14 @@ func SemiConfig(c *Net.WsData) {
 		action.SwitchDynamicMode()
 		break
 
+	case "Endpoint_delay":
+		action.Endpoint_delay.Store(Calc.Any2Int64(data["Endpoint_delay"]))
+		break
+
+	case "Endpoint_BeforeDelay":
+		action.Endpoint_BeforeDelay.Store(Calc.Any2Int64(data["Endpoint_BeforeDelay"]))
+		break
+
 	default:
 		fmt.Println(c.Conn.RemoteAddr().String(), Type)
 		break
