@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
 )
@@ -13,6 +14,7 @@ type loginData struct {
 func Login(c *Net.WsData) {
 	a, err := sonic.Get(c.Message, "data")
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	Net.WsServer_WriteChannel <- Net.WsData{
@@ -22,6 +24,16 @@ func Login(c *Net.WsData) {
 		Status:  true,
 	}
 	tjson, err := a.MarshalJSON()
-	sonic.Unmarshal(tjson, &loginData{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	ld := &loginData{}
+	err = sonic.Unmarshal(tjson, &ld)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(ld)
 	//jsonObj := sonic.Unmarshal(c.Message, &loginData{})
 }
