@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"main.go/action"
+	"main.go/app/websocket"
 	"main.go/config/app_conf"
 	"main.go/netReceiver"
 	"main.go/netSender"
@@ -28,7 +29,7 @@ func main() {
 		ClientRx: netReceiver.Crx,
 	}
 	go sudp.Start()
-
+	go websocket.MainWsRouter()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
 	gin.SetMode(gin.TestMode)
