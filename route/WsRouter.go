@@ -11,6 +11,7 @@ func MainWsRouter() {
 	for c := range Net.WsServer_ReadChannel {
 		nd, err := sonic.Get(c.Message, "route")
 		if err != nil {
+			fmt.Println("err", string(c.Message))
 			continue
 		}
 		r, err := nd.String()
@@ -24,6 +25,10 @@ func MainWsRouter() {
 
 		case "info":
 			ws.Info(&c)
+			break
+
+		case "semi-config":
+			ws.SemiConfig(&c)
 			break
 
 		default:

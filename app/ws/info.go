@@ -17,7 +17,7 @@ func Info(c *Net.WsData) {
 
 		"LCD1": action.LcdLine1,
 		"LCD2": action.LcdLine2,
-		"LCD3": action.LcdLine3,
+		"Mode": action.Mode.Load(),
 	}
 	bt, err := sonic.Marshal(data)
 	if err != nil {
