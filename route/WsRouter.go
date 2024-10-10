@@ -31,6 +31,10 @@ func MainWsRouter() {
 			ws.SemiConfig(&c)
 			break
 
+		case "kbd":
+			ws.Kbd(&c)
+			break
+
 		default:
 			fmt.Println(c.Conn.RemoteAddr().String())
 			break
