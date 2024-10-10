@@ -105,6 +105,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 	case 0x00:
 		break
 
+	case 0x01:
+		//fmt.Println("ping")
+		break
+
 	case 0x81:
 		//fmt.Println("9239:PowerUp:", hex.EncodeToString(Data[2:]))
 		fmt.Print("9239:Version:1.", Data[2]-0x30)
