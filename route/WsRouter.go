@@ -20,19 +20,19 @@ func MainWsRouter() {
 		}
 		switch r {
 		case "login":
-			ws.Login(&c)
+			go ws.Login(&c)
 			break
 
 		case "info":
-			ws.Info(&c)
+			go ws.Info(&c)
 			break
 
 		case "semi-config":
-			ws.SemiConfig(&c)
+			go ws.SemiConfig(&c)
 			break
 
 		case "kbd":
-			ws.Kbd(&c)
+			go ws.Kbd(&c)
 			break
 
 		default:

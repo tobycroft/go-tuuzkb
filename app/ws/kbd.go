@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/netSender"
+	"time"
 )
 
 func Kbd(c *Net.WsData) {
@@ -19,6 +21,8 @@ func Kbd(c *Net.WsData) {
 	}
 	switch Type {
 	case "reset":
+		time.Sleep(1 * time.Second)
+		netSender.Ctx.CmdReset()
 		break
 
 	default:
