@@ -28,17 +28,22 @@ type Para struct {
 	Blank3               uint32
 }
 
-func (self *ClientTx) CmdSetParaCfg() *ClientTx {
+const BaudRate3k = 0x493e0
+const BaudRate115200 = 0x1c200
+const BaudRate9600 = 0x2580
+
+//0x05ac 0x0256
+
+func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx {
 	pa := Para{
-		Mode:       SetModeKeyMouse,
-		Cfg:        SetCfgNorm,
-		ComAddress: 0x00,
-		BaudRate:   0x1c200,
-		//BaudRate:             0x2580,
+		Mode:                 SetModeKeyMouse,
+		Cfg:                  SetCfgNorm,
+		ComAddress:           0x00,
+		BaudRate:             BaudRate,
 		Blank1:               0x0000,
 		SepDelay:             0x1,
-		Pid:                  bits.ReverseBytes16(0x05ac),
-		Vid:                  bits.ReverseBytes16(0x0256),
+		Pid:                  bits.ReverseBytes16(Pid),
+		Vid:                  bits.ReverseBytes16(Vid),
 		KeyboardDelay:        0x00,
 		KeyboardReleaseDelay: 0x01,
 		EnterSignAuto:        0x00,
