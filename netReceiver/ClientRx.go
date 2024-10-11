@@ -170,6 +170,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		fmt.Println("设备重启完成")
 		break
 
+	case 0x89:
+		fmt.Println("设备CFG设定成功")
+		break
+
 	default:
 		go fmt.Println("9239_unreco:", hex.EncodeToString(Data))
 

@@ -5,6 +5,7 @@ import (
 	"main.go/netSender"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type Action struct {
@@ -27,13 +28,19 @@ type mask struct {
 func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
 	self.ClientRx = clientrx
 	self.ClientTx = clienttx
+	go func() {
+		time.Sleep(3 * time.Second)
+		SetUsbString()
+	}()
 
-	self.ClientTx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
-	self.ClientTx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
-	self.ClientTx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")
 	go self.kb_banSomeKeys()
-
 	go self.mouse_runnable()
 	self.keyboard_runnable()
 	panic("runnable")
+}
+
+func SetUsbString() {
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")
 }

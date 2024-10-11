@@ -63,13 +63,10 @@ func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx 
 	self.head(cmd.CMD_SET_PARA_CFG).data(pa).send()
 	return self
 }
-func (self *ClientTx) CmdSetParaCfgRecv(buf []byte) [50]byte {
+func CmdSetParaCfgRecv(buf []byte) [50]byte {
 	bs := bytes.NewReader(buf)
-	crx := sendData{}
-	binary.Read(bs, binary.BigEndian, &crx)
 	dats := [50]byte{}
 	binary.Read(bs, binary.BigEndian, &dats)
-	fmt.Println(crx)
 	fmt.Println(dats)
 	return dats
 }
