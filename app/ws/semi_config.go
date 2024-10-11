@@ -54,12 +54,10 @@ func SemiConfig(c *Net.WsData) {
 		break
 	}
 	Net.WsConns.Range(func(key, value interface{}) bool {
-		if value != c.Conn {
-			Net.WsServer_WriteChannel <- Net.WsData{
-				Conn:    value.(*websocket.Conn),
-				Type:    websocket.TextMessage,
-				Message: []byte("update"),
-			}
+		Net.WsServer_WriteChannel <- Net.WsData{
+			Conn:    value.(*websocket.Conn),
+			Type:    websocket.TextMessage,
+			Message: []byte("update"),
 		}
 		return true
 	})
