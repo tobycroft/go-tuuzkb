@@ -28,7 +28,7 @@ type Para struct {
 	Blank3               uint32
 }
 
-const BaudRate3k = 0x493e0
+const BaudRate300k = 0x493e0
 const BaudRate115200 = 0x1c200
 const BaudRate9600 = 0x2580
 
