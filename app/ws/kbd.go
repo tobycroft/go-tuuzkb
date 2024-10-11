@@ -22,6 +22,7 @@ func Kbd(c *Net.WsData) {
 	}
 	switch Type {
 	case "reset":
+		action.SetUsbString()
 		time.Sleep(1 * time.Second)
 		go netSender.Ctx.CmdReset()
 		break

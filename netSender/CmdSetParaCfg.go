@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"main.go/define/cmd"
+	"main.go/define/hid"
 	"math/bits"
 )
 
@@ -49,7 +50,7 @@ func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx 
 		EnterSignAuto:        0x00,
 		EnterSign:            936748722493063168,
 		KeyboardFilter:       0x0000000000000000,
-		UsbStringSign:        0x01,
+		UsbStringSign:        hid.Bit1,
 		FastUploadSign:       0x00,
 		Blank2:               0x00000000,
 		Blank3:               0x00000000,
