@@ -62,7 +62,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		break
 
 	case 0x82:
-		go fmt.Println(Data[0], Data)
+		//go fmt.Println("状态请求:", Data[0], Data)
 		break
 
 	case 0x80:
