@@ -40,7 +40,7 @@ func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.
 }
 
 func SetUsbString() {
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G ManualFacture")
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G Reciever")
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "05ac")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "A87")
 }

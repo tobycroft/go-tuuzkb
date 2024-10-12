@@ -9,6 +9,7 @@ import (
 	"main.go/netSender"
 	"net"
 	"sync"
+	"time"
 )
 
 var Crx = &ClientRx{}
@@ -168,6 +169,13 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 
 	case 0x8f:
 		fmt.Println("设备重启完成")
+		go func() {
+			time.Sleep(3 * time.Second)
+			netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
+			netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
+			netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "A87")
+		}()
+
 		break
 
 	case 0x89:
