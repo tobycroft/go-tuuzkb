@@ -1,7 +1,6 @@
 package action
 
 import (
-	"fmt"
 	"main.go/netSender"
 )
 
@@ -16,7 +15,7 @@ func (self *Action) KeyDown(key byte) {
 		}
 	}
 	self.ClientTx.CmdSendKbGeneralDataRaw(out)
-	go fmt.Println("keyboardAutoDN", out)
+	//go fmt.Println("keyboardAutoDN", out)
 }
 
 func (self *Action) KeyUp(key byte) {
@@ -24,7 +23,7 @@ func (self *Action) KeyUp(key byte) {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
 	self.ClientTx.CmdSendKbGeneralDataRaw(out)
-	go fmt.Println("keyboardAutoUP", out)
+	//go fmt.Println("keyboardAutoUP", out)
 }
 
 func (self *Action) SendKbGeneralDataRaw() {
