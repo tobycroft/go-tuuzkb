@@ -50,7 +50,7 @@ func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx 
 		EnterSignAuto:        0x00,
 		EnterSign:            936748722493063168,
 		KeyboardFilter:       0x0000000000000000,
-		UsbStringSign:        hid.Bit0 | hid.Bit1 | hid.Bit2 | hid.Bit7,
+		UsbStringSign:        hid.Bit0 + hid.Bit1 + hid.Bit2 + hid.Bit7,
 		FastUploadSign:       0x00,
 		Blank2:               0x00000000,
 		Blank3:               0x00000000,
