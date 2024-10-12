@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
-	"main.go/action"
+	"main.go/netReceiver"
 	"main.go/netSender"
 	"time"
 )
@@ -22,7 +22,7 @@ func Kbd(c *Net.WsData) {
 	}
 	switch Type {
 	case "reset":
-		action.SetUsbString()
+		netReceiver.SetUsbString()
 		time.Sleep(500 * time.Millisecond)
 		netSender.Ctx.CmdReset()
 		break
@@ -44,7 +44,8 @@ func Kbd(c *Net.WsData) {
 		break
 
 	case "setusb":
-		action.SetUsbString()
+		netReceiver.SetUsbString()
+		break
 
 	default:
 		break

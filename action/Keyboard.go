@@ -3,6 +3,7 @@ package action
 import (
 	"fmt"
 	"main.go/define/hid"
+	"main.go/netReceiver"
 	"main.go/netSender"
 	"time"
 )
@@ -82,7 +83,7 @@ func (self *Action) kb_get_usbstring() {
 
 func (self *Action) kb_set_usbstring() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift+hid.RightAlt, hid.CmdPrintScreen) {
-		SetUsbString()
+		netReceiver.SetUsbString()
 	}
 }
 

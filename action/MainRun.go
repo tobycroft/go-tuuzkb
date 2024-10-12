@@ -30,17 +30,11 @@ func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.
 	self.ClientTx = clienttx
 	go func() {
 		time.Sleep(3 * time.Second)
-		SetUsbString()
+		netReceiver.SetUsbString()
 	}()
 
 	go self.kb_banSomeKeys()
 	go self.mouse_runnable()
 	self.keyboard_runnable()
 	panic("runnable")
-}
-
-func SetUsbString() {
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "A87")
 }

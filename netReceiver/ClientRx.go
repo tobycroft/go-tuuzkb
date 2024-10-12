@@ -171,9 +171,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		fmt.Println("设备重启完成")
 		go func() {
 			time.Sleep(3 * time.Second)
-			netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
-			netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
-			netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "A87")
+			SetUsbString()
 		}()
 
 		break
@@ -186,4 +184,10 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		go fmt.Println("9239_unreco:", hex.EncodeToString(Data))
 
 	}
+}
+
+func SetUsbString() {
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "A87")
 }
