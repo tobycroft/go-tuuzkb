@@ -189,5 +189,5 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 func SetUsbString() {
 	netSender.Ctx.CmdSetUsbString(netSender.StrTypeManufacturer, "2.4G MonkaKeyboard")
 	netSender.Ctx.CmdSetUsbString(netSender.StrTypeProduct, "2.4G MonkaReciever")
-	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "ads001202208")
+	netSender.Ctx.CmdSetUsbString(netSender.StrTypeSerial, "ds001202208")
 }
