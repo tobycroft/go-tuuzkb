@@ -19,7 +19,7 @@ func (self *ClientTx) CmdSetUsbString(HidStingType byte, str string) *ClientTx {
 	binary.Write(&buf, binary.BigEndian, usbstr)
 	buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
-	self.head(cmd.CMD_SET_USB_STRING).data(buf.Bytes()).send()
+	new(SendTx).Head(cmd.CMD_SET_USB_STRING).Data(buf.Bytes()).Send()
 	time.Sleep(500 * time.Millisecond)
 	return self
 }

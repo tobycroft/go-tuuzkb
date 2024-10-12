@@ -12,9 +12,9 @@ func (self *ClientTx) CmdSendMsRelData(mousebyte MouseData) *ClientTx {
 	binary.Write(&buf, binary.BigEndian, mousebyte)
 	//buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
-	//self.data(buf.Bytes()).send()
-	//self.data([]byte{}).send()
-	self.head(cmd.CMD_SEND_MS_REL_DATA).data(mousebyte).send()
+	//self.data(buf.Bytes()).Send()
+	//self.Data([]byte{}).Send()
+	new(SendTx).Head(cmd.CMD_SEND_MS_REL_DATA).Data(mousebyte).Send()
 
 	return self
 }
@@ -28,7 +28,7 @@ func (self *ClientTx) CmdSendMsRelWheel(wheel int8) *ClientTx {
 	}
 	binary.Write(&buf, binary.BigEndian, mousebyte)
 	//fmt.Println(mousebyte)
-	self.head(cmd.CMD_SEND_MS_REL_DATA).data(mousebyte).send()
+	new(SendTx).Head(cmd.CMD_SEND_MS_REL_DATA).Data(mousebyte).Send()
 
 	return self
 }

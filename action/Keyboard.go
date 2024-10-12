@@ -12,22 +12,22 @@ func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
 		//fmt.Println("keybaordrecv", c)
-		go self.kb_actvate()
-		go self.kb_reboot()
-		go self.kb_unbanall()
-		//go self.kb_test()
-		go self.key_main()
-		go self.qe_main()
-		go self.whel_main()
+		//go self.kb_actvate()
+		//go self.kb_reboot()
+		//go self.kb_unbanall()
+		go self.kb_test()
+		//go self.key_main()
+		//go self.qe_main()
+		//go self.whel_main()
 
-		go self.kb_get_para()
-		go self.kb_set_para()
-		go self.kb_get_usbstring()
-		go self.kb_set_usbstring()
-		if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
-			go self.kb_banSomeKeys()
-			fmt.Println("ban_all")
-		}
+		//go self.kb_get_para()
+		//go self.kb_set_para()
+		//go self.kb_get_usbstring()
+		//go self.kb_set_usbstring()
+		//if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
+		//	go self.kb_banSomeKeys()
+		//	fmt.Println("ban_all")
+		//}
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -89,6 +89,7 @@ func (self *Action) kb_set_usbstring() {
 
 func (self *Action) kb_reboot() {
 	if self.checkKeyIsPressedByOrder(hid.LeftCtrl+hid.LeftShift, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
+		self.ClientTx.CmdSetDefaultCfg()
 		time.Sleep(2 * time.Second)
 		self.ClientTx.CmdReset()
 	}
@@ -96,6 +97,6 @@ func (self *Action) kb_reboot() {
 
 func (self *Action) kb_test() {
 	if self.checkKeyIsPressedByOrder(0, hid.CmdScrollLock) {
-		self.ClientTx.CmdSendMsRelWheel(-1)
+		self.ClientTx.CmdGetParaCfg()
 	}
 }

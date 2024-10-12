@@ -13,9 +13,9 @@ func (self *ClientTx) CmdSendKbGeneralData(keybytes KeyboardData) *ClientTx {
 	binary.Write(&buf, binary.BigEndian, keybytes)
 	//buf.WriteString(str)
 	//fmt.Println(string(buf.Bytes()))
-	//self.data(buf.Bytes()).send()
-	//self.data([]byte{}).send()
-	self.head(cmd.CMD_SEND_KB_GENERAL_DATA).data(keybytes).send()
+	//self.data(buf.Bytes()).Send()
+	//self.Data([]byte{}).Send()
+	new(SendTx).Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
 
 	return self
 }
@@ -25,7 +25,7 @@ func (self *ClientTx) CmdSendKbGeneralDataRaw(keybytes KeyboardData2) *ClientTx 
 	buf := bytes.Buffer{}
 	keybytes.Resv = 0x00
 	binary.Write(&buf, binary.BigEndian, keybytes)
-	self.head(cmd.CMD_SEND_KB_GENERAL_DATA).data(keybytes).send()
+	new(SendTx).Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
 
 	return self
 }

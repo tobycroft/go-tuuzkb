@@ -164,7 +164,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.Packet
 		break
 
 	case 0xca:
-		go fmt.Println("错误：", hex.EncodeToString(Data[2:2]))
+		go fmt.Println("错误：", hex.EncodeToString(Data[2:]))
 		break
 
 	case 0x8f:

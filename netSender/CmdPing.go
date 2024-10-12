@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdPing() *ClientTx {
-	self.head(cmd.CMD_READ_MY_HID_DATA).data([]byte{}).send()
+	new(SendTx).Head(cmd.CMD_READ_MY_HID_DATA).Data([]byte{}).Send()
 	return self
 }
