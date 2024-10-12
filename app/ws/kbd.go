@@ -44,7 +44,7 @@ func Kbd(c *Net.WsData) {
 		break
 
 	case "setusb":
-		netReceiver.SetUsbString()
+		go netReceiver.SetUsbString()
 		break
 
 	default:
