@@ -57,6 +57,15 @@ func Kbd(c *Net.WsData) {
 		fmt.Println("Reset")
 		break
 
+	case "bankey":
+		action.Kb_banSomeKeys()
+		break
+
+	case "unbanall":
+		action.Mask.Button.Clear()
+		action.Mask.Ctrl.Clear()
+		break
+
 	default:
 		break
 	}

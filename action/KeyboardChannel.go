@@ -32,7 +32,7 @@ func (self *Action) keyboard_runnable() {
 		go self.kb_get_usbstring()
 		go self.kb_set_usbstring()
 		if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
-			go self.kb_banSomeKeys()
+			go Kb_banSomeKeys()
 			fmt.Println("ban_all")
 		}
 		self.SendKbGeneralDataRaw(c)
@@ -50,7 +50,7 @@ func (self *Action) kb_actvate() {
 	}
 }
 
-func (self *Action) kb_banSomeKeys() {
+func Kb_banSomeKeys() {
 	kb_add_masking(hid.CmdApplication, false)
 	kb_add_masking(hid.CmdPrintScreen, false)
 	kb_add_masking(hid.CmdPause, false)

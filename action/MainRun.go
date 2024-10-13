@@ -35,7 +35,7 @@ func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.
 		netReceiver.SetUsbString()
 	}()
 
-	go self.kb_banSomeKeys()
+	go Kb_banSomeKeys()
 	go self.mouse_runnable()
 	self.keyboard_runnable()
 	panic("runnable")
