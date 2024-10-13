@@ -8,7 +8,6 @@ import (
 )
 
 func Info(c *Net.WsData) {
-	action.Key_set_lcd()
 	data := map[string]any{
 		"Endpoint_delay":        action.Endpoint_delay.Load(),
 		"Endpoint_BeforeDelay":  action.Endpoint_BeforeDelay.Load(),
