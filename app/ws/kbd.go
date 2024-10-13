@@ -3,6 +3,7 @@ package ws
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
+	"github.com/gorilla/websocket"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
 	"main.go/netReceiver"
@@ -57,4 +58,12 @@ func Kbd(c *Net.WsData) {
 	default:
 		break
 	}
+	Net.WsConns.Range(func(key, value interface{}) bool {
+		Net.WsServer_WriteChannel <- Net.WsData{
+			Conn:    value.(*websocket.Conn),
+			Type:    websocket.TextMessage,
+			Message: []byte("update"),
+		}
+		return true
+	})
 }
