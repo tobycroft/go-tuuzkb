@@ -2,8 +2,6 @@ package netTcp
 
 import (
 	"bytes"
-	"encoding/hex"
-	"fmt"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
@@ -45,10 +43,9 @@ func (self *ServerUDP) Start() *ServerUDP {
 		for _, ddd := range slice_byte {
 			self.ClientRx.MessageRouter(ddd, addr, self.Conn)
 		}
-		if addr.String() == "10.0.0.90:6666" {
-			fmt.Println(addr.String(), hex.EncodeToString(buff))
-
-		}
+		//if addr.String() == "10.0.0.90:6666" {
+		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
+		//}
 		//} else {
 		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
 		//}
