@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
+	"main.go/action"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"time"
@@ -45,6 +46,12 @@ func Kbd(c *Net.WsData) {
 
 	case "setusb":
 		go netReceiver.SetUsbString()
+		break
+
+	case "setting_reset":
+		action.Endpoint_delay.Store(0)
+		action.Endpoint_BeforeDelay.Store(0)
+		fmt.Println("Reset")
 		break
 
 	default:
