@@ -244,6 +244,5 @@ const (
 	Bit5 = 0x20
 	Bit6 = 0x40
 	Bit7 = 0x80
-
 	Base = 0xff
 )

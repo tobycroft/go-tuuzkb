@@ -25,8 +25,7 @@ type Para struct {
 	KeyboardFilter       uint64
 	UsbStringSign        byte
 	FastUploadSign       byte
-	Blank2               uint64
-	Blank3               uint32
+	Blank2               [12]byte
 }
 
 const BaudRate300k = 0x493e0
@@ -41,19 +40,18 @@ func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx 
 		Cfg:                  SetCfgNorm,
 		ComAddress:           0x00,
 		BaudRate:             BaudRate,
-		Blank1:               0x0000,
+		Blank1:               0x0800,
 		SepDelay:             0x1,
 		Pid:                  bits.ReverseBytes16(Pid),
 		Vid:                  bits.ReverseBytes16(Vid),
-		KeyboardDelay:        0x00,
-		KeyboardReleaseDelay: 0x01,
+		KeyboardDelay:        0x0000,
+		KeyboardReleaseDelay: 0x0001,
 		EnterSignAuto:        0x00,
-		EnterSign:            936748722493063168,
+		EnterSign:            0x0d00000000000000,
 		KeyboardFilter:       0x0000000000000000,
 		UsbStringSign:        hid.Bit0 + hid.Bit1 + hid.Bit2 + hid.Bit7,
 		FastUploadSign:       0x00,
-		Blank2:               0x00000000,
-		Blank3:               0x00000000,
+		Blank2:               [12]byte{},
 	}
 	bb := bytes.Buffer{}
 	err := binary.Write(&bb, binary.BigEndian, pa)
