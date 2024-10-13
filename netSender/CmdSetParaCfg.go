@@ -41,7 +41,7 @@ func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx 
 		ComAddress:           0x00,
 		BaudRate:             BaudRate,
 		Blank1:               0x0800,
-		SepDelay:             0x1,
+		SepDelay:             0x3,
 		Pid:                  bits.ReverseBytes16(Pid),
 		Vid:                  bits.ReverseBytes16(Vid),
 		KeyboardDelay:        0x0000,
