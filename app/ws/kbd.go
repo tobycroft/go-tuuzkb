@@ -52,6 +52,8 @@ func Kbd(c *Net.WsData) {
 	case "setting_reset":
 		action.Endpoint_delay.Store(0)
 		action.Endpoint_BeforeDelay.Store(0)
+		action.Mode.Store(0)
+		action.Endpoint_dynamic_mode.Store(0)
 		fmt.Println("Reset")
 		break
 
