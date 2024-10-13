@@ -29,6 +29,7 @@ func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.
 	self.ClientRx = clientrx
 	self.ClientTx = clienttx
 	go func() {
+		netSender.Ctx.CmdGetParaCfg()
 		time.Sleep(3 * time.Second)
 		netReceiver.SetUsbString()
 	}()
