@@ -30,26 +30,24 @@ type sendData struct {
 	Len  byte   // 后续数据长度 (1个字节)
 }
 
-type snd struct {
+type SendStruct struct {
 	sendBuf  *bytes.Buffer
-	ctx      *ClientTx
 	sendData *sendData
 }
 
-func (self *ClientTx) head(Cmd byte) *snd {
-	return &snd{
+func Head(Cmd byte) *SendStruct {
+	return &SendStruct{
 		sendData: &sendData{
 			Head: uint16(start1)<<8 | uint16(start2),
 			Addr: 0x00,
 			Cmd:  Cmd,
 			Len:  0x00,
 		},
-		ctx:     self,
 		sendBuf: &bytes.Buffer{},
 	}
 }
 
-func (self *snd) data(data any) *snd {
+func (self *SendStruct) Data(data any) *SendStruct {
 	bb := bytes.Buffer{}
 	err := binary.Write(&bb, binary.BigEndian, data)
 	if err != nil {
@@ -64,7 +62,7 @@ func (self *snd) data(data any) *snd {
 	return self
 }
 
-func (self *snd) sum() *snd {
+func (self *SendStruct) Sum() *SendStruct {
 	sum := byte(0x00)
 	for _, b := range self.sendBuf.Bytes() {
 		sum = sum + (b)
@@ -76,9 +74,9 @@ func (self *snd) sum() *snd {
 	return self
 }
 
-func (self *snd) send() {
-	self.sum()
-	self.ctx.TxChannel <- self.sendBuf.Bytes()
+func (self *SendStruct) Send() {
+	self.Sum()
+	Ctx.TxChannel <- self.sendBuf.Bytes()
 	time.Sleep(1 * time.Millisecond)
 	self.sendBuf.Reset()
 }
