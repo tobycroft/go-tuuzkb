@@ -13,10 +13,11 @@ type Action struct {
 	ClientRx *netReceiver.ClientRx
 	ClientTx *netSender.ClientTx
 
-	AutoPressed  sync.Map
-	lastPressSum atomic.Value
-	c            netSender.KeyboardData2
+	AutoPressed sync.Map
+	c           netSender.KeyboardData2
 }
+
+var lastPressSum atomic.Value
 
 var Mask = mask{}
 

@@ -26,12 +26,12 @@ func (self *Action) KeyUp(key byte) {
 	//go fmt.Println("keyboardAutoUP", out)
 }
 
-func (self *Action) SendKbGeneralDataRaw() {
+func (self *Action) SendKbGeneralDataRaw(c netSender.KeyboardData2) {
 	out := netSender.KeyboardData2{}
-	out.Ctrl, out.Button, out.Resv = self.kb_washing()
+	out.Ctrl, out.Button, out.Resv = self.kb_washing2(c)
 	//go fmt.Println("keybaordsnd", out)
-	if out.Resv != self.lastPressSum.Load() {
-		self.lastPressSum.Store(out.Resv)
+	if out.Resv != lastPressSum.Load() {
+		lastPressSum.Store(out.Resv)
 		out.Resv = 0x00
 		self.ClientTx.CmdSendKbGeneralDataRaw(out)
 	}
@@ -88,6 +88,28 @@ func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 }
 
 func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
+	for i, button := range self.c.Button {
+		_, ok := Mask.Button.Load(button)
+		if !ok {
+			Button[i] = button
+		} else {
+			Button[i] = 0
+		}
+		sum += button
+	}
+
+	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {
+		_, ok := Mask.Ctrl.Load(key.(byte))
+		if !ok {
+			Ctrl += key.(byte)
+		}
+		return true
+	})
+	sum += Ctrl
+	return
+}
+
+func (self *Action) kb_washing2(c netSender.KeyboardData2) (Ctrl byte, Button [6]byte, sum byte) {
 	for i, button := range self.c.Button {
 		_, ok := Mask.Button.Load(button)
 		if !ok {

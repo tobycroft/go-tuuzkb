@@ -28,7 +28,7 @@ func (self *Action) keyboard_runnable() {
 			go self.kb_banSomeKeys()
 			fmt.Println("ban_all")
 		}
-		self.SendKbGeneralDataRaw()
+		self.SendKbGeneralDataRaw(c)
 
 	}
 	panic("键盘通道意外结束")
