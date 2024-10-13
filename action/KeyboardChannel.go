@@ -8,6 +8,13 @@ import (
 	"time"
 )
 
+type lastKey struct {
+	Ctrl   byte
+	Button [6]byte
+}
+
+var LastPress = lastKey{}
+
 func (self *Action) keyboard_runnable() {
 	for c := range self.ClientRx.KeyboardRxChannel {
 		self.c = c
