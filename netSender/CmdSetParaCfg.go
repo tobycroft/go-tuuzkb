@@ -29,26 +29,36 @@ type Para struct {
 	Blank2               [12]byte
 }
 
-const BaudRate300k = 0x493e0
-const BaudRate115200 = 0x1c200
-const BaudRate9600 = 0x2580
+const BaudRate300k = uint32(0x493e0)
+const BaudRate115200 = uint32(0x1c200)
+const BaudRate9600 = uint32(0x2580)
 
 // 0x05ac 0x0256
 var SepDelay = atomic.Uint32{}
+var BaudRate = atomic.Uint32{}
 
-func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx {
-	if SepDelay.Load() < 0x01 {
-		SepDelay.Store(0x01)
+var Pid = atomic.Uint32{}
+var Vid = atomic.Uint32{}
+
+func (self *ClientTx) CmdSetParaCfg() *ClientTx {
+	if SepDelay.Load() < uint32(0x01) {
+		SepDelay.Store(uint32(0x01))
+	}
+	if Pid.Load() == uint32(0x0) {
+		Pid.Store(uint32(0x05ac))
+	}
+	if Vid.Load() == uint32(0x0) {
+		Vid.Store(uint32(0x0256))
 	}
 	pa := Para{
 		Mode:                 SetModeKeyMouse,
 		Cfg:                  SetCfgNorm,
 		ComAddress:           0x00,
-		BaudRate:             BaudRate,
+		BaudRate:             BaudRate.Load(),
 		Blank1:               0x0800,
 		SepDelay:             uint16(SepDelay.Load()),
-		Pid:                  bits.ReverseBytes16(Pid),
-		Vid:                  bits.ReverseBytes16(Vid),
+		Pid:                  bits.ReverseBytes16(uint16(Pid.Load())),
+		Vid:                  bits.ReverseBytes16(uint16(Vid.Load())),
 		KeyboardDelay:        0x0000,
 		KeyboardReleaseDelay: 0x0001,
 		EnterSignAuto:        0x00,
