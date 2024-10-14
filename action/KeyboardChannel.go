@@ -21,9 +21,9 @@ var OnchangePress = &lastKey{}
 func (self *Action) keyboard_runnable() {
 	self.ready()
 	for c := range self.ClientRx.KeyboardRxChannel {
-		swap_key(&c)
 		self.c = c
-		//fmt.Println("keybaordrecv", c)
+		swap_key(&c)
+		fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
 		go self.kb_actvate()
 		go self.kb_reboot()
 		go self.kb_unbanall()
@@ -47,24 +47,28 @@ func (self *Action) keyboard_runnable() {
 }
 
 func swap_key(c *netSender.KeyboardData2) {
-	LastPress.Ctrl.Store(CurrentPress.Ctrl.Load().(byte))
-	CurrentPress.Ctrl.Store(c.Ctrl)
-	if LastPress.Ctrl.Load() == c.Ctrl {
+	if CurrentPress.Ctrl.Load().(byte) == c.Ctrl {
 		OnchangePress.Ctrl.Store(byte(0))
 	} else {
 		OnchangePress.Ctrl.Store(c.Ctrl)
 	}
-
-	for i, button := range CurrentPress.Button {
-		LastPress.Button[i].Store(button.Load().(byte))
-		CurrentPress.Button[i].Store(c.Button[i])
-		if LastPress.Button[i].Load() == c.Button[i] {
+	LastPress.Ctrl.Store(CurrentPress.Ctrl.Load().(byte))
+	CurrentPress.Ctrl.Store(c.Ctrl)
+	for i := 0; i < 6; i++ {
+		if c.Button[i] == CurrentPress.Button[i].Load() {
 			OnchangePress.Button[i].Store(byte(0))
 		} else {
-			OnchangePress.Button[i].Store(c.Button[i])
+			if i < 6 && c.Button[i] == CurrentPress.Button[i+1].Load() {
+				OnchangePress.Button[i].Store(byte(0))
+			} else {
+				OnchangePress.Button[i].Store(c.Button[i])
+			}
 		}
 	}
-
+	for i := 0; i < 6; i++ {
+		LastPress.Button[i].Store(CurrentPress.Button[i].Load().(byte))
+		CurrentPress.Button[i].Store(c.Button[i])
+	}
 }
 
 func (self *Action) ready() {
