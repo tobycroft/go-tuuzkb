@@ -39,7 +39,7 @@ func MainWsRouter() {
 		case "ping":
 			Net.WsServer_WriteChannel <- Net.WsData{
 				Conn:    c.Conn,
-				Type:    websocket.TextMessage,
+				Type:    websocket.PongMessage,
 				Message: []byte("pong"),
 			}
 			break
