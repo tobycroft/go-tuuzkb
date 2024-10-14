@@ -10,23 +10,20 @@ import (
 )
 
 type lastKey struct {
-	Ctrl    atomic.Value
-	Button0 atomic.Value
-	Button1 atomic.Value
-	Button2 atomic.Value
-	Button3 atomic.Value
-	Button4 atomic.Value
-	Button5 atomic.Value
+	Ctrl   atomic.Value
+	Button [6]atomic.Value
 }
 
-var LastPress = lastKey{}
-var CurrentPress = lastKey{}
+var LastPress = &lastKey{}
+var CurrentPress = &lastKey{}
+var OnchangePress = &lastKey{}
 
 func (self *Action) keyboard_runnable() {
+	self.ready()
 	for c := range self.ClientRx.KeyboardRxChannel {
 		swap_key(&c)
 		self.c = c
-		fmt.Println("keybaordrecv", c)
+		//fmt.Println("keybaordrecv", c)
 		go self.kb_actvate()
 		go self.kb_reboot()
 		go self.kb_unbanall()
@@ -50,48 +47,35 @@ func (self *Action) keyboard_runnable() {
 }
 
 func swap_key(c *netSender.KeyboardData2) {
-	if ctrl := CurrentPress.Ctrl.Swap(c.Ctrl); ctrl != nil {
-		LastPress.Ctrl.Store(ctrl.(byte))
+	LastPress.Ctrl.Store(CurrentPress.Ctrl.Load().(byte))
+	CurrentPress.Ctrl.Store(c.Ctrl)
+	if LastPress.Ctrl.Load() == c.Ctrl {
+		OnchangePress.Ctrl.Store(byte(0))
 	} else {
-		LastPress.Ctrl.Store(byte(0))
+		OnchangePress.Ctrl.Store(c.Ctrl)
 	}
 
-	if btn0 := CurrentPress.Button0.Swap(c.Button[0]); btn0 != nil {
-		LastPress.Button0.Store(btn0.(byte))
-	} else {
-		LastPress.Button0.Store(byte(0))
+	for i, button := range CurrentPress.Button {
+		LastPress.Button[i].Store(button.Load().(byte))
+		CurrentPress.Button[i].Store(c.Button[i])
+		if LastPress.Button[i].Load() == c.Button[i] {
+			OnchangePress.Button[i].Store(byte(0))
+		} else {
+			OnchangePress.Button[i].Store(c.Button[i])
+		}
 	}
 
-	if btn1 := CurrentPress.Button1.Swap(c.Button[1]); btn1 != nil {
-		LastPress.Button1.Store(btn1.(byte))
-	} else {
-		LastPress.Button1.Store(byte(0))
-	}
+}
 
-	if btn2 := CurrentPress.Button2.Swap(c.Button[2]); btn2 != nil {
-		LastPress.Button2.Store(btn2.(byte))
-	} else {
-		LastPress.Button2.Store(byte(0))
+func (self *Action) ready() {
+	CurrentPress.Ctrl.Store(byte(0))
+	LastPress.Ctrl.Store(byte(0))
+	OnchangePress.Ctrl.Store(byte(0))
+	for i := range OnchangePress.Button {
+		CurrentPress.Button[i].Store(byte(0))
+		LastPress.Button[i].Store(byte(0))
+		OnchangePress.Button[i].Store(byte(0))
 	}
-
-	if btn3 := CurrentPress.Button3.Swap(c.Button[3]); btn3 != nil {
-		LastPress.Button3.Store(btn3.(byte))
-	} else {
-		LastPress.Button3.Store(byte(0))
-	}
-
-	if btn4 := CurrentPress.Button4.Swap(c.Button[4]); btn4 != nil {
-		LastPress.Button4.Store(btn4.(byte))
-	} else {
-		LastPress.Button4.Store(byte(0))
-	}
-
-	if btn5 := CurrentPress.Button5.Swap(c.Button[5]); btn5 != nil {
-		LastPress.Button5.Store(btn5.(byte))
-	} else {
-		LastPress.Button5.Store(byte(0))
-	}
-
 }
 
 func (self *Action) kb_actvate() {

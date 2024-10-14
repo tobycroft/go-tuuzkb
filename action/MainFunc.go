@@ -1,6 +1,7 @@
 package action
 
 import (
+	"main.go/define/hid"
 	"main.go/netSender"
 )
 
@@ -38,11 +39,10 @@ func (self *Action) SendKbGeneralDataRaw(c netSender.KeyboardData2) {
 }
 
 func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
-	btns := self.c.Button
-	if self.c.Ctrl == Ctrl {
+	if CurrentPress.Ctrl.Load() == Ctrl || Ctrl == hid.CmdNone {
 		for _, btn := range Btn {
-			for _, b := range btns {
-				if b == btn {
+			for _, b := range OnchangePress.Button {
+				if b.Load() == btn {
 					return true
 				}
 			}
@@ -53,11 +53,10 @@ func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	btns := self.c.Button
 	if self.c.Ctrl == Ctrl {
 		for _, btn := range Btn {
-			for _, b := range btns {
-				if b == btn {
+			for _, b := range CurrentPress.Button {
+				if b.Load() == btn {
 					num += 1
 				}
 			}
@@ -72,10 +71,9 @@ func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	btns := self.c.Button
 	if self.c.Ctrl == Ctrl {
 		for i, btn := range Btn {
-			if btns[i] == btn {
+			if CurrentPress.Button[i].Load() == btn {
 				num += 1
 			}
 		}
