@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
@@ -9,6 +10,15 @@ import (
 
 func Info(c *Net.WsData) {
 	action.Key_set_lcd()
+	maskctrl, maskbutton := []string{}, []string{}
+	action.Mask.Ctrl.Range(func(key, value interface{}) bool {
+		maskctrl = append(maskctrl, hex.EncodeToString([]byte{key.(byte)}))
+		return true
+	})
+	action.Mask.Button.Range(func(key, value interface{}) bool {
+		maskbutton = append(maskbutton, hex.EncodeToString([]byte{key.(byte)}))
+		return true
+	})
 	data := map[string]any{
 		"Endpoint_delay":        action.Endpoint_delay.Load(),
 		"Endpoint_BeforeDelay":  action.Endpoint_BeforeDelay.Load(),
@@ -19,6 +29,9 @@ func Info(c *Net.WsData) {
 		"LCD1": action.LcdLine1,
 		"LCD2": action.LcdLine2,
 		"Mode": action.Mode.Load(),
+
+		"MaskCtrl":   maskctrl,
+		"MaskButton": maskbutton,
 	}
 	bt, err := sonic.Marshal(data)
 	if err != nil {
