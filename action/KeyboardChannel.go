@@ -86,6 +86,7 @@ func (self *Action) kb_actvate() {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(0)
 		fmt.Println("Reset")
+		go Lcd_refresh()
 		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
 	}
 }
@@ -98,6 +99,7 @@ func Kb_banSomeKeys() {
 	kb_add_masking(hid.RightCtrl, true)
 	//kb_add_masking(hid.RightShift, true)
 	kb_add_masking(hid.RightAlt, true)
+	go Lcd_refresh()
 }
 
 func (self *Action) kb_unbanall() {
@@ -105,6 +107,7 @@ func (self *Action) kb_unbanall() {
 		Mask.Button.Clear()
 		Mask.Ctrl.Clear()
 		fmt.Println("unbanall")
+		go Lcd_refresh()
 	}
 }
 
