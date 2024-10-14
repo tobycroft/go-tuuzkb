@@ -3,7 +3,6 @@ package route
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
-	"github.com/gorilla/websocket"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/app/ws"
 )
@@ -37,11 +36,11 @@ func MainWsRouter() {
 			break
 
 		case "ping":
-			Net.WsServer_WriteChannel <- Net.WsData{
-				Conn:    c.Conn,
-				Type:    websocket.PongMessage,
-				Message: []byte("pong"),
-			}
+			//Net.WsServer_WriteChannel <- Net.WsData{
+			//	Conn:    c.Conn,
+			//	Type:    websocket.PongMessage,
+			//	Message: []byte("pong"),
+			//}
 			break
 
 		default:
