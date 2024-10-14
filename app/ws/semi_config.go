@@ -51,6 +51,9 @@ func SemiConfig(c *Net.WsData) {
 		break
 
 	case "sep":
+		if Calc.Any2Int64(data["sep"]) < 1 {
+			data["sep"] = 1
+		}
 		netSender.SepDelay.Store(uint32(Calc.Any2Int64(data["sep"])))
 		break
 
