@@ -24,8 +24,6 @@ func main() {
 			IP:   net.ParseIP("10.0.0.90"),
 			Port: 6666,
 		},
-		ClientTx: netSender.Ctx,
-		ClientRx: netReceiver.Crx,
 	}
 	go sudp.Start()
 	go route.MainWsRouter()

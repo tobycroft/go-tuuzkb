@@ -1,34 +1,51 @@
 package netTcp
 
 import (
-	"encoding/hex"
-	"fmt"
+	"bytes"
+	"main.go/netReceiver"
+	"main.go/netSender"
 	"net"
 )
 
-func ServerRx() {
+type ServerTcp struct {
+	SendServer net.Addr
+
+	Conn net.PacketConn
+
+	Kb netReceiver.KeyBoard
+}
+
+func (self *ServerTcp) Start() *ServerTcp {
 	buff := make([]byte, 128)
-	keyboard_server, err := net.Listen("tcp", ":6666")
+	var err error
+	self.Conn, err = net.ListenPacket("tcp", ":6666")
 	if err != nil {
 		panic(err.Error())
 	}
+
+	go func() {
+		for keyboard := range netSender.Ctx.TxChannel {
+			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
+			self.Conn.WriteTo(keyboard, self.SendServer)
+		}
+	}()
+
 	for {
-		Conn, err := keyboard_server.Accept()
+		_, addr, err := self.Conn.ReadFrom(buff)
 		if err != nil {
 			panic(err.Error())
 		}
-		//aa, err := Conn.Read(buff)
-		//fmt.Println(Conn, aa, buff)
-		go func() {
-			for {
-				aa, _ := Conn.Read(buff)
-				fmt.Println(Conn.RemoteAddr(), aa, hex.EncodeToString(buff))
-			}
-		}()
+		//if addr.String() == "10.0.0.91:6666" {
+		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
+		for _, ddd := range slice_byte {
+			netReceiver.Crx.MessageRouter(ddd, addr, self.Conn)
+		}
+		//if addr.String() == "10.0.0.90:6666" {
+		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
+		//}
+		//} else {
+		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
+		//}
+
 	}
-
-}
-
-func ServerTx() {
-
 }

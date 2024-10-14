@@ -13,9 +13,6 @@ type ServerUDP struct {
 	Conn net.PacketConn
 
 	Kb netReceiver.KeyBoard
-
-	ClientTx *netSender.ClientTx
-	ClientRx *netReceiver.ClientRx
 }
 
 func (self *ServerUDP) Start() *ServerUDP {
@@ -27,7 +24,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 	}
 
 	go func() {
-		for keyboard := range self.ClientTx.TxChannel {
+		for keyboard := range netSender.Ctx.TxChannel {
 			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 			self.Conn.WriteTo(keyboard, self.SendServer)
 		}
@@ -41,7 +38,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 		//if addr.String() == "10.0.0.91:6666" {
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			self.ClientRx.MessageRouter(ddd, addr, self.Conn)
+			netReceiver.Crx.MessageRouter(ddd, addr, self.Conn)
 		}
 		//if addr.String() == "10.0.0.90:6666" {
 		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
