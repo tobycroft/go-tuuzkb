@@ -53,7 +53,7 @@ func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	if self.c.Ctrl == Ctrl {
+	if CurrentPress.Ctrl.Load() == Ctrl {
 		for _, btn := range Btn {
 			for _, b := range CurrentPress.Button {
 				if b.Load() == btn {
@@ -71,7 +71,7 @@ func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	if self.c.Ctrl == Ctrl {
+	if CurrentPress.Ctrl.Load() == Ctrl {
 		for i, btn := range Btn {
 			if CurrentPress.Button[i].Load() == btn {
 				num += 1
@@ -86,14 +86,14 @@ func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 }
 
 func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
-	for i, button := range self.c.Button {
+	for i, button := range CurrentPress.Button {
 		_, ok := Mask.Button.Load(button)
 		if !ok {
-			Button[i] = button
+			Button[i] = button.Load().(byte)
 		} else {
 			Button[i] = 0
 		}
-		sum += button
+		sum += button.Load().(byte)
 	}
 
 	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {

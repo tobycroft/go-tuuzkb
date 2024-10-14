@@ -21,7 +21,6 @@ var OnchangePress = &lastKey{}
 func (self *Action) keyboard_runnable() {
 	self.ready()
 	for c := range self.ClientRx.KeyboardRxChannel {
-		self.c = c
 		swap_key(&c)
 		fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
 		go self.kb_actvate()
