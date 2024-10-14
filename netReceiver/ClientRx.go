@@ -83,6 +83,8 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		buf := bytes.NewReader(Data[1:9])
 		err := binary.Read(buf, binary.BigEndian, &kbreport)
 		if err != nil {
+			fmt.Println(len(Data), Data)
+			fmt.Println(hex.EncodeToString(Data))
 			panic(err.Error())
 		}
 		//go fmt.Println(kbreport)

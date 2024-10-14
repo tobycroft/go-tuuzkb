@@ -39,7 +39,7 @@ func (self *Action) keyboard_runnable() {
 			go Kb_banSomeKeys()
 			fmt.Println("ban_all")
 		}
-		self.SendKbGeneralDataRaw(c)
+		self.SendKbGeneralDataRaw()
 
 	}
 	panic("键盘通道意外结束")
@@ -57,7 +57,7 @@ func swap_key(c *netSender.KeyboardData2) {
 		if c.Button[i] == CurrentPress.Button[i].Load() {
 			OnchangePress.Button[i].Store(byte(0))
 		} else {
-			if i < 6 && c.Button[i] == CurrentPress.Button[i+1].Load() {
+			if i < 5 && c.Button[i] == CurrentPress.Button[i+1].Load() {
 				OnchangePress.Button[i].Store(byte(0))
 			} else {
 				OnchangePress.Button[i].Store(c.Button[i])
