@@ -65,7 +65,6 @@ func Kbd(c *Net.WsData) {
 		action.Endpoint_dynamic_mode.Store(0)
 		fmt.Println("设置重置")
 		go action.Lcd_refresh()
-
 		break
 
 	case "bankey":
