@@ -19,13 +19,21 @@ func main() {
 
 	Act := &action.Action{}
 	go Act.MainRun(netReceiver.Crx, netSender.Ctx)
-	sudp := netTcp.ServerUDP{
-		SendServer: &net.UDPAddr{
+	//sudp := netTcp.ServerUDP{
+	//	SendServer: &net.UDPAddr{
+	//		IP:   net.ParseIP("10.0.0.90"),
+	//		Port: 6666,
+	//	},
+	//}
+	//go sudp.Start()
+	stcp := netTcp.ServerTcp{
+		SendServer: &net.TCPAddr{
 			IP:   net.ParseIP("10.0.0.90"),
 			Port: 6666,
 		},
 	}
-	go sudp.Start()
+	go stcp.Start()
+
 	go route.MainWsRouter()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)

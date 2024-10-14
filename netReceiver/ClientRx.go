@@ -36,14 +36,14 @@ func (self *ClientRx) Ready() {
 	go self.RouterKeyboard()
 }
 
-func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.PacketConn) {
+func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 	if len(Data) < 1 {
 		return
 	}
 	switch Data[0] {
 
 	case 0x00:
-		self.Router9239(Data[1:], Addr, PackConn)
+		self.Router9239(Data[1:], Addr)
 		break
 
 	case 0x99:
@@ -51,11 +51,11 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 		break
 
 	case 0xab:
-		self.Router9239(Data[2:], Addr, PackConn)
+		self.Router9239(Data[2:], Addr)
 		break
 
 	case 0x57:
-		self.Router9239(Data[2:], Addr, PackConn)
+		self.Router9239(Data[2:], Addr)
 		break
 
 	case 0x81:
@@ -104,7 +104,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr, PackConn net.Pac
 	}
 }
 
-func (self *ClientRx) Router9239(Data []byte, Addr net.Addr, PackConn net.PacketConn) {
+func (self *ClientRx) Router9239(Data []byte, Addr net.Addr) {
 	switch Data[0] {
 
 	case 0x00:

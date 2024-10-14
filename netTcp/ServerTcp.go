@@ -1,51 +1,70 @@
 package netTcp
 
 import (
+	"bufio"
 	"bytes"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
+	"sync"
 )
 
 type ServerTcp struct {
 	SendServer net.Addr
 
-	Conn net.PacketConn
-
 	Kb netReceiver.KeyBoard
 }
 
+var addrToConn sync.Map
+
 func (self *ServerTcp) Start() *ServerTcp {
-	buff := make([]byte, 128)
-	var err error
-	self.Conn, err = net.ListenPacket("tcp", ":6666")
+	Conn, err := net.Listen("tcp", ":6666")
 	if err != nil {
 		panic(err.Error())
 	}
-
-	go func() {
-		for keyboard := range netSender.Ctx.TxChannel {
-			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
-			self.Conn.WriteTo(keyboard, self.SendServer)
-		}
-	}()
-
+	go self.tcpchannel()
 	for {
-		_, addr, err := self.Conn.ReadFrom(buff)
+		conn, err := Conn.Accept()
 		if err != nil {
 			panic(err.Error())
+		}
+		reader := bufio.NewReader(conn)
+		addrToConn.Store(conn.RemoteAddr().String(), conn)
+		go self.handler(conn, reader)
+
+	}
+}
+
+func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
+	buff := make([]byte, 128)
+	for {
+		_, err := reader.Read(buff)
+		if err != nil {
+			addrToConn.Delete(conn.RemoteAddr().String())
+			return
 		}
 		//if addr.String() == "10.0.0.91:6666" {
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			netReceiver.Crx.MessageRouter(ddd, addr, self.Conn)
+			netReceiver.Crx.MessageRouter(ddd, conn.RemoteAddr())
 		}
-		//if addr.String() == "10.0.0.90:6666" {
-		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
-		//}
-		//} else {
-		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
-		//}
+	}
+
+}
+
+func (self *ServerTcp) tcpchannel() {
+	for keyboard := range netSender.Ctx.TxChannel {
+		//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
+		addrToConn.Range(func(key, value interface{}) bool {
+			if self.SendServer.String() == key.(string) {
+				_, err := value.(net.Conn).Write(keyboard)
+				if err != nil {
+					addrToConn.Delete(key)
+				}
+			}
+
+			return true
+		})
 
 	}
 }

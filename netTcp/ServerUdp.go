@@ -38,7 +38,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 		//if addr.String() == "10.0.0.91:6666" {
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
-			netReceiver.Crx.MessageRouter(ddd, addr, self.Conn)
+			netReceiver.Crx.MessageRouter(ddd, addr)
 		}
 		//if addr.String() == "10.0.0.90:6666" {
 		//	fmt.Println(addr.String(), hex.EncodeToString(buff))
