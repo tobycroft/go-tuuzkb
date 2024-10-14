@@ -6,6 +6,7 @@ import (
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
+	"main.go/netSender"
 )
 
 func Info(c *Net.WsData) {
@@ -32,6 +33,7 @@ func Info(c *Net.WsData) {
 
 		"MaskCtrl":   maskctrl,
 		"MaskButton": maskbutton,
+		"sep":        netSender.SepDelay.Load(),
 	}
 	bt, err := sonic.Marshal(data)
 	if err != nil {

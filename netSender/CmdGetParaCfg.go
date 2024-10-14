@@ -53,6 +53,7 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	fmt.Println("通信地址:", pa.ComAddress)
 	fmt.Println("波特率:", pa.BaudRate)
 	fmt.Println("通信包间隔:", pa.SepDelay)
+	SepDelay.Store(uint32(pa.SepDelay))
 	fmt.Println("PID:", hex.EncodeToString([]byte{byte(pa.Pid), byte(pa.Pid >> 8)}), "VID:", hex.EncodeToString([]byte{byte(pa.Vid), byte(pa.Vid >> 8)}))
 	fmt.Println("USB字符串:", pa.UsbStringSign)
 	return pa
