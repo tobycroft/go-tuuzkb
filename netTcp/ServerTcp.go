@@ -43,6 +43,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			addrToConn.Delete(conn.RemoteAddr().String())
 			return
 		}
+		//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 		//if addr.String() == "10.0.0.91:6666" {
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
