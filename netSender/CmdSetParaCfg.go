@@ -7,6 +7,7 @@ import (
 	"main.go/define/cmd"
 	"main.go/define/hid"
 	"math/bits"
+	"sync/atomic"
 )
 
 type Para struct {
@@ -32,16 +33,20 @@ const BaudRate300k = 0x493e0
 const BaudRate115200 = 0x1c200
 const BaudRate9600 = 0x2580
 
-//0x05ac 0x0256
+// 0x05ac 0x0256
+var SepDelay = atomic.Uint32{}
 
 func (self *ClientTx) CmdSetParaCfg(BaudRate uint32, Pid, Vid uint16) *ClientTx {
+	if SepDelay.Load() < 0x01 {
+		SepDelay.Store(0x01)
+	}
 	pa := Para{
 		Mode:                 SetModeKeyMouse,
 		Cfg:                  SetCfgNorm,
 		ComAddress:           0x00,
 		BaudRate:             BaudRate,
 		Blank1:               0x0800,
-		SepDelay:             0x1,
+		SepDelay:             uint16(SepDelay.Load()),
 		Pid:                  bits.ReverseBytes16(Pid),
 		Vid:                  bits.ReverseBytes16(Vid),
 		KeyboardDelay:        0x0000,

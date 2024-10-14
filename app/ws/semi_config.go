@@ -7,6 +7,7 @@ import (
 	"github.com/tobycroft/Calc"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
+	"main.go/netSender"
 )
 
 func SemiConfig(c *Net.WsData) {
@@ -47,6 +48,10 @@ func SemiConfig(c *Net.WsData) {
 
 	case "Endpoint_BeforeDelay":
 		action.Endpoint_BeforeDelay.Store(Calc.Any2Int64(data["Endpoint_BeforeDelay"]))
+		break
+
+	case "sep":
+		netSender.SepDelay.Store(uint32(Calc.Any2Int64(data["sep"])))
 		break
 
 	default:
