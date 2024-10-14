@@ -174,6 +174,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr) {
 		go func() {
 			time.Sleep(3 * time.Second)
 			SetUsbString()
+			netSender.Ctx.CmdSetParaCfg()
 		}()
 
 		break

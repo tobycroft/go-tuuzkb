@@ -29,6 +29,13 @@ func Kbd(c *Net.WsData) {
 		netSender.Ctx.CmdReset()
 		break
 
+	case "05ac":
+		netSender.Pid.Store(uint32(0x05ac))
+		netSender.Vid.Store(uint32(0x0256))
+		netSender.BaudRate.Store(netSender.BaudRate115200)
+		netSender.Ctx.CmdSetParaCfg()
+		break
+
 	case "cfg3k":
 		netSender.BaudRate.Store(netSender.BaudRate300k)
 		netSender.Ctx.CmdSetParaCfg()

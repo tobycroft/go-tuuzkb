@@ -33,7 +33,11 @@ func Info(c *Net.WsData) {
 
 		"MaskCtrl":   maskctrl,
 		"MaskButton": maskbutton,
-		"sep":        netSender.SepDelay.Load(),
+
+		"sep":  netSender.SepDelay.Load(),
+		"baud": netSender.BaudRate.Load(),
+		"pid":  hex.EncodeToString([]byte{byte(netSender.Pid.Load() >> 8), byte(netSender.Pid.Load())}),
+		"vid":  hex.EncodeToString([]byte{byte(netSender.Vid.Load() >> 8), byte(netSender.Vid.Load())}),
 	}
 	bt, err := sonic.Marshal(data)
 	if err != nil {

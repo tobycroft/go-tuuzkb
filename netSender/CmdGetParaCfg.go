@@ -5,7 +5,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"github.com/gorilla/websocket"
+	Net "github.com/tobycroft/TuuzNet"
 	"main.go/define/cmd"
+	"math/bits"
 )
 
 func (self *ClientTx) CmdGetParaCfg() *ClientTx {
@@ -56,7 +59,22 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	fmt.Println("通信包间隔:", pa.SepDelay)
 	SepDelay.Store(uint32(pa.SepDelay))
 	fmt.Println("PID:", hex.EncodeToString([]byte{byte(pa.Pid), byte(pa.Pid >> 8)}), "VID:", hex.EncodeToString([]byte{byte(pa.Vid), byte(pa.Vid >> 8)}))
+	Pid.Store(uint32(bits.ReverseBytes16(pa.Pid)))
+	Vid.Store(uint32(bits.ReverseBytes16(pa.Vid)))
+
 	fmt.Println("USB字符串:", pa.UsbStringSign)
+
+	go func() {
+		Net.WsConns.Range(func(key, value interface{}) bool {
+			Net.WsServer_WriteChannel <- Net.WsData{
+				Conn:    value.(*websocket.Conn),
+				Type:    websocket.TextMessage,
+				Message: []byte("update"),
+			}
+			return true
+		})
+	}()
+
 	return pa
 }
 
