@@ -3,7 +3,6 @@ package ws
 import (
 	"fmt"
 	"github.com/bytedance/sonic"
-	"github.com/gorilla/websocket"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
 	"main.go/netReceiver"
@@ -64,7 +63,9 @@ func Kbd(c *Net.WsData) {
 		action.Endpoint_BeforeDelay.Store(0)
 		action.Mode.Store(0)
 		action.Endpoint_dynamic_mode.Store(0)
-		fmt.Println("Reset")
+		fmt.Println("设置重置")
+		go action.Lcd_refresh()
+
 		break
 
 	case "bankey":
@@ -74,17 +75,11 @@ func Kbd(c *Net.WsData) {
 	case "unbanall":
 		action.Mask.Button.Clear()
 		action.Mask.Ctrl.Clear()
+		go action.Lcd_refresh()
 		break
 
 	default:
 		break
 	}
-	Net.WsConns.Range(func(key, value interface{}) bool {
-		Net.WsServer_WriteChannel <- Net.WsData{
-			Conn:    value.(*websocket.Conn),
-			Type:    websocket.TextMessage,
-			Message: []byte("update"),
-		}
-		return true
-	})
+
 }
