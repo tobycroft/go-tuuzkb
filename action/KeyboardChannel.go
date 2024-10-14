@@ -22,7 +22,7 @@ func (self *Action) keyboard_runnable() {
 	self.ready()
 	for c := range self.ClientRx.KeyboardRxChannel {
 		swap_key(&c)
-		fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
+		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
 		go self.kb_actvate()
 		go self.kb_reboot()
 		go self.kb_unbanall()
