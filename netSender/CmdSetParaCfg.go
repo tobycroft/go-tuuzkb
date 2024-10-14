@@ -41,14 +41,21 @@ var Pid = atomic.Uint32{}
 var Vid = atomic.Uint32{}
 
 func (self *ClientTx) CmdSetParaCfg() *ClientTx {
-	if SepDelay.Load() < uint32(0x01) {
-		SepDelay.Store(uint32(0x01))
+	if SepDelay.Load() < uint32(0x01) || SepDelay.Load() > uint32(0x100) {
+		SepDelay.Store(uint32(0x03))
 	}
 	if Pid.Load() == uint32(0x0) {
 		Pid.Store(uint32(0x05ac))
 	}
 	if Vid.Load() == uint32(0x0) {
 		Vid.Store(uint32(0x0256))
+	}
+	switch BaudRate.Load() {
+	case BaudRate300k, BaudRate115200, BaudRate9600:
+		break
+	default:
+		BaudRate.Store(BaudRate115200)
+		break
 	}
 	pa := Para{
 		Mode:                 SetModeKeyMouse,
