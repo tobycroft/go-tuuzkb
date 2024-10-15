@@ -89,7 +89,7 @@ func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
 	for i, button := range CurrentPress.Button {
-		_, ok := Mask.Button.Load(button)
+		_, ok := Mask.Button.Load(button.Load().(byte))
 		if !ok {
 			Button[i] = button.Load().(byte)
 		} else {
