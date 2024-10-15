@@ -24,7 +24,7 @@ type ClientRx struct {
 }
 
 var ctrl = &atomic.Value{}
-var buttons = &[6]*atomic.Value{}
+var buttons = &[6]atomic.Value{}
 
 var OriginalButton = &sync.Map{}
 var OriginCtrl = &sync.Map{}
@@ -38,7 +38,6 @@ func (self *ClientRx) Ready() {
 
 	ctrl.Store(byte(hid.CmdNone))
 	for i := range buttons {
-		buttons[i] = &atomic.Value{}
 		buttons[i].Store(byte(hid.CmdNone))
 	}
 

@@ -16,9 +16,9 @@ type Action struct {
 	AutoPressed sync.Map
 }
 
-var lastPressSum atomic.Value
+var lastPressSum = &atomic.Value{}
 
-var Mask = mask{}
+var Mask = &mask{}
 
 type mask struct {
 	Button sync.Map
