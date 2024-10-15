@@ -139,6 +139,8 @@ github.com/tobycroft/TuuzNet v1.6.1 h1:cK9vo7AUGy7WpqpCp/5PpJHVdKodLhL2Do/5nNcVY
 github.com/tobycroft/TuuzNet v1.6.1/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
 github.com/tobycroft/TuuzNet v1.7.0 h1:Mben2yzjcfbH0piddeV/erFXBiHrQvHg+O1vr9CjKnM=
 github.com/tobycroft/TuuzNet v1.7.0/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
+github.com/tobycroft/TuuzNet v1.7.1 h1:v0YFGf/rPeb85NAD/SD0cKkcJ+AHTKUH1H9lyuAYXPY=
+github.com/tobycroft/TuuzNet v1.7.1/go.mod h1:Fl+ls5obNVUBe8wCZhEsNG4NzqsEoENVmTJ75CFV870=
 github.com/tobycroft/gorose-pro v1.14.1 h1:mMZGs4osOxH7zKaEG29dtprw1zfSlErIxCe1S7SDmNg=
 github.com/tobycroft/gorose-pro v1.14.1/go.mod h1:dgkEvC/YbvQKdrwCDac5Xy/OllbuERFz5Q1+QNRs3lQ=
 github.com/twitchyliquid64/golang-asm v0.15.1 h1:SU5vSMR7hnwNxj24w34ZyCi/FmDZTkS4MhqMhdFk5YI=
