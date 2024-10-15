@@ -16,19 +16,19 @@ func (self *ClientRx) RouterKeyboard() {
 
 func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	num := 0
-	if self.keys.Ctrl != c.Ctrl {
+	if self.ctrl.Load() != c.Ctrl {
 		self.ctrl_define(c.Ctrl)
-		self.keys.Ctrl = c.Ctrl
+		self.ctrl.Store(c.Ctrl)
 		num += 1
 	}
 	for i, button := range c.Button {
-		if self.keys.Button[i] != self.banKey(button) {
-			if button > self.keys.Button[i] {
+		if self.buttons[i].Load() != self.banKey(button) {
+			if button > self.buttons[i].Load().(byte) {
 				self.OriginalButton.Store(button, true)
-			} else if self.keys.Button[i] > button {
-				self.OriginalButton.Delete(self.keys.Button[i])
+			} else if self.buttons[i].Load().(byte) > button {
+				self.OriginalButton.Delete(self.buttons[i])
 			}
-			self.keys.Button[i] = self.banKey(button)
+			self.buttons[i].Store(self.banKey(button))
 			num += 1
 		}
 	}

@@ -9,6 +9,7 @@ import (
 	"main.go/netSender"
 	"net"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -21,9 +22,11 @@ type ClientRx struct {
 	KeyboardRxChannel chan netSender.KeyboardData2
 	MouseRxChannel    chan any
 
-	keys           netSender.KeyboardData2
 	OriginalButton sync.Map
 	OriginCtrl     sync.Map
+
+	ctrl    atomic.Value
+	buttons [6]atomic.Value
 }
 
 func (self *ClientRx) Ready() {
@@ -32,6 +35,11 @@ func (self *ClientRx) Ready() {
 
 	self.MouseRxChannel = make(chan any)
 	self.KeyboardRxChannel = make(chan netSender.KeyboardData2)
+
+	self.ctrl.Store(byte(hid.CmdNone))
+	for i := range self.buttons {
+		self.buttons[i].Store(byte(hid.CmdNone))
+	}
 
 	go self.RouterKeyboard()
 }
