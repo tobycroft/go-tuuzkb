@@ -3,6 +3,7 @@ package action
 import (
 	"fmt"
 	"main.go/define/hid"
+	"main.go/netReceiver"
 	"main.go/netSender"
 )
 
@@ -97,29 +98,7 @@ func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
 		sum += button.Load().(byte)
 	}
 
-	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {
-		_, ok := Mask.Ctrl.Load(key.(byte))
-		if !ok {
-			Ctrl += key.(byte)
-		}
-		return true
-	})
-	sum += Ctrl
-	return
-}
-
-func (self *Action) kb_washing2(c netSender.KeyboardData2) (Ctrl byte, Button [6]byte, sum byte) {
-	for i, button := range c.Button {
-		_, ok := Mask.Button.Load(button)
-		if !ok {
-			Button[i] = button
-		} else {
-			Button[i] = 0
-		}
-		sum += button
-	}
-
-	self.ClientRx.OriginCtrl.Range(func(key, value interface{}) bool {
+	netReceiver.OriginCtrl.Range(func(key, value interface{}) bool {
 		_, ok := Mask.Ctrl.Load(key.(byte))
 		if !ok {
 			Ctrl += key.(byte)

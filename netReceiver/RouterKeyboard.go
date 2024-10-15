@@ -16,76 +16,76 @@ func (self *ClientRx) RouterKeyboard() {
 
 func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	num := 0
-	if self.ctrl.Load() != c.Ctrl {
-		self.ctrl_define(c.Ctrl)
-		self.ctrl.Store(c.Ctrl)
+	if ctrl.Load() != c.Ctrl {
+		CtrlToMap(c.Ctrl)
+		ctrl.Store(c.Ctrl)
 		num += 1
 	}
 	for i, button := range c.Button {
-		if self.buttons[i].Load() != self.banKey(button) {
-			if button > self.buttons[i].Load().(byte) {
-				self.OriginalButton.Store(button, true)
-			} else if self.buttons[i].Load().(byte) > button {
-				self.OriginalButton.Delete(self.buttons[i])
+		if buttons[i].Load() != self.banKey(button) {
+			if button > buttons[i].Load().(byte) {
+				OriginalButton.Store(button, true)
+			} else if buttons[i].Load().(byte) > button {
+				OriginalButton.Delete(buttons[i])
 			}
-			self.buttons[i].Store(self.banKey(button))
+			buttons[i].Store(self.banKey(button))
 			num += 1
 		}
 	}
 	return num
 }
 
-func (self *ClientRx) ctrl_define(ctrl byte) byte {
+func CtrlToMap(ctrl byte) byte {
 	if ctrl&hid.LeftCtrl != 0 {
-		self.OriginCtrl.Store(byte(hid.LeftCtrl), true)
+		OriginCtrl.Store(byte(hid.LeftCtrl), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.LeftCtrl))
+		OriginCtrl.Delete(byte(hid.LeftCtrl))
 	}
 
 	if ctrl&hid.RightCtrl != 0 {
-		self.OriginCtrl.Store(byte(hid.RightCtrl), true)
+		OriginCtrl.Store(byte(hid.RightCtrl), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.RightCtrl))
+		OriginCtrl.Delete(byte(hid.RightCtrl))
 	}
 
 	if ctrl&hid.LeftShift != 0 {
-		self.OriginCtrl.Store(byte(hid.LeftShift), true)
+		OriginCtrl.Store(byte(hid.LeftShift), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.LeftShift))
+		OriginCtrl.Delete(byte(hid.LeftShift))
 	}
 
 	if ctrl&hid.RightShift != 0 {
-		self.OriginCtrl.Store(byte(hid.RightShift), true)
+		OriginCtrl.Store(byte(hid.RightShift), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.RightShift))
+		OriginCtrl.Delete(byte(hid.RightShift))
 	}
 
 	if ctrl&hid.LeftAlt != 0 {
-		self.OriginCtrl.Store(byte(hid.LeftAlt), true)
+		OriginCtrl.Store(byte(hid.LeftAlt), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.LeftAlt))
+		OriginCtrl.Delete(byte(hid.LeftAlt))
 	}
 
 	if ctrl&hid.RightAlt != 0 {
-		self.OriginCtrl.Store(byte(hid.RightAlt), true)
+		OriginCtrl.Store(byte(hid.RightAlt), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.RightAlt))
+		OriginCtrl.Delete(byte(hid.RightAlt))
 	}
 
 	if ctrl&hid.LeftWindows != 0 {
-		self.OriginCtrl.Store(byte(hid.LeftWindows), true)
+		OriginCtrl.Store(byte(hid.LeftWindows), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.LeftWindows))
+		OriginCtrl.Delete(byte(hid.LeftWindows))
 	}
 
 	if ctrl&hid.RightWindows != 0 {
-		self.OriginCtrl.Store(byte(hid.RightWindows), true)
+		OriginCtrl.Store(byte(hid.RightWindows), true)
 	} else {
-		self.OriginCtrl.Delete(byte(hid.RightWindows))
+		OriginCtrl.Delete(byte(hid.RightWindows))
 	}
 
 	if ctrl == hid.CmdNone {
-		self.OriginCtrl.Clear()
+		OriginCtrl.Clear()
 	}
 
 	return 0
