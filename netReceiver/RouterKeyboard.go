@@ -22,14 +22,14 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 		num += 1
 	}
 	for i, button := range c.Button {
-		temp_button := self.banKey(button)
-		if originButton[i].Load() != temp_button {
-			if button > originButton[i].Load().(byte) {
+		c.Button[i] = self.banKey(button)
+		if originButton[i].Load() != c.Button[i] {
+			if c.Button[i] > originButton[i].Load().(byte) {
 				OriginalButton.Store(button, true)
-			} else if originButton[i].Load().(byte) > button {
+			} else if originButton[i].Load().(byte) > c.Button[i] {
 				OriginalButton.Delete(originButton[i])
 			}
-			originButton[i].Store(temp_button)
+			originButton[i].Store(c.Button[i])
 			num += 1
 		}
 	}
