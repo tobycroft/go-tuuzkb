@@ -23,8 +23,8 @@ type ClientRx struct {
 	MouseRxChannel    chan any
 }
 
-var ctrl = &atomic.Value{}
-var buttons = &[6]*atomic.Value{}
+var originCtrl = &atomic.Value{}
+var originButton = &[6]*atomic.Value{}
 
 var OriginalButton = &sync.Map{}
 var OriginCtrl = &sync.Map{}
@@ -36,10 +36,10 @@ func (self *ClientRx) Ready() {
 	self.MouseRxChannel = make(chan any)
 	self.KeyboardRxChannel = make(chan netSender.KeyboardData2)
 
-	ctrl.Store(byte(hid.CmdNone))
-	for i := range buttons {
-		buttons[i] = &atomic.Value{}
-		buttons[i].Store(byte(hid.CmdNone))
+	originCtrl.Store(byte(hid.CmdNone))
+	for i := range originButton {
+		originButton[i] = &atomic.Value{}
+		originButton[i].Store(byte(hid.CmdNone))
 	}
 
 	go self.RouterKeyboard()
