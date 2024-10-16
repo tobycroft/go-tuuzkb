@@ -33,7 +33,6 @@ func (self *ServerTcp) Start() *ServerTcp {
 		addrToConn.Store(conn.RemoteAddr().String(), conn)
 		addrToLock.Store(conn.RemoteAddr().String(), &sync.Mutex{})
 		go self.handler(conn, reader)
-
 	}
 }
 

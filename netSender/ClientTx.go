@@ -50,22 +50,22 @@ func (self *SendTx) Head(Cmd byte) *SendTx {
 }
 
 func (self *SendTx) Data(data any) *SendTx {
-	bb := bytes.Buffer{}
-	err := binary.Write(&bb, binary.BigEndian, data)
+	bb := &bytes.Buffer{}
+	err := binary.Write(bb, binary.BigEndian, data)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	self.sendData.Len = self.sendData.Len + byte(bb.Len())
-	cc := bytes.Buffer{}
-	err = binary.Write(&cc, binary.NativeEndian, data)
-	if err != nil {
-		panic(fmt.Sprintln("binary编译失败", err))
-	}
+	//cc := bytes.Buffer{}
+	//err = binary.Write(&cc, binary.NativeEndian, data)
+	//if err != nil {
+	//	panic(fmt.Sprintln("binary编译失败", err))
+	//}
 	err = binary.Write(self.sendBuf, binary.BigEndian, self.sendData)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	fmt.Println("sumlen", bb.Bytes(), cc.Bytes(), self.sendBuf.Bytes())
+	//fmt.Println("sumlen", bb.Bytes(), cc.Bytes(), self.sendBuf.Bytes())
 	self.sendBuf.Write(bb.Bytes())
 	return self
 }
@@ -79,6 +79,7 @@ func (self *SendTx) Sum() *SendTx {
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
+	fmt.Println("sum", self.sendBuf.Bytes())
 	return self
 }
 
