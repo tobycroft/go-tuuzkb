@@ -18,7 +18,8 @@ func main() {
 	netReceiver.Crx.Ready()
 
 	Act := &action.Action{}
-	go Act.MainRun(netReceiver.Crx, netSender.Ctx)
+	go Act.MainRun()
+
 	//sudp := netTcp.ServerUDP{
 	//	SendServer: &net.UDPAddr{
 	//		IP:   net.ParseIP("10.0.0.90"),
@@ -26,6 +27,7 @@ func main() {
 	//	},
 	//}
 	//go sudp.Start()
+
 	stcp := netTcp.ServerTcp{
 		SendServer: &net.TCPAddr{
 			IP:   net.ParseIP("10.0.0.90"),

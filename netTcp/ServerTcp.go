@@ -11,8 +11,6 @@ import (
 
 type ServerTcp struct {
 	SendServer net.Addr
-
-	Kb netReceiver.KeyBoard
 }
 
 var addrToConn sync.Map

@@ -16,7 +16,7 @@ func (self *Action) KeyDown(key byte) {
 			break
 		}
 	}
-	self.ClientTx.CmdSendKbGeneralDataRaw(out)
+	netSender.Ctx.CmdSendKbGeneralDataRaw(out)
 	//go fmt.Println("keyboardAutoDN", out)
 }
 
@@ -24,7 +24,7 @@ func (self *Action) KeyUp(key byte) {
 	self.AutoPressed.Delete(key)
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	self.ClientTx.CmdSendKbGeneralDataRaw(out)
+	netSender.Ctx.CmdSendKbGeneralDataRaw(out)
 	//go fmt.Println("keyboardAutoUP", out)
 }
 
@@ -36,7 +36,7 @@ func (self *Action) SendKbGeneralDataRaw() {
 	if out.Resv != lastPressSum.Load() {
 		lastPressSum.Store(out.Resv)
 		out.Resv = 0x00
-		self.ClientTx.CmdSendKbGeneralDataRaw(out)
+		netSender.Ctx.CmdSendKbGeneralDataRaw(out)
 	}
 }
 

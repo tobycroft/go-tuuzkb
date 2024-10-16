@@ -10,9 +10,6 @@ import (
 
 type Action struct {
 	//将你需要缓存的数据存在这里
-	ClientRx *netReceiver.ClientRx
-	ClientTx *netSender.ClientTx
-
 	AutoPressed sync.Map
 }
 
@@ -25,9 +22,7 @@ type mask struct {
 	Ctrl   sync.Map
 }
 
-func (self *Action) MainRun(clientrx *netReceiver.ClientRx, clienttx *netSender.ClientTx) {
-	self.ClientRx = clientrx
-	self.ClientTx = clienttx
+func (self *Action) MainRun() {
 	go func() {
 		time.Sleep(3 * time.Second)
 		netReceiver.SetUsbString()

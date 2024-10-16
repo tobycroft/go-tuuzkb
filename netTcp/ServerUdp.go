@@ -9,15 +9,12 @@ import (
 
 type ServerUDP struct {
 	SendServer net.Addr
-
-	Conn net.PacketConn
-
-	Kb netReceiver.KeyBoard
+	conn       net.PacketConn
 }
 
 func (self *ServerUDP) Start() *ServerUDP {
 	var err error
-	self.Conn, err = net.ListenPacket("udp", ":6666")
+	self.conn, err = net.ListenPacket("udp", ":6666")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -25,14 +22,14 @@ func (self *ServerUDP) Start() *ServerUDP {
 	go func() {
 		for keyboard := range netSender.Ctx.TxChannel {
 			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
-			self.Conn.WriteTo(keyboard, self.SendServer)
+			self.conn.WriteTo(keyboard, self.SendServer)
 		}
 	}()
 
 	buff := make([]byte, 1024)
 	buffer := bytes.Buffer{}
 	for {
-		blen, addr, err := self.Conn.ReadFrom(buff)
+		blen, addr, err := self.conn.ReadFrom(buff)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -50,7 +47,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 				//if addr.String() == "10.0.0.91:6666" {
 				netReceiver.Crx.MessageRouter(segment, addr)
 				//if addr.String() == "10.0.0.90:6666" {
-				//	fmt.Println(addr.String(), hex.EncodeToString(buff))
+				//fmt.Println(addr.String(), hex.EncodeToString(buff))
 				//}
 				//} else {
 				//	fmt.Println(addr.String(), hex.EncodeToString(buff))

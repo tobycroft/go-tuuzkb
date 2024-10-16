@@ -20,7 +20,7 @@ var OnchangePress = &lastKey{}
 
 func (self *Action) keyboard_runnable() {
 	self.ready()
-	for c := range self.ClientRx.KeyboardRxChannel {
+	for c := range netReceiver.Crx.KeyboardRxChannel {
 		swap_key(&c)
 		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
 		go self.kb_actvate()
@@ -116,21 +116,21 @@ func (self *Action) kb_unbanall() {
 
 func (self *Action) kb_get_para() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdScrollLock) {
-		self.ClientTx.CmdGetParaCfg()
+		netSender.Ctx.CmdGetParaCfg()
 	}
 }
 
 func (self *Action) kb_set_para() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdScrollLock) {
-		self.ClientTx.CmdGetParaCfg()
+		netSender.Ctx.CmdGetParaCfg()
 	}
 }
 
 func (self *Action) kb_get_usbstring() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen) {
-		self.ClientTx.CmdGetUsbString(netSender.StrTypeManufacturer)
-		self.ClientTx.CmdGetUsbString(netSender.StrTypeProduct)
-		self.ClientTx.CmdGetUsbString(netSender.StrTypeSerial)
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeManufacturer)
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeProduct)
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeSerial)
 	}
 }
 
@@ -142,14 +142,14 @@ func (self *Action) kb_set_usbstring() {
 
 func (self *Action) kb_reboot() {
 	if self.checkKeyIsPressedByOrder(hid.LeftCtrl+hid.LeftShift, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
-		self.ClientTx.CmdSetDefaultCfg()
+		netSender.Ctx.CmdSetDefaultCfg()
 		time.Sleep(2 * time.Second)
-		self.ClientTx.CmdReset()
+		netSender.Ctx.CmdReset()
 	}
 }
 
 func (self *Action) kb_test() {
 	if self.checkKeyIsPressedByOrder(0, hid.CmdScrollLock) {
-		self.ClientTx.CmdGetParaCfg()
+		netSender.Ctx.CmdGetParaCfg()
 	}
 }
