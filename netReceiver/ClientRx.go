@@ -114,7 +114,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	default:
-		go fmt.Println("main_unreco:", Addr, Data[0], hex.EncodeToString(Data[:2]), hex.EncodeToString(Data))
+		go fmt.Println("main_unreco:", Addr, hex.EncodeToString(Data))
 
 	}
 }
@@ -178,7 +178,7 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr) {
 		}
 		break
 
-	case 0xca, 0xc0:
+	case 0xca, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4:
 		go fmt.Println("错误：", hex.EncodeToString(Data[2:]))
 		break
 

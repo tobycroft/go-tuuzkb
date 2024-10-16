@@ -37,7 +37,7 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
-	buff := make([]byte, 128)
+	buff := make([]byte, 512)
 	for {
 		_, err := reader.Read(buff)
 		if err != nil {

@@ -8,7 +8,7 @@ import (
 )
 
 func ClientTx() {
-	buff := make([]byte, 128)
+	buff := make([]byte, 512)
 
 	network := net.TCPAddr{
 		IP:   net.ParseIP("10.0.0.90"),
