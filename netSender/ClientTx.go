@@ -23,10 +23,10 @@ const start2 = 0xab
 
 // 发送数据联合体
 type sendData struct {
-	Head uint16 // 帧头 (2个字节)
-	Addr byte   // 地址码 (1个字节)
-	Cmd  byte   // 命令码 (1个字节)
-	Len  byte   // 后续数据长度 (1个字节)
+	Head [2]byte // 帧头 (2个字节)
+	Addr byte    // 地址码 (1个字节)
+	Cmd  byte    // 命令码 (1个字节)
+	Len  byte    // 后续数据长度 (1个字节)
 }
 
 type SendTx struct {
@@ -37,7 +37,10 @@ type SendTx struct {
 func (self *SendTx) Head(Cmd byte) *SendTx {
 	return &SendTx{
 		sendData: &sendData{
-			Head: uint16(start1)<<8 | uint16(start2),
+			Head: [2]byte{
+				start1,
+				start2,
+			},
 			Addr: 0x00,
 			Cmd:  Cmd,
 			Len:  0x00,

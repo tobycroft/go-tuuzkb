@@ -16,6 +16,7 @@ type ServerTcp struct {
 }
 
 var addrToConn sync.Map
+var addrToLock sync.Map
 
 func (self *ServerTcp) Start() *ServerTcp {
 	Conn, err := net.Listen("tcp", ":6666")
@@ -30,6 +31,7 @@ func (self *ServerTcp) Start() *ServerTcp {
 		}
 		reader := bufio.NewReader(conn)
 		addrToConn.Store(conn.RemoteAddr().String(), conn)
+		addrToLock.Store(conn.RemoteAddr().String(), &sync.Mutex{})
 		go self.handler(conn, reader)
 
 	}
@@ -41,6 +43,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 		_, err := reader.Read(buff)
 		if err != nil {
 			addrToConn.Delete(conn.RemoteAddr().String())
+			addrToLock.Delete(conn.RemoteAddr().String())
 			return
 		}
 		//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
@@ -58,12 +61,17 @@ func (self *ServerTcp) tcpchannel() {
 		//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 		addrToConn.Range(func(key, value interface{}) bool {
 			if self.SendServer.String() == key.(string) {
-				_, err := value.(net.Conn).Write(keyboard)
-				if err != nil {
-					addrToConn.Delete(key)
+				locker, ok := addrToLock.Load(key)
+				if ok {
+					locker.(*sync.Mutex).Lock()
+					_, err := value.(net.Conn).Write(keyboard)
+					locker.(*sync.Mutex).Unlock()
+					if err != nil {
+						addrToConn.Delete(key)
+						addrToLock.Delete(key)
+					}
 				}
 			}
-
 			return true
 		})
 
