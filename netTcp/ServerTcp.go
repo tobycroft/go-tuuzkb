@@ -46,6 +46,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			return
 		}
 		//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
+
 		//if addr.String() == "10.0.0.91:6666" {
 		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
 		for _, ddd := range slice_byte {
@@ -57,11 +58,11 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 
 func (self *ServerTcp) tcpchannel() {
 	for keyboard := range netSender.Ctx.TxChannel {
-		//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 		addrToConn.Range(func(key, value interface{}) bool {
 			if self.SendServer.String() == key.(string) {
 				locker, ok := addrToLock.Load(key)
 				if ok {
+					//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 					locker.(*sync.Mutex).Lock()
 					_, err := value.(net.Conn).Write(keyboard)
 					locker.(*sync.Mutex).Unlock()
