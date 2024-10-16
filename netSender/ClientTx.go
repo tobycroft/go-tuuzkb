@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"sync/atomic"
 )
 
 var Ctx = &ClientTx{}
@@ -32,6 +33,7 @@ type sendData struct {
 type SendTx struct {
 	sendBuf  *bytes.Buffer
 	sendData *sendData
+	sum      *atomic.Uint32
 }
 
 func (self *SendTx) Head(Cmd byte) *SendTx {
@@ -46,6 +48,7 @@ func (self *SendTx) Head(Cmd byte) *SendTx {
 			Len:  0x00,
 		},
 		sendBuf: &bytes.Buffer{},
+		sum:     &atomic.Uint32{},
 	}
 }
 
@@ -56,30 +59,24 @@ func (self *SendTx) Data(data any) *SendTx {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	self.sendData.Len = self.sendData.Len + byte(bb.Len())
-	//cc := bytes.Buffer{}
-	//err = binary.Write(&cc, binary.NativeEndian, data)
-	//if err != nil {
-	//	panic(fmt.Sprintln("binary编译失败", err))
-	//}
 	err = binary.Write(self.sendBuf, binary.BigEndian, self.sendData)
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	//fmt.Println("sumlen", bb.Bytes(), cc.Bytes(), self.sendBuf.Bytes())
 	self.sendBuf.Write(bb.Bytes())
 	return self
 }
 
 func (self *SendTx) Sum() *SendTx {
-	sum := byte(0x00)
+	self.sum.Store(0x00)
 	for _, b := range self.sendBuf.Bytes() {
-		sum = sum + (b)
+		self.sum.Add(uint32(b))
 	}
-	err := binary.Write(self.sendBuf, binary.BigEndian, sum)
+	err := binary.Write(self.sendBuf, binary.BigEndian, byte(self.sum.Load()&0xff))
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	fmt.Println("sum", self.sendBuf.Bytes())
+	//fmt.Println("sum", self.sendBuf.Bytes(), byte(self.sum.Load()&0xff))
 	return self
 }
 
