@@ -81,7 +81,7 @@ func (self *ClientTx) CmdSetParaCfg() *ClientTx {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
 	//fmt.Println(bb.Len())
-	new(SendTx).Head(cmd.CMD_SET_PARA_CFG).Data(pa).Send()
+	new(SendFrame).Head(cmd.CMD_SET_PARA_CFG).Data(pa).Send()
 	return self
 }
 func CmdSetParaCfgRecv(buf []byte) [50]byte {

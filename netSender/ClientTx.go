@@ -83,7 +83,6 @@ func (self *SendTx) sum() *SendTx {
 func (self *SendTx) Send() {
 	self.sum()
 	Ctx.TxChannel <- self.sendBuf.Bytes()
-	self.sendBuf.Reset()
 }
 
 // 定义帧结构
@@ -110,11 +109,8 @@ func (self *SendFrame) Data(data any) *SendFrame {
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
-	blen, err := bb.Write(self.DataSection)
-	if err != nil {
-		panic(err)
-	}
-	self.DataLength = byte(blen)
+	self.DataSection = bb.Bytes()
+	self.DataLength = byte(bb.Len())
 	return self
 }
 
@@ -129,14 +125,9 @@ func (f *SendFrame) sum() {
 
 // 编码为[]byte
 func (f *SendFrame) encode() ([]byte, error) {
-	// 根据Data的长度计算DataLength
-	f.DataLength = byte(len(f.DataSection))
-
-	// 计算校验和
 	f.sum()
-
 	// 创建一个缓冲区，大小为固定部分 + 数据长度 + 校验和
-	buf := make([]byte, 4+len(f.DataSection)+1) // 4 = 2 (header) + 1 (address) + 1 (command)
+	buf := make([]byte, 5+len(f.DataSection)+1) // 4 = 2 (header) + 1 (address) + 1 (command)
 
 	// 写入固定部分
 	copy(buf[0:2], f.Header[:])
@@ -149,6 +140,7 @@ func (f *SendFrame) encode() ([]byte, error) {
 
 	// 写入校验和
 	buf[5+len(f.DataSection)] = f.Checksum
+	//fmt.Println(buf)
 
 	return buf, nil
 }

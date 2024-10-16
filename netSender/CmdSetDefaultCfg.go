@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdSetDefaultCfg() *ClientTx {
-	new(SendTx).Head(cmd.CMD_SET_DEFAULT_CFG).Data([]byte{}).Send()
+	new(SendFrame).Head(cmd.CMD_SET_DEFAULT_CFG).Data([]byte{}).Send()
 	return self
 }

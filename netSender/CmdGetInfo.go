@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdGetInfo() *ClientTx {
-	new(SendTx).Head(cmd.CMD_GET_INFO).Data([]byte{}).Send()
+	new(SendFrame).Head(cmd.CMD_GET_INFO).Data([]byte{}).Send()
 	return self
 }

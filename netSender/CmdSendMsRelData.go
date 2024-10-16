@@ -28,7 +28,7 @@ func (self *ClientTx) CmdSendMsRelWheel(wheel int8) *ClientTx {
 	}
 	binary.Write(&buf, binary.BigEndian, mousebyte)
 	//fmt.Println(mousebyte)
-	new(SendTx).Head(cmd.CMD_SEND_MS_REL_DATA).Data(mousebyte).Send()
+	new(SendFrame).Head(cmd.CMD_SEND_MS_REL_DATA).Data(mousebyte).Send()
 
 	return self
 }
