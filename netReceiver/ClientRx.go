@@ -88,6 +88,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x01:
+		fmt.Println("kb-recv", hex.EncodeToString(Data))
 		kbreport := netSender.KeyboardData2{}
 		if len(Data) < 9 {
 			fmt.Println("kb-err-recv", Data)

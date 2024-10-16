@@ -33,7 +33,7 @@ type sendData struct {
 type SendTx struct {
 	sendBuf  *bytes.Buffer
 	sendData *sendData
-	sum      *atomic.Uint32
+	sumhex   *atomic.Uint32
 }
 
 func (self *SendTx) Head(Cmd byte) *SendTx {
@@ -48,7 +48,7 @@ func (self *SendTx) Head(Cmd byte) *SendTx {
 			Len:  0x00,
 		},
 		sendBuf: &bytes.Buffer{},
-		sum:     &atomic.Uint32{},
+		sumhex:  &atomic.Uint32{},
 	}
 }
 
@@ -67,12 +67,12 @@ func (self *SendTx) Data(data any) *SendTx {
 	return self
 }
 
-func (self *SendTx) Sum() *SendTx {
-	self.sum.Store(0x00)
+func (self *SendTx) sum() *SendTx {
+	self.sumhex.Store(0x00)
 	for _, b := range self.sendBuf.Bytes() {
-		self.sum.Add(uint32(b))
+		self.sumhex.Add(uint32(b))
 	}
-	err := binary.Write(self.sendBuf, binary.BigEndian, byte(self.sum.Load()&0xff))
+	err := binary.Write(self.sendBuf, binary.BigEndian, byte(self.sumhex.Load()&0xff))
 	if err != nil {
 		panic(fmt.Sprintln("binary编译失败", err))
 	}
@@ -81,7 +81,82 @@ func (self *SendTx) Sum() *SendTx {
 }
 
 func (self *SendTx) Send() {
-	self.Sum()
+	self.sum()
 	Ctx.TxChannel <- self.sendBuf.Bytes()
 	self.sendBuf.Reset()
+}
+
+// 定义帧结构
+type SendFrame struct {
+	Header      [2]byte // 帧头，固定2个字节
+	AddressCode byte    // 地址码，固定1个字节
+	CommandCode byte    // 命令码，固定1个字节
+	DataLength  byte    // 后续数据长度，固定1个字节
+	DataSection []byte  // 后续数据，变长
+	Checksum    byte    // 校验和，固定1个字节
+}
+
+func (self *SendFrame) Head(Cmd byte) *SendFrame {
+	return &SendFrame{
+		Header:      [2]byte{0x57, 0xAB},
+		AddressCode: 0x00,
+		CommandCode: Cmd,
+	}
+}
+
+func (self *SendFrame) Data(data any) *SendFrame {
+	bb := &bytes.Buffer{}
+	err := binary.Write(bb, binary.BigEndian, data)
+	if err != nil {
+		panic(fmt.Sprintln("binary编译失败", err))
+	}
+	blen, err := bb.Write(self.DataSection)
+	if err != nil {
+		panic(err)
+	}
+	self.DataLength = byte(blen)
+	return self
+}
+
+// 计算校验和
+func (f *SendFrame) sum() {
+	sum := f.Header[0] + f.Header[1] + f.AddressCode + f.CommandCode + f.DataLength
+	for _, b := range f.DataSection {
+		sum += b
+	}
+	f.Checksum = sum
+}
+
+// 编码为[]byte
+func (f *SendFrame) encode() ([]byte, error) {
+	// 根据Data的长度计算DataLength
+	f.DataLength = byte(len(f.DataSection))
+
+	// 计算校验和
+	f.sum()
+
+	// 创建一个缓冲区，大小为固定部分 + 数据长度 + 校验和
+	buf := make([]byte, 4+len(f.DataSection)+1) // 4 = 2 (header) + 1 (address) + 1 (command)
+
+	// 写入固定部分
+	copy(buf[0:2], f.Header[:])
+	buf[2] = f.AddressCode
+	buf[3] = f.CommandCode
+	buf[4] = f.DataLength
+
+	// 写入可变长度数据
+	copy(buf[5:], f.DataSection)
+
+	// 写入校验和
+	buf[5+len(f.DataSection)] = f.Checksum
+
+	return buf, nil
+}
+
+func (self *SendFrame) Send() {
+	buf, err := self.encode()
+	if err != nil {
+		panic(err)
+	}
+	Ctx.TxChannel <- buf
 }

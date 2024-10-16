@@ -12,7 +12,7 @@ import (
 )
 
 func (self *ClientTx) CmdGetParaCfg() *ClientTx {
-	new(SendTx).Head(cmd.CMD_GET_PARA_CFG).Data([]byte{}).Send()
+	new(SendFrame).Head(cmd.CMD_GET_PARA_CFG).Data([]byte{}).Send()
 	return self
 }
 func CmdGetParaCfgRecv(buf []byte) Para {
