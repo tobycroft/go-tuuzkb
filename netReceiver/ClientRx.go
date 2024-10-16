@@ -88,13 +88,9 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x01:
-		fmt.Println("kb-recv", hex.EncodeToString(Data))
+		//fmt.Println("kb-recv", hex.EncodeToString(Data))
 		kbreport := netSender.KeyboardData2{}
-		if len(Data) < 9 {
-			fmt.Println("kb-err-recv", Data)
-			break
-		}
-		buf := bytes.NewReader(Data[1:9])
+		buf := bytes.NewReader(Data[1:])
 		err := binary.Read(buf, binary.BigEndian, &kbreport)
 		if err != nil {
 			fmt.Println(len(Data), Data)
