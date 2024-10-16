@@ -3,6 +3,7 @@ package netTcp
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
@@ -37,23 +38,34 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
-	buff := make([]byte, 512)
+	buff := make([]byte, 1024)
+	buffer := bytes.Buffer{}
 	for {
-		_, err := reader.Read(buff)
+		blen, err := reader.Read(buff)
 		if err != nil {
 			addrToConn.Delete(conn.RemoteAddr().String())
 			addrToLock.Delete(conn.RemoteAddr().String())
 			return
 		}
-		//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
+		buffer.Write(buff[:blen])
 
-		//if addr.String() == "10.0.0.91:6666" {
-		slice_byte := bytes.Split(buff, []byte{0x57, 0xab})
-		for _, ddd := range slice_byte {
-			netReceiver.Crx.MessageRouter(ddd, conn.RemoteAddr())
+		for {
+			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
+			idx := bytes.Index(data, []byte{0x57, 0xab})
+			if idx == -1 {
+				// 没有找到分隔符，等待更多数据
+				break
+			}
+			segment := data[:idx]
+			if len(segment) > 0 {
+				//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
+				//if addr.String() == "10.0.0.91:6666" {
+				netReceiver.Crx.MessageRouter(segment, conn.RemoteAddr())
+				fmt.Println("Processed:", segment)
+			}
+			buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 		}
 	}
-
 }
 
 func (self *ServerTcp) tcpchannel() {
