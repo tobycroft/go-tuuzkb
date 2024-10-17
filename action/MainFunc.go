@@ -32,7 +32,7 @@ func (self *Action) KeyUp(key byte) {
 func (self *Action) SendKbGeneralDataRaw() {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	fmt.Println("keybaordsnd", out)
+	go fmt.Println("keybaordsnd", out)
 
 	if out.Resv != lastPressSum.Load() {
 		lastPressSum.Store(out.Resv)
