@@ -46,6 +46,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 		}
 		buffer.Write(buff[:blen])
 		//fmt.Println("bufftcp:", blen, buff[:blen])
+
 		for {
 			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
 			idx := bytes.Index(data, []byte{0x57, 0xab})

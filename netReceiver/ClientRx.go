@@ -45,6 +45,14 @@ func (self *ClientRx) Ready() {
 	go self.RouterKeyboard()
 }
 
+type keyframe struct {
+	DataLength byte   // 长度
+	Ident      byte   // 标识
+	KeyData    []byte // 键值
+	Index      byte   // 序列号
+	Checksum   byte   // 校验
+}
+
 func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 	if len(Data) < 1 {
 		return
@@ -68,15 +76,33 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x80:
-		//go fmt.Println("键值改变帧", Data[1:6])
+		//go fmt.Println("键值改变帧", Data[1:])
 		break
 
 	case 0x86:
-		//go fmt.Println("设备断开")
+		go fmt.Println("设备断开")
 		break
 
 	case 0x88:
-		go fmt.Println("键值数据帧：", Data[1:])
+		//go fmt.Println("键值数据帧：", Data[1:])
+		//fmt.Println("kff", len(Data), Data[1], Data[2], 2+int(Data[1]))
+		frame := keyframe{
+			DataLength: Data[1],
+			Ident:      Data[2],
+			KeyData:    Data[3 : int(Data[1])-2], // 根据 DataLength 解析数据
+			Index:      Data[int(Data[1])-1],
+			Checksum:   Data[int(Data[1])],
+		}
+		//kbreport := netSender.KeyboardData2{}
+		//buf := bytes.NewReader(Data[1:])
+		//err := binary.Read(buf, binary.BigEndian, &kbreport)
+		//if err != nil {
+		//	fmt.Println(len(Data), Data)
+		//	fmt.Println(hex.EncodeToString(Data))
+		//	panic(err.Error())
+		//}
+		fmt.Println("键值数据结构：", frame)
+		//self.keyboardMain <- kbreport
 		break
 
 	case 0x01:
