@@ -65,6 +65,44 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 
 	fmt.Println("USB字符串:", pa.UsbStringSign)
 
+	switch pa.Mode {
+	case GetModeKeyMouse:
+		KbMode.Store(0x00)
+		break
+
+	case GetModeKey:
+		KbMode.Store(0x01)
+		break
+
+	case GetModeMouse:
+		KbMode.Store(0x02)
+		break
+
+	case GetModeHidRaw:
+		KbMode.Store(0x03)
+		break
+
+	default:
+		KbMode.Store(0x00)
+		break
+	}
+
+	switch pa.Cfg {
+	case GetCfgNorm:
+		KbCfg.Store(0x00)
+		break
+	case GetCfgASCII:
+		KbCfg.Store(0x01)
+		break
+	case GetCfgPassthough:
+		KbCfg.Store(0x02)
+		break
+	default:
+		KbCfg.Store(0x00)
+		break
+
+	}
+
 	go func() {
 		Net.WsConns.Range(func(key, value interface{}) bool {
 			Net.WsServer_WriteChannel <- Net.WsData{
