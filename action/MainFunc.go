@@ -2,7 +2,6 @@ package action
 
 import (
 	"fmt"
-	"main.go/common"
 	"main.go/define/hid"
 	"main.go/netReceiver"
 	"main.go/netSender"
@@ -11,7 +10,6 @@ import (
 func (self *Action) KeyDown(key byte) {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	go common.PrintRedis("KeyDown", out)
 	for i, button := range out.Button {
 		if button == 0 {
 			self.AutoPressed.Store(key, int64(i))
@@ -27,7 +25,6 @@ func (self *Action) KeyUp(key byte) {
 	self.AutoPressed.Delete(key)
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	go common.PrintRedis("KeyUp", out)
 	netSender.Ctx.CmdSendKbGeneralDataRaw(out)
 	//go fmt.Println("keyboardAutoUP", out)
 }
@@ -36,7 +33,6 @@ func (self *Action) SendKbGeneralDataRaw() {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
 	go fmt.Println("keybaordsnd", out)
-	go common.PrintRedis("keybaordsnd", out)
 	if out.Resv != lastPressSum.Load() {
 		lastPressSum.Store(out.Resv)
 		out.Resv = 0x00
