@@ -25,7 +25,7 @@ func (self *Action) keyboard_runnable() {
 		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
 		go self.kb_actvate()
 		go self.kb_reboot()
-		go self.kb_unbanall()
+		//go self.kb_unbanall()
 		//go self.kb_test()
 		go self.key_main()
 		go self.qe_main()
@@ -128,10 +128,9 @@ func (self *Action) kb_set_para() {
 
 func (self *Action) kb_get_usbstring() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen) {
-		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeManufacturer)
-		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeProduct)
-		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeSerial)
-		//netSender.Ctx.CmdReadMyHidData()
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeManufacturer)
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeProduct)
+		netSender.Ctx.CmdGetUsbString(netSender.StrTypeSerial)
 	}
 }
 
