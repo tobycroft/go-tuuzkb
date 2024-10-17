@@ -22,35 +22,43 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	//binary.Read(bs, binary.BigEndian, &crx)
 	pa := Para{}
 	binary.Read(bs, binary.BigEndian, &pa)
+	fmt.Println(pa)
 	switch pa.Mode {
-	case 0x00:
+	case 0x00, 0x80:
 		fmt.Println("工作模式：键盘鼠标")
+		KbMode.Store(0x00)
 		break
 
-	case 0x01:
+	case 0x01, 0x81:
 		fmt.Println("工作模式：键盘")
+		KbMode.Store(0x01)
 		break
 
-	case 0x02:
+	case 0x02, 0x82:
 		fmt.Println("工作模式：鼠标")
+		KbMode.Store(0x02)
 		break
 
-	case 0x03:
+	case 0x03, 0x83:
 		fmt.Println("工作模式：HID Raw")
+		KbMode.Store(0x03)
 		break
 	}
 
 	switch pa.Cfg {
-	case 0x00:
+	case 0x00, 0x80:
 		fmt.Println("配置：协议传输")
+		KbCfg.Store(0x00)
 		break
 
-	case 0x01:
+	case 0x01, 0x81:
 		fmt.Println("配置：ASCII")
+		KbCfg.Store(0x01)
 		break
 
-	case 0x02:
+	case 0x02, 0x82:
 		fmt.Println("配置：Passthough")
+		KbCfg.Store(0x02)
 		break
 	}
 
@@ -64,44 +72,6 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	Vid.Store(uint32(bits.ReverseBytes16(pa.Vid)))
 
 	fmt.Println("USB字符串:", pa.UsbStringSign)
-
-	switch pa.Mode {
-	case GetModeKeyMouse:
-		KbMode.Store(0x00)
-		break
-
-	case GetModeKey:
-		KbMode.Store(0x01)
-		break
-
-	case GetModeMouse:
-		KbMode.Store(0x02)
-		break
-
-	case GetModeHidRaw:
-		KbMode.Store(0x03)
-		break
-
-	default:
-		KbMode.Store(0x00)
-		break
-	}
-
-	switch pa.Cfg {
-	case GetCfgNorm:
-		KbCfg.Store(0x00)
-		break
-	case GetCfgASCII:
-		KbCfg.Store(0x01)
-		break
-	case GetCfgPassthough:
-		KbCfg.Store(0x02)
-		break
-	default:
-		KbCfg.Store(0x00)
-		break
-
-	}
 
 	go func() {
 		Net.WsConns.Range(func(key, value interface{}) bool {
