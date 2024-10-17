@@ -11,6 +11,7 @@ import (
 func (self *Action) KeyDown(key byte) {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
+	go common.PrintRedis("KeyDown", out)
 	for i, button := range out.Button {
 		if button == 0 {
 			self.AutoPressed.Store(key, int64(i))
@@ -26,6 +27,7 @@ func (self *Action) KeyUp(key byte) {
 	self.AutoPressed.Delete(key)
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
+	go common.PrintRedis("KeyUp", out)
 	netSender.Ctx.CmdSendKbGeneralDataRaw(out)
 	//go fmt.Println("keyboardAutoUP", out)
 }
