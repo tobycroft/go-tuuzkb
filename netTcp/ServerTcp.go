@@ -3,7 +3,6 @@ package netTcp
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
@@ -46,7 +45,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			return
 		}
 		buffer.Write(buff[:blen])
-		fmt.Println("bufftcp:", buff[:blen])
+		//fmt.Println("bufftcp:", buff[:blen])
 		for {
 			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
 			idx := bytes.Index(data, []byte{0x57, 0xab})
