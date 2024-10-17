@@ -2,6 +2,7 @@ package netTcp
 
 import (
 	"bytes"
+	"fmt"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
@@ -34,6 +35,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 			panic(err.Error())
 		}
 		buffer.Write(buff[:blen])
+		fmt.Println("buffudp:", buff[:blen])
 
 		for {
 			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
