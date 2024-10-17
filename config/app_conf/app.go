@@ -5,7 +5,7 @@ import (
 	"github.com/Unknwon/goconfig"
 )
 
-var Project = "tuuzgoweb"
+var Project = "tuuzkb"
 var Debug = "tgw"
 var TestMode = true
 var AppMode = "debug"
