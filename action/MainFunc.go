@@ -43,6 +43,7 @@ func (self *Action) SendKbGeneralDataRaw() {
 }
 
 func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
+
 	if CurrentPress.Ctrl.Load() == Ctrl || Ctrl == hid.CmdNone {
 		for _, btn := range Btn {
 			for _, b := range OnchangePress.Button {
