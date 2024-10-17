@@ -57,6 +57,16 @@ func SemiConfig(c *Net.WsData) {
 		netSender.SepDelay.Store(uint32(Calc.Any2Int64(data["sep"])))
 		break
 
+	case "kbmode":
+		netSender.KbMode.Store(uint32(Calc.Any2Int64(data["kbmode"])))
+		netSender.Ctx.CmdSetParaCfg()
+		break
+
+	case "kbcfg":
+		netSender.KbCfg.Store(uint32(Calc.Any2Int64(data["kbcfg"])))
+		netSender.Ctx.CmdSetParaCfg()
+		break
+
 	default:
 		fmt.Println(c.Conn.RemoteAddr().String(), Type)
 		break
