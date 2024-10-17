@@ -128,9 +128,10 @@ func (self *Action) kb_set_para() {
 
 func (self *Action) kb_get_usbstring() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen) {
-		netSender.Ctx.CmdGetUsbString(netSender.StrTypeManufacturer)
-		netSender.Ctx.CmdGetUsbString(netSender.StrTypeProduct)
-		netSender.Ctx.CmdGetUsbString(netSender.StrTypeSerial)
+		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeManufacturer)
+		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeProduct)
+		//netSender.Ctx.CmdGetUsbString(netSender.StrTypeSerial)
+		netSender.Ctx.CmdReadMyHidData()
 	}
 }
 
