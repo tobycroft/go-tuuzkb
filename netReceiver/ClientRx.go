@@ -59,14 +59,6 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		//fmt.Println("ping")
 		break
 
-	case 0xab:
-		self.Router9239(Data[2:], Addr)
-		break
-
-	case 0x57:
-		self.Router9239(Data[2:], Addr)
-		break
-
 	case 0x81:
 		go fmt.Println("链接")
 		break
@@ -121,9 +113,6 @@ func (self *ClientRx) Router9239(Data []byte, Addr net.Addr) {
 		return
 	}
 	switch Data[0] {
-
-	case 0x00:
-		break
 
 	case 0x99:
 		//fmt.Println("ping")
