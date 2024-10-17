@@ -1,7 +1,7 @@
 package action
 
 import (
-	"fmt"
+	"main.go/common"
 	"main.go/define/hid"
 	"main.go/netReceiver"
 	"main.go/netSender"
@@ -32,8 +32,8 @@ func (self *Action) KeyUp(key byte) {
 func (self *Action) SendKbGeneralDataRaw() {
 	out := netSender.KeyboardData2{}
 	out.Ctrl, out.Button, out.Resv = self.kb_washing()
-	go fmt.Println("keybaordsnd", out)
-
+	//go fmt.Println("keybaordsnd", out)
+	go common.PrintRedis("keybaordsnd", out)
 	if out.Resv != lastPressSum.Load() {
 		lastPressSum.Store(out.Resv)
 		out.Resv = 0x00

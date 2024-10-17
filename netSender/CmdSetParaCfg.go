@@ -33,6 +33,9 @@ const BaudRate300k = uint32(0x493e0)
 const BaudRate115200 = uint32(0x1c200)
 const BaudRate9600 = uint32(0x2580)
 
+var KbMode = atomic.Uint32{}
+var KbCfg = atomic.Uint32{}
+
 // 0x05ac 0x0256
 var SepDelay = atomic.Uint32{}
 var BaudRate = atomic.Uint32{}
@@ -58,8 +61,8 @@ func (self *ClientTx) CmdSetParaCfg() *ClientTx {
 		break
 	}
 	pa := Para{
-		Mode:                 SetModeKeyMouse,
-		Cfg:                  SetCfgNorm,
+		Mode:                 byte(KbMode.Load()),
+		Cfg:                  byte(KbCfg.Load()),
 		ComAddress:           0x00,
 		BaudRate:             BaudRate.Load(),
 		Blank1:               0x0800,
@@ -97,7 +100,6 @@ const (
 	SetModeKey      = 0x01
 	SetModeMouse    = 0x02
 	SetModeHidRaw   = 0x03
-	ss              = 1
 )
 
 const (
