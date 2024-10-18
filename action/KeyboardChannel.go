@@ -94,16 +94,6 @@ func (self *Action) kb_bansomeKeys() {
 		fmt.Println("ban_all")
 	}
 }
-func Kb_banSomeKeys() {
-	kb_add_masking(hid.CmdApplication, false)
-	kb_add_masking(hid.CmdPrintScreen, false)
-	kb_add_masking(hid.CmdPause, false)
-	kb_add_masking(hid.CmdScrollLock, false)
-	kb_add_masking(hid.RightCtrl, true)
-	//kb_add_masking(hid.RightShift, true)
-	kb_add_masking(hid.RightAlt, true)
-	go Lcd_refresh()
-}
 
 func (self *Action) kb_unbanall() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
