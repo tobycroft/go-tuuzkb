@@ -20,13 +20,13 @@ func main() {
 	Act := &action.Action{}
 	go Act.MainRun()
 
-	//sudp := netTcp.ServerUDP{
-	//	SendServer: &net.UDPAddr{
-	//		IP:   net.ParseIP("10.0.0.90"),
-	//		Port: 6666,
-	//	},
-	//}
-	//go sudp.Start()
+	sudp := netTcp.ServerUDP{
+		SendServer: &net.UDPAddr{
+			IP:   net.ParseIP("10.0.0.90"),
+			Port: 6666,
+		},
+	}
+	go sudp.Start()
 
 	stcp := netTcp.ServerTcp{
 		SendServer: &net.TCPAddr{
