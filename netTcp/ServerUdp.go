@@ -20,7 +20,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 	}
 
 	go func() {
-		for keyboard := range netSender.Ctx.TxChannel {
+		for keyboard := range netSender.Ctx.UdpChannel {
 			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 			self.conn.WriteTo(keyboard, self.SendServer)
 		}

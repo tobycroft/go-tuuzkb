@@ -74,7 +74,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 }
 
 func (self *ServerTcp) tcpchannel() {
-	for keyboard := range netSender.Ctx.TxChannel {
+	for keyboard := range netSender.Ctx.TcpChannel {
 		addrToConn.Range(func(key, value interface{}) bool {
 			if self.SendServer.String() == key.(string) {
 				locker, ok := addrToLock.Load(key)
