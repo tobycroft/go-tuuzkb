@@ -1,10 +1,9 @@
-package send
+package netSender
 
 import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"main.go/netSender"
 	"sync/atomic"
 )
 
@@ -71,5 +70,5 @@ func (self *SendTx) sum() *SendTx {
 
 func (self *SendTx) Send() {
 	self.sum()
-	netSender.Ctx.TxChannel <- self.sendBuf.Bytes()
+	Ctx.TxChannel <- self.sendBuf.Bytes()
 }

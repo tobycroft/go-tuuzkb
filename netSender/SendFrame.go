@@ -1,10 +1,9 @@
-package send
+package netSender
 
 import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"main.go/netSender"
 )
 
 // 定义帧结构
@@ -64,5 +63,5 @@ func (self *SendFrame) Send() {
 	buf[5+len(self.DataSection)] = self.Checksum
 	//fmt.Println(buf)
 
-	netSender.Ctx.TxChannel <- buf
+	Ctx.TxChannel <- buf
 }

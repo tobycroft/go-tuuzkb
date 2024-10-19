@@ -1,4 +1,4 @@
-package send
+package netSender
 
 var SendApi = SendFrameApi[SendFrame](&SendFrame{})
 

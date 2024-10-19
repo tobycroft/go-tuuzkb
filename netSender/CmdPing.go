@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdPing() *ClientTx {
-	send.SendApi.Head(cmd.CMD_READ_MY_HID_DATA).Data([]byte{}).Send()
+	SendApi.Head(cmd.CMD_READ_MY_HID_DATA).Data([]byte{}).Send()
 	return self
 }

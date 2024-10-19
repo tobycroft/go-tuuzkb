@@ -13,7 +13,7 @@ import (
 )
 
 func (self *ClientTx) CmdGetParaCfg() *ClientTx {
-	send.SendApi.Head(cmd.CMD_GET_PARA_CFG).Data([]byte{}).Send()
+	SendApi.Head(cmd.CMD_GET_PARA_CFG).Data([]byte{}).Send()
 	return self
 }
 
