@@ -9,6 +9,16 @@ import (
 
 var Ctx = &ClientTx{}
 
+var SendApi = SendFrameApi[SendFrame](&SendFrame{})
+
+type SendFrameApi[T SendFrame | SendTx] interface {
+	Head(Cmd byte) *T
+	Data(data any) *T
+	sum() *T
+
+	Send()
+}
+
 type ClientTx struct {
 	TxChannel      chan []byte
 	TcpChannel     chan []byte
@@ -125,40 +135,32 @@ func (self *SendFrame) Data(data any) *SendFrame {
 }
 
 // 计算校验和
-func (f *SendFrame) sum() {
-	sum := f.Header[0] + f.Header[1] + f.AddressCode + f.CommandCode + f.DataLength
-	for _, b := range f.DataSection {
+func (self *SendFrame) sum() *SendFrame {
+	sum := self.Header[0] + self.Header[1] + self.AddressCode + self.CommandCode + self.DataLength
+	for _, b := range self.DataSection {
 		sum += b
 	}
-	f.Checksum = sum
-}
-
-// 编码为[]byte
-func (f *SendFrame) encode() ([]byte, error) {
-	f.sum()
-	// 创建一个缓冲区，大小为固定部分 + 数据长度 + 校验和
-	buf := make([]byte, 5+len(f.DataSection)+1) // 4 = 2 (header) + 1 (address) + 1 (command)
-
-	// 写入固定部分
-	copy(buf[0:2], f.Header[:])
-	buf[2] = f.AddressCode
-	buf[3] = f.CommandCode
-	buf[4] = f.DataLength
-
-	// 写入可变长度数据
-	copy(buf[5:], f.DataSection)
-
-	// 写入校验和
-	buf[5+len(f.DataSection)] = f.Checksum
-	//fmt.Println(buf)
-
-	return buf, nil
+	self.Checksum = sum
+	return self
 }
 
 func (self *SendFrame) Send() {
-	buf, err := self.encode()
-	if err != nil {
-		panic(err)
-	}
+	self.sum()
+	// 创建一个缓冲区，大小为固定部分 + 数据长度 + 校验和
+	buf := make([]byte, 5+len(self.DataSection)+1) // 4 = 2 (header) + 1 (address) + 1 (command)
+
+	// 写入固定部分
+	copy(buf[0:2], self.Header[:])
+	buf[2] = self.AddressCode
+	buf[3] = self.CommandCode
+	buf[4] = self.DataLength
+
+	// 写入可变长度数据
+	copy(buf[5:], self.DataSection)
+
+	// 写入校验和
+	buf[5+len(self.DataSection)] = self.Checksum
+	//fmt.Println(buf)
+
 	Ctx.TxChannel <- buf
 }

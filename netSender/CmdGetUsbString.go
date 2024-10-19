@@ -16,7 +16,7 @@ type Usbstr struct {
 // 通过该命令向芯片获取当前所使
 // 用的 USB 字符串描述符配置
 func (self *ClientTx) CmdGetUsbString(HidStringType byte) *ClientTx {
-	new(SendFrame).Head(cmd.CMD_GET_USB_STRING).Data([]byte{HidStringType}).Send()
+	SendApi.Head(cmd.CMD_GET_USB_STRING).Data([]byte{HidStringType}).Send()
 	time.Sleep(500 * time.Millisecond)
 	return self
 }

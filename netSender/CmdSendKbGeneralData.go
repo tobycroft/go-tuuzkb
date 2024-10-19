@@ -7,11 +7,11 @@ import (
 // 发送 USB 键盘普通数据
 func (self *ClientTx) CmdSendKbGeneralData(keybytes KeyboardData) {
 	keybytes.Resv = 0x00
-	new(SendTx).Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
+	SendApi.Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
 }
 
 // 发送 USB 键盘普通数据
 func (self *ClientTx) CmdSendKbGeneralDataRaw(keybytes KeyboardData2) {
 	keybytes.Resv = 0x00
-	new(SendFrame).Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
+	SendApi.Head(cmd.CMD_SEND_KB_GENERAL_DATA).Data(keybytes).Send()
 }
