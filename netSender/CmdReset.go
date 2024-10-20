@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdReset() *ClientTx {
-	SendApi.Head(cmd.CMD_RESET).Data([]byte{}).Send()
+	SApi.Head(cmd.CMD_RESET).Data([]byte{}).Send()
 	return self
 }

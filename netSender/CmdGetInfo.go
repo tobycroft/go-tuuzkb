@@ -5,6 +5,6 @@ import (
 )
 
 func (self *ClientTx) CmdGetInfo() *ClientTx {
-	SendApi.Head(cmd.CMD_GET_INFO).Data([]byte{}).Send()
+	SApi.Head(cmd.CMD_GET_INFO).Data([]byte{}).Send()
 	return self
 }

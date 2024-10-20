@@ -37,11 +37,10 @@ func (self *SendFrame) Data(data any) *SendFrame {
 
 // 计算校验和
 func (self *SendFrame) sum() *SendFrame {
-	sum := self.Header[0] + self.Header[1] + self.AddressCode + self.CommandCode + self.DataLength
+	self.Checksum = self.Header[0] + self.Header[1] + self.AddressCode + self.CommandCode + self.DataLength
 	for _, b := range self.DataSection {
-		sum += b
+		self.Checksum += b
 	}
-	self.Checksum = sum
 	return self
 }
 

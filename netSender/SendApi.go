@@ -1,6 +1,6 @@
 package netSender
 
-var SendApi = SendFrameApi[SendFrame](&SendFrame{})
+var SApi = SendFrameApi[SendFrame](&SendFrame{})
 
 type SendFrameApi[T SendFrame | SendTx] interface {
 	Head(Cmd byte) *T
