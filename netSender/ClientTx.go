@@ -16,7 +16,7 @@ func (self *ClientTx) Ready() {
 	self.UdpChannel = make(chan []byte)
 	go func() {
 		for c := range self.TxChannel {
-			self.UdpChannel <- c
+			go func(c []byte) { self.UdpChannel <- c }(c)
 			self.TcpChannel <- c
 		}
 	}()
