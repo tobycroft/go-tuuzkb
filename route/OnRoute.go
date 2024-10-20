@@ -11,6 +11,9 @@ func OnRoute(router *gin.Engine) {
 		ws := Net.WsServer{}
 		ws.NewServer(c.Writer, c.Request, c.Writer.Header())
 	})
+	router.Any("info", func(c *gin.Context) {
+
+	})
 	version1 := router.Group("/v1")
 	{
 		version1.Use(func(context *gin.Context) {

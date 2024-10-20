@@ -28,7 +28,7 @@ func CmdGetUsbStringRecv(buf []byte) string {
 	binary.Read(bs, binary.BigEndian, &us)
 	bt := make([]byte, us.HidLen)
 	binary.Read(bs, binary.BigEndian, &bt)
-	if len(bt) >= int(us.HidLen) {
+	if int(us.HidLen) >= len(bt) {
 		return string(bt[2:us.HidLen])
 	} else {
 		return ""

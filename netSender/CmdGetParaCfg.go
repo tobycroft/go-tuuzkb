@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	Net "github.com/tobycroft/TuuzNet"
-	"main.go/common"
 	"main.go/define/cmd"
 	"math/bits"
 )
@@ -23,7 +22,7 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	//binary.Read(bs, binary.BigEndian, &crx)
 	pa := Para{}
 	binary.Read(bs, binary.BigEndian, &pa)
-	go common.PrintRedis("获取参数配置", pa)
+	//go common.PrintRedis("获取参数配置", pa)
 	//fmt.Println(pa)
 	switch pa.Mode {
 	case 0x00, 0x80:
