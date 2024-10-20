@@ -82,6 +82,7 @@ func (self *ServerTcp) tcpchannel() {
 					//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
 					locker.(*sync.Mutex).Lock()
 					_, err := value.(net.Conn).Write(keyboard)
+					//fmt.Println("sendwithn:", n, keyboard)
 					locker.(*sync.Mutex).Unlock()
 					if err != nil {
 						addrToConn.Delete(key)

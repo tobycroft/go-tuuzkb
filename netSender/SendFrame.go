@@ -61,7 +61,7 @@ func (self *SendFrame) Send() {
 
 	// 写入校验和
 	buf[5+len(self.DataSection)] = self.Checksum
-	fmt.Println(buf)
+	//fmt.Println(buf)
 
 	Ctx.TxChannel <- buf
 }
