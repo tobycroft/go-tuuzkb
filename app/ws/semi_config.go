@@ -50,6 +50,10 @@ func SemiConfig(c *Net.WsData) {
 		action.Endpoint_BeforeDelay.Store(Calc.Any2Int64(data["Endpoint_BeforeDelay"]))
 		break
 
+	case "Endpoint_BeforeDelay_Random":
+		action.Endpoint_BeforeDelay_Random.Store(Calc.Any2Int64(data["Endpoint_BeforeDelay_Random"]))
+		break
+
 	case "sep":
 		if Calc.Any2Int64(data["sep"]) < 1 {
 			data["sep"] = 1

@@ -21,11 +21,12 @@ func Info(c *Net.WsData) {
 		return true
 	})
 	data := map[string]any{
-		"Endpoint_delay":        action.Endpoint_delay.Load(),
-		"Endpoint_BeforeDelay":  action.Endpoint_BeforeDelay.Load(),
-		"Endpoint_dynamic_mode": action.Endpoint_dynamic_mode.Load(),
-		"VHits":                 action.VHits.Load(),
-		"VLast":                 action.VLast.Load(),
+		"Endpoint_delay":              action.Endpoint_delay.Load(),
+		"Endpoint_BeforeDelay":        action.Endpoint_BeforeDelay.Load(),
+		"Endpoint_BeforeDelay_Random": action.Endpoint_BeforeDelay_Random.Load(),
+		"Endpoint_dynamic_mode":       action.Endpoint_dynamic_mode.Load(),
+		"VHits":                       action.VHits.Load(),
+		"VLast":                       action.VLast.Load(),
 
 		"LCD1": action.LcdLine1,
 		"LCD2": action.LcdLine2,
