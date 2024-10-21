@@ -96,7 +96,7 @@ func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
 		} else {
 			Button[i] = 0
 		}
-		sum += button.Load().(byte)
+		sum += Button[i]
 	}
 
 	netReceiver.OriginCtrl.Range(func(key, value interface{}) bool {
