@@ -30,7 +30,6 @@ func (self *Action) keyboard_runnable() {
 		go self.key_main()
 		go self.qe_main()
 		go self.whel_main()
-		//
 		//go self.kb_get_para()
 		//go self.kb_set_para()
 		//go self.kb_get_usbstring()
