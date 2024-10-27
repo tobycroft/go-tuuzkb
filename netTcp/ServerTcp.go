@@ -56,7 +56,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			} else if idx == 0 {
 				buffer.Next(2)
 				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
-				netReceiver.Crx.MessageRouter(buffer.Bytes(), conn.RemoteAddr())
+				go netReceiver.Crx.MessageRouter(buffer.Bytes(), conn.RemoteAddr())
 				buffer.Next(buffer.Len())
 				break
 			} else {
@@ -65,7 +65,7 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 					//fmt.Println("Processed:", segment)
 					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 					//if addr.String() == "10.0.0.91:6666" {
-					netReceiver.Crx.MessageRouter(segment, conn.RemoteAddr())
+					go netReceiver.Crx.MessageRouter(segment, conn.RemoteAddr())
 				}
 				buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 			}
