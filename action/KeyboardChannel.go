@@ -34,7 +34,7 @@ func (self *Action) keyboard_runnable() {
 		//go self.kb_set_para()
 		//go self.kb_get_usbstring()
 		//go self.kb_set_usbstring()
-		go self.kb_bansomeKeys()
+		//go self.kb_bansomeKeys()
 		self.SendKbGeneralDataRaw()
 
 	}
