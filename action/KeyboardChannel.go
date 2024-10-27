@@ -87,7 +87,7 @@ func (self *Action) kb_actvate() {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(40)
 		Endpoint_BeforeDelay_Random.Store(15)
-		fmt.Println("Reset")
+		go fmt.Println("Reset")
 		go Lcd_refresh()
 		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
 	}
@@ -96,7 +96,7 @@ func (self *Action) kb_actvate() {
 func (self *Action) kb_bansomeKeys() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen) {
 		go Kb_banSomeKeys()
-		fmt.Println("ban_all")
+		go fmt.Println("ban_all")
 	}
 }
 
@@ -104,7 +104,7 @@ func (self *Action) kb_unbanall() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
 		Mask.Button.Clear()
 		Mask.Ctrl.Clear()
-		fmt.Println("unbanall")
+		go fmt.Println("unbanall")
 		go Lcd_refresh()
 	}
 }

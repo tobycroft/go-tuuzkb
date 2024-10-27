@@ -13,22 +13,22 @@ import (
 func SemiConfig(c *Net.WsData) {
 	a, err := sonic.Get(c.Message, "type")
 	if err != nil {
-		fmt.Println(err)
+		go fmt.Println(err)
 		return
 	}
 	Type, err := a.String()
 	if err != nil {
-		fmt.Println(err)
+		go fmt.Println(err)
 		return
 	}
 	d, err := sonic.Get(c.Message, "data")
 	if err != nil {
-		fmt.Println(err)
+		go fmt.Println(err)
 		return
 	}
 	data, err := d.Map()
 	if err != nil {
-		fmt.Println(err)
+		go fmt.Println(err)
 		return
 	}
 	switch Type {
@@ -72,7 +72,7 @@ func SemiConfig(c *Net.WsData) {
 		break
 
 	default:
-		fmt.Println(c.Conn.RemoteAddr().String(), Type)
+		go fmt.Println(c.Conn.RemoteAddr().String(), Type)
 		break
 	}
 	Net.WsConns.Range(func(key, value interface{}) bool {

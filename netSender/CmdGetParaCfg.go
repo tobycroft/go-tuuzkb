@@ -26,53 +26,53 @@ func CmdGetParaCfgRecv(buf []byte) Para {
 	//fmt.Println(pa)
 	switch pa.Mode {
 	case 0x00, 0x80:
-		fmt.Println("工作模式：键盘鼠标")
+		go fmt.Println("工作模式：键盘鼠标")
 		KbMode.Store(0x00)
 		break
 
 	case 0x01, 0x81:
-		fmt.Println("工作模式：键盘")
+		go fmt.Println("工作模式：键盘")
 		KbMode.Store(0x01)
 		break
 
 	case 0x02, 0x82:
-		fmt.Println("工作模式：鼠标")
+		go fmt.Println("工作模式：鼠标")
 		KbMode.Store(0x02)
 		break
 
 	case 0x03, 0x83:
-		fmt.Println("工作模式：HID Raw")
+		go fmt.Println("工作模式：HID Raw")
 		KbMode.Store(0x03)
 		break
 	}
 
 	switch pa.Cfg {
 	case 0x00, 0x80:
-		fmt.Println("配置：协议传输")
+		go fmt.Println("配置：协议传输")
 		KbCfg.Store(0x00)
 		break
 
 	case 0x01, 0x81:
-		fmt.Println("配置：ASCII")
+		go fmt.Println("配置：ASCII")
 		KbCfg.Store(0x01)
 		break
 
 	case 0x02, 0x82:
-		fmt.Println("配置：Passthough")
+		go fmt.Println("配置：Passthough")
 		KbCfg.Store(0x02)
 		break
 	}
 
-	fmt.Println("通信地址:", pa.ComAddress)
-	fmt.Println("波特率:", pa.BaudRate)
-	BaudRate.Store(pa.BaudRate)
-	fmt.Println("通信包间隔:", pa.SepDelay)
-	SepDelay.Store(uint32(pa.SepDelay))
-	fmt.Println("PID:", hex.EncodeToString([]byte{byte(pa.Pid), byte(pa.Pid >> 8)}), "VID:", hex.EncodeToString([]byte{byte(pa.Vid), byte(pa.Vid >> 8)}))
-	Pid.Store(uint32(bits.ReverseBytes16(pa.Pid)))
-	Vid.Store(uint32(bits.ReverseBytes16(pa.Vid)))
+	go fmt.Println("通信地址:", pa.ComAddress)
+	go fmt.Println("波特率:", pa.BaudRate)
+	go BaudRate.Store(pa.BaudRate)
+	go fmt.Println("通信包间隔:", pa.SepDelay)
+	go SepDelay.Store(uint32(pa.SepDelay))
+	go fmt.Println("PID:", hex.EncodeToString([]byte{byte(pa.Pid), byte(pa.Pid >> 8)}), "VID:", hex.EncodeToString([]byte{byte(pa.Vid), byte(pa.Vid >> 8)}))
+	go Pid.Store(uint32(bits.ReverseBytes16(pa.Pid)))
+	go Vid.Store(uint32(bits.ReverseBytes16(pa.Vid)))
 
-	fmt.Println("USB字符串:", pa.UsbStringSign)
+	go fmt.Println("USB字符串:", pa.UsbStringSign)
 
 	go func() {
 		Net.WsConns.Range(func(key, value interface{}) bool {

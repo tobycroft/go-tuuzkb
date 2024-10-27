@@ -30,11 +30,11 @@ var OriginalButton = &sync.Map{}
 var OriginCtrl = &sync.Map{}
 
 func (self *ClientRx) Ready() {
-	self.keyboardMain = make(chan netSender.KeyboardData2)
-	self.mouseMain = make(chan any)
+	self.keyboardMain = make(chan netSender.KeyboardData2, 1)
+	self.mouseMain = make(chan any, 1)
 
-	self.MouseRxChannel = make(chan any)
-	self.KeyboardRxChannel = make(chan netSender.KeyboardData2)
+	self.MouseRxChannel = make(chan any, 1)
+	self.KeyboardRxChannel = make(chan netSender.KeyboardData2, 1)
 
 	originCtrl.Store(byte(hid.CmdNone))
 	for i := range originButton {
@@ -104,7 +104,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		if frame.Ident&hid.Bit0 == 0 {
 
 		}
-		fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit3, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1)
+		go fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit3, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1)
 		//kbreport := netSender.KeyboardData2{}
 		//buf := bytes.NewReader(Data[1:])
 		//err := binary.Read(buf, binary.BigEndian, &kbreport)
@@ -113,7 +113,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		//	fmt.Println(hex.EncodeToString(Data))
 		//	panic(err.Error())
 		//}
-		fmt.Println("键值数据结构：", frame)
+		go fmt.Println("键值数据结构：", frame)
 		//self.keyboardMain <- kbreport
 		break
 
