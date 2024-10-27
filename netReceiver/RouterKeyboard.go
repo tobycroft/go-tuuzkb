@@ -8,7 +8,7 @@ import (
 func (self *ClientRx) RouterKeyboard() {
 	for report := range self.keyboardMain {
 		//fmt.Println(report)
-		if self.maskingKeyBoard2(&report) > 0 {
+		if self.maskingKeyBoard2(report) > 0 {
 			self.KeyboardRxChannel <- report
 		}
 	}

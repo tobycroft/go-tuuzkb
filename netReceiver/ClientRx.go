@@ -16,10 +16,10 @@ import (
 var Crx = &ClientRx{}
 
 type ClientRx struct {
-	keyboardMain chan netSender.KeyboardData2
+	keyboardMain chan *netSender.KeyboardData2
 	mouseMain    chan any
 
-	KeyboardRxChannel chan netSender.KeyboardData2
+	KeyboardRxChannel chan *netSender.KeyboardData2
 	MouseRxChannel    chan any
 }
 
@@ -30,11 +30,11 @@ var OriginalButton = &sync.Map{}
 var OriginCtrl = &sync.Map{}
 
 func (self *ClientRx) Ready() {
-	self.keyboardMain = make(chan netSender.KeyboardData2, 1)
+	self.keyboardMain = make(chan *netSender.KeyboardData2, 1)
 	self.mouseMain = make(chan any, 1)
 
 	self.MouseRxChannel = make(chan any, 1)
-	self.KeyboardRxChannel = make(chan netSender.KeyboardData2, 1)
+	self.KeyboardRxChannel = make(chan *netSender.KeyboardData2, 1)
 
 	originCtrl.Store(byte(hid.CmdNone))
 	for i := range originButton {
@@ -119,9 +119,9 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 
 	case 0x01:
 		//fmt.Println("kb-recv", hex.EncodeToString(Data))
-		kbreport := netSender.KeyboardData2{}
+		kbreport := &netSender.KeyboardData2{}
 		buf := bytes.NewReader(Data[1:])
-		err := binary.Read(buf, binary.BigEndian, &kbreport)
+		err := binary.Read(buf, binary.BigEndian, kbreport)
 		if err != nil {
 			fmt.Println(len(Data), Data)
 			fmt.Println(hex.EncodeToString(Data))
