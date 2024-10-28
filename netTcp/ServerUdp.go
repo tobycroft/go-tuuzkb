@@ -45,7 +45,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 			} else if idx == 0 {
 				buffer.Next(2)
 				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
-				go netReceiver.Crx.MessageRouter(buffer.Bytes(), addr)
+				go netReceiver.Crx.MessageRouter(buffer.Bytes(), addr.String())
 				buffer.Next(buffer.Len())
 				break
 			} else {
@@ -54,7 +54,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 					//fmt.Println("Processed:", segment)
 					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 					//if addr.String() == "10.0.0.91:6666" {
-					go netReceiver.Crx.MessageRouter(segment, addr)
+					go netReceiver.Crx.MessageRouter(segment, addr.String())
 				}
 				buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 			}

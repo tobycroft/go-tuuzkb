@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"main.go/define/hid"
 	"main.go/netSender"
-	"net"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -54,7 +53,7 @@ type keyframe struct {
 	Checksum   byte   // 校验
 }
 
-func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
+func (self *ClientRx) MessageRouter(Data []byte, Addr string) {
 	if len(Data) < 1 {
 		return
 	}
@@ -134,14 +133,13 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x02:
-		go fmt.Println("鼠标数据帧2：", Data[1:5])
-		mouseReport := &netSender.MouseData{}
-		buf := bytes.NewReader(Data)
-		err := binary.Read(buf, binary.BigEndian, mouseReport)
-		if err != nil {
-			fmt.Println(len(Data), Data)
-			fmt.Println(hex.EncodeToString(Data))
-			panic(err.Error())
+		//go fmt.Println("鼠标数据帧2：", Data[1:5])
+		mouseReport := &netSender.MouseData{
+			Resv:       0x01,
+			ButtonBits: Data[1],
+			X:          Data[2],
+			Y:          Data[3],
+			Wheel:      Data[4],
 		}
 		self.mouseMain <- mouseReport
 		break
@@ -156,7 +154,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 	}
 }
 
-func (self *ClientRx) Router9239(Data []byte, Addr net.Addr) {
+func (self *ClientRx) Router9239(Data []byte, Addr string) {
 	if len(Data) < 1 {
 		return
 	}
