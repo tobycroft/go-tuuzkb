@@ -136,7 +136,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 	case 0x02:
 		go fmt.Println("鼠标数据帧2：", Data[1:5])
 		mouseReport := &netSender.MouseData{}
-		buf := bytes.NewReader(Data[1:])
+		buf := bytes.NewReader(Data)
 		err := binary.Read(buf, binary.BigEndian, mouseReport)
 		if err != nil {
 			fmt.Println(len(Data), Data)
