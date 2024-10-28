@@ -17,10 +17,10 @@ var Crx = &ClientRx{}
 
 type ClientRx struct {
 	keyboardMain chan *netSender.KeyboardData2
-	mouseMain    chan any
+	mouseMain    chan *netSender.MouseData
 
 	KeyboardRxChannel chan *netSender.KeyboardData2
-	MouseRxChannel    chan any
+	MouseRxChannel    chan *netSender.MouseData
 }
 
 var originCtrl = &atomic.Value{}
@@ -31,9 +31,9 @@ var OriginCtrl = &sync.Map{}
 
 func (self *ClientRx) Ready() {
 	self.keyboardMain = make(chan *netSender.KeyboardData2, 1)
-	self.mouseMain = make(chan any, 1)
+	self.mouseMain = make(chan *netSender.MouseData, 1)
 
-	self.MouseRxChannel = make(chan any, 1)
+	self.MouseRxChannel = make(chan *netSender.MouseData, 1)
 	self.KeyboardRxChannel = make(chan *netSender.KeyboardData2, 1)
 
 	originCtrl.Store(byte(hid.CmdNone))
@@ -43,6 +43,7 @@ func (self *ClientRx) Ready() {
 	}
 
 	go self.RouterKeyboard()
+	go self.RouterMouse()
 }
 
 type keyframe struct {
@@ -134,6 +135,15 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 
 	case 0x02:
 		go fmt.Println("鼠标数据帧2：", Data[1:5])
+		mouseReport := &netSender.MouseData{}
+		buf := bytes.NewReader(Data[1:])
+		err := binary.Read(buf, binary.BigEndian, mouseReport)
+		if err != nil {
+			fmt.Println(len(Data), Data)
+			fmt.Println(hex.EncodeToString(Data))
+			panic(err.Error())
+		}
+		self.mouseMain <- mouseReport
 		break
 
 	case 0x04:
