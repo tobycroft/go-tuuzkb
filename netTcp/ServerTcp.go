@@ -36,7 +36,7 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
-	buff := make([]byte, 2048)
+	buff := make([]byte, 10240)
 	buffer := bytes.Buffer{}
 	addr := conn.RemoteAddr().String()
 	for {

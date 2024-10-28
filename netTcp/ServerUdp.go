@@ -26,7 +26,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 		}
 	}()
 
-	buff := make([]byte, 1024)
+	buff := make([]byte, 10240)
 	buffer := bytes.Buffer{}
 	for {
 		blen, addr, err := self.conn.ReadFrom(buff)
