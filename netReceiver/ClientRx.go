@@ -84,7 +84,6 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		break
 
 	case 0x88:
-		//go fmt.Println("键值数据帧：", Data[1:])
 		//fmt.Println("kff", len(Data), Data[1], Data[2], 2+int(Data[1]))
 		frame := keyframe{
 			DataLength: Data[1],
@@ -104,7 +103,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		if frame.Ident&hid.Bit0 == 0 {
 
 		}
-		go fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit3, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1)
+		fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit5&hid.Bit4, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1, "port:", frame.Ident&hid.Bit0)
 		//kbreport := netSender.KeyboardData2{}
 		//buf := bytes.NewReader(Data[1:])
 		//err := binary.Read(buf, binary.BigEndian, &kbreport)
@@ -113,7 +112,8 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr net.Addr) {
 		//	fmt.Println(hex.EncodeToString(Data))
 		//	panic(err.Error())
 		//}
-		go fmt.Println("键值数据结构：", frame)
+		fmt.Println("键值数据帧：", Data[1:])
+		fmt.Println("键值数据结构：", frame)
 		//self.keyboardMain <- kbreport
 		break
 
