@@ -16,6 +16,8 @@ type ServerTcp struct {
 var addrToConn sync.Map
 var addrToLock sync.Map
 
+var buff = make([]byte, 10240)
+
 func (self *ServerTcp) Start() *ServerTcp {
 	Conn, err := net.Listen("tcp", ":6666")
 	if err != nil {
@@ -35,14 +37,13 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
-	buff := make([]byte, 10240)
 	buffer := bytes.Buffer{}
 	addr := conn.RemoteAddr().String()
 	for {
 		blen, err := reader.Read(buff)
 		if err != nil {
-			addrToConn.Delete(addr)
-			addrToLock.Delete(addr)
+			go addrToConn.Delete(addr)
+			go addrToLock.Delete(addr)
 			return
 		}
 		buffer.Write(buff[:blen])
@@ -62,13 +63,13 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 				break
 			} else {
 				segment := data[:idx]
-				buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 				if len(segment) > 0 {
 					//fmt.Println("Processed:", segment)
 					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 					//if addr.String() == "10.0.0.91:6666" {
 					go netReceiver.Crx.MessageRouter(segment, addr)
 				}
+				buffer.Next(idx) // 跳过 `0x57 0xab` 分隔符
 			}
 		}
 	}

@@ -1,8 +1,6 @@
 package netReceiver
 
 import (
-	"bytes"
-	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"main.go/define/hid"
@@ -119,14 +117,18 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr string) {
 
 	case 0x01:
 		//fmt.Println("kb-recv", hex.EncodeToString(Data))
-		kbreport := &netSender.KeyboardData2{}
-		buf := bytes.NewReader(Data[1:])
-		err := binary.Read(buf, binary.BigEndian, kbreport)
-		if err != nil {
-			fmt.Println(len(Data), Data)
-			fmt.Println(hex.EncodeToString(Data))
-			panic(err.Error())
+		kbreport := &netSender.KeyboardData2{
+			Ctrl:   Data[1],
+			Resv:   Data[2],
+			Button: [6]byte{Data[3], Data[4], Data[5], Data[6], Data[7], Data[8]},
 		}
+		//buf := bytes.NewReader(Data[1:])
+		//err := binary.Read(buf, binary.BigEndian, kbreport)
+		//if err != nil {
+		//	fmt.Println(len(Data), Data)
+		//	fmt.Println(hex.EncodeToString(Data))
+		//	panic(err.Error())
+		//}
 		//go fmt.Println(kbreport)
 		self.keyboardMain <- kbreport
 		//go fmt.Println("键盘数据帧：", Data[1:9])
@@ -142,6 +144,7 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr string) {
 			Wheel:      Data[4],
 		}
 		self.mouseMain <- mouseReport
+		//netSender.Ctx.CmdSendMsRelData(*mouseReport)
 		break
 
 	case 0x04:

@@ -25,8 +25,6 @@ func (self *ServerUDP) Start() *ServerUDP {
 			self.conn.WriteTo(keyboard, self.SendServer)
 		}
 	}()
-
-	buff := make([]byte, 10240)
 	buffer := bytes.Buffer{}
 	for {
 		blen, addr, err := self.conn.ReadFrom(buff)
