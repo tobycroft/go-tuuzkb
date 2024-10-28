@@ -36,6 +36,11 @@ func main() {
 	}
 	go stcp.Start()
 
+	go netTcp.Start()
+	go netTcp.Start()
+	go netTcp.Start()
+	go netTcp.Start()
+
 	go route.MainWsRouter()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)

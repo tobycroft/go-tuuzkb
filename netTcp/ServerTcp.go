@@ -3,7 +3,6 @@ package netTcp
 import (
 	"bufio"
 	"bytes"
-	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
 	"sync"
@@ -48,7 +47,6 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 		}
 		buffer.Write(buff[:blen])
 		//fmt.Println("bufftcp:", blen, buff[:blen])
-
 		for {
 			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
 			idx := bytes.Index(data, []byte{0x57, 0xab})
@@ -58,7 +56,8 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			} else if idx == 0 {
 				buffer.Next(2)
 				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
-				go netReceiver.Crx.MessageRouter(buffer.Bytes(), addr)
+				DataChannel <- buffer.Bytes()
+				//go netReceiver.Crx.MessageRouter(buffer.Bytes())
 				buffer.Next(buffer.Len())
 				break
 			} else {
@@ -67,7 +66,8 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 					//fmt.Println("Processed:", segment)
 					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 					//if addr.String() == "10.0.0.91:6666" {
-					go netReceiver.Crx.MessageRouter(segment, addr)
+					DataChannel <- segment
+					//go netReceiver.Crx.MessageRouter(segment)
 				}
 				buffer.Next(idx) // 跳过 `0x57 0xab` 分隔符
 			}

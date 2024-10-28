@@ -2,7 +2,6 @@ package netTcp
 
 import (
 	"bytes"
-	"main.go/netReceiver"
 	"main.go/netSender"
 	"net"
 )
@@ -27,7 +26,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 	}()
 	buffer := bytes.Buffer{}
 	for {
-		blen, addr, err := self.conn.ReadFrom(buff)
+		blen, _, err := self.conn.ReadFrom(buff)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -43,7 +42,8 @@ func (self *ServerUDP) Start() *ServerUDP {
 			} else if idx == 0 {
 				buffer.Next(2)
 				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
-				go netReceiver.Crx.MessageRouter(buffer.Bytes(), addr.String())
+				//go netReceiver.Crx.MessageRouter(buffer.Bytes())
+				DataChannel <- buffer.Bytes()
 				buffer.Next(buffer.Len())
 				break
 			} else {
@@ -52,7 +52,8 @@ func (self *ServerUDP) Start() *ServerUDP {
 					//fmt.Println("Processed:", segment)
 					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
 					//if addr.String() == "10.0.0.91:6666" {
-					go netReceiver.Crx.MessageRouter(segment, addr.String())
+					//go netReceiver.Crx.MessageRouter(segment)
+					DataChannel <- segment
 				}
 				buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 			}

@@ -51,14 +51,14 @@ type keyframe struct {
 	Checksum   byte   // 校验
 }
 
-func (self *ClientRx) MessageRouter(Data []byte, Addr string) {
+func (self *ClientRx) MessageRouter(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}
 	switch Data[0] {
 
 	case 0x00:
-		self.Router9239(Data[1:], Addr)
+		self.Router9239(Data[1:])
 		break
 
 	case 0x99:
@@ -156,12 +156,12 @@ func (self *ClientRx) MessageRouter(Data []byte, Addr string) {
 		break
 
 	default:
-		go fmt.Println("main_unreco:", Addr, hex.EncodeToString(Data))
+		go fmt.Println("main_unreco:", hex.EncodeToString(Data))
 
 	}
 }
 
-func (self *ClientRx) Router9239(Data []byte, Addr string) {
+func (self *ClientRx) Router9239(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}
