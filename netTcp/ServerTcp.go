@@ -23,6 +23,9 @@ func (self *ServerTcp) Start() *ServerTcp {
 		panic(err.Error())
 	}
 	go self.tcpchannel()
+	go self.tcpchannel()
+	go self.tcpchannel()
+	go self.tcpchannel()
 	for {
 		conn, err := Conn.Accept()
 		if err != nil {
