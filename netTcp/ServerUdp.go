@@ -18,12 +18,11 @@ func (self *ServerUDP) Start() *ServerUDP {
 		panic(err.Error())
 	}
 
-	go func() {
-		for keyboard := range netSender.Ctx.UdpChannel {
-			//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
-			self.conn.WriteTo(keyboard, self.SendServer)
-		}
-	}()
+	go self.udpchannel()
+	go self.udpchannel()
+	go self.udpchannel()
+	go self.udpchannel()
+
 	buffer := bytes.Buffer{}
 	for {
 		blen, _, err := self.conn.ReadFrom(buff)
@@ -58,5 +57,12 @@ func (self *ServerUDP) Start() *ServerUDP {
 				buffer.Next(idx + 2) // 跳过 `0x57 0xab` 分隔符
 			}
 		}
+	}
+}
+
+func (self *ServerUDP) udpchannel() {
+	for keyboard := range netSender.Ctx.UdpChannel {
+		//fmt.Println("rss", keyboard, hex.EncodeToString(keyboard))
+		self.conn.WriteTo(keyboard, self.SendServer)
 	}
 }
