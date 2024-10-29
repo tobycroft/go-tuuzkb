@@ -118,7 +118,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 	case 0x01:
 		//fmt.Println("kb-recv", hex.EncodeToString(Data))
 		if len(Data) < 9 {
-			fmt.Println("键盘数据帧：", Data[1:])
+			fmt.Println("键盘数据帧：", Data)
 			break
 		}
 		kbreport := &netSender.KeyboardData2{
