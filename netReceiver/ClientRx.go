@@ -66,7 +66,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x81:
-		go fmt.Println("链接")
+		fmt.Println("链接")
 		break
 
 	case 0x82:
@@ -78,7 +78,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x86:
-		go fmt.Println("设备断开")
+		fmt.Println("设备断开")
 		break
 
 	case 0x88:
@@ -118,7 +118,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 	case 0x01:
 		//fmt.Println("kb-recv", hex.EncodeToString(Data))
 		if len(Data) < 9 {
-			go fmt.Println("键盘数据帧：", Data[1:])
+			fmt.Println("键盘数据帧：", Data[1:])
 			break
 		}
 		kbreport := &netSender.KeyboardData2{
@@ -152,11 +152,11 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x04:
-		go fmt.Println("鼠标数据帧4：", Data[1:8])
+		fmt.Println("鼠标数据帧4：", Data[1:8])
 		break
 
 	default:
-		go fmt.Println("main_unreco:", hex.EncodeToString(Data))
+		fmt.Println("main_unreco:", hex.EncodeToString(Data))
 
 	}
 }
@@ -188,7 +188,7 @@ func (self *ClientRx) Router9239(Data []byte) {
 
 	case 0x88:
 		//fmt.Println("键盘数据帧：", hex.EncodeToString(Data[0:]))
-		go netSender.CmdGetParaCfgRecv(Data[2:])
+		netSender.CmdGetParaCfgRecv(Data[2:])
 		break
 
 	case 0x85:
@@ -216,12 +216,12 @@ func (self *ClientRx) Router9239(Data []byte) {
 
 	case 0x8b:
 		if Data[1] == 0x01 {
-			go fmt.Println("键盘字符串设定成功")
+			fmt.Println("键盘字符串设定成功")
 		}
 		break
 
 	case 0xca, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4:
-		go fmt.Println("9239错误：", hex.EncodeToString(Data[2:]))
+		fmt.Println("9239错误：", hex.EncodeToString(Data[2:]))
 		break
 
 	case 0x8f:
@@ -239,7 +239,7 @@ func (self *ClientRx) Router9239(Data []byte) {
 		break
 
 	default:
-		go fmt.Println("9239_unreco:", hex.EncodeToString(Data))
+		fmt.Println("9239_unreco:", hex.EncodeToString(Data))
 
 	}
 }
