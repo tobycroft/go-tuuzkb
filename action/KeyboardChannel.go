@@ -136,7 +136,7 @@ func (self *Action) kb_set_usbstring() {
 }
 
 func (self *Action) kb_reboot() {
-	if self.checkKeyIsPressedByOrder(hid.LeftCtrl+hid.LeftShift, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
+	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightShift, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
 		netSender.Ctx.CmdSetDefaultCfg()
 		time.Sleep(2 * time.Second)
 		netSender.Ctx.CmdReset()
