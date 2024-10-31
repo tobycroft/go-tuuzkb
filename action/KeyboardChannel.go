@@ -23,8 +23,8 @@ func (self *Action) keyboard_runnable() {
 	for c := range netReceiver.Crx.KeyboardRxChannel {
 		swap_key(c)
 		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
-		//go self.kb_actvate()
-		//go self.kb_reboot()
+		go self.kb_reset()
+		go self.kb_reboot()
 		//go self.kb_unbanall()
 		//go self.kb_test()
 		go self.key_main()
@@ -82,7 +82,7 @@ func (self *Action) ready() {
 	}
 }
 
-func (self *Action) kb_actvate() {
+func (self *Action) kb_reset() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl, hid.CmdScrollLock) {
 		Endpoint_delay.Store(0)
 		Endpoint_BeforeDelay.Store(40)
