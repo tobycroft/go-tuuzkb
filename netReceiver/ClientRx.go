@@ -221,7 +221,7 @@ func (self *ClientRx) Router9239(Data []byte) {
 		break
 
 	case 0xca, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4:
-		fmt.Println("9239错误：", hex.EncodeToString(Data[2:]))
+		fmt.Println("9239错误：", hex.EncodeToString(Data))
 		break
 
 	case 0x8f:
