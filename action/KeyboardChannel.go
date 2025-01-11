@@ -72,8 +72,8 @@ func (self *Action) ready() {
 	OnchangePress.Ctrl.Store(byte(0))
 
 	Endpoint_delay.Store(0)
-	Endpoint_BeforeDelay.Store(40)
-	Endpoint_BeforeDelay_Random.Store(15)
+	Endpoint_BeforeDelay.Store(50)
+	Endpoint_BeforeDelay_Random.Store(20)
 
 	for i := range OnchangePress.Button {
 		CurrentPress.Button[i].Store(byte(0))
