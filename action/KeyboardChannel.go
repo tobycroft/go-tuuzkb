@@ -85,8 +85,8 @@ func (self *Action) ready() {
 func (self *Action) kb_reset() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl, hid.CmdScrollLock) {
 		Endpoint_delay.Store(0)
-		Endpoint_BeforeDelay.Store(40)
-		Endpoint_BeforeDelay_Random.Store(15)
+		Endpoint_BeforeDelay.Store(50)
+		Endpoint_BeforeDelay_Random.Store(20)
 		go fmt.Println("Reset")
 		go Lcd_refresh()
 		//go self.Km.KmNetLcdPicture_tempSet("Golang", "GolangGolang", "GolangGolangGolang", 1*time.Second)
