@@ -58,6 +58,10 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 	switch Data[0] {
 
 	case 0x00:
+		if len(Data) < 2 {
+			fmt.Println("Router9239-data-err：", Data)
+			break
+		}
 		self.Router9239(Data[1:])
 		break
 
@@ -82,37 +86,37 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x88:
-		//fmt.Println("kff", len(Data), Data[1], Data[2], 2+int(Data[1]))
-		frame := keyframe{
-			DataLength: Data[1],
-			Ident:      Data[2],
-			KeyData:    Data[3 : int(Data[1])-2], // 根据 DataLength 解析数据
-			Index:      Data[int(Data[1])-1],
-			Checksum:   Data[int(Data[1])],
-		}
-		//switch frame.Ident & hid.Bit0 {
-		//case 0x00:
-		//	fmt.Println("上键值数据结构：")
-		//	break
-		//case 0x01:
-		//	fmt.Println("下键值数据结构：")
-		//	break
+		////fmt.Println("kff", len(Data), Data[1], Data[2], 2+int(Data[1]))
+		//frame := keyframe{
+		//	DataLength: Data[1],
+		//	Ident:      Data[2],
+		//	KeyData:    Data[3 : int(Data[1])-2], // 根据 DataLength 解析数据
+		//	Index:      Data[int(Data[1])-1],
+		//	Checksum:   Data[int(Data[1])],
 		//}
-		if frame.Ident&hid.Bit0 == 0 {
-
-		}
-		fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit5&hid.Bit4, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1, "port:", frame.Ident&hid.Bit0)
-		//kbreport := netSender.KeyboardData2{}
-		//buf := bytes.NewReader(Data[1:])
-		//err := binary.Read(buf, binary.BigEndian, &kbreport)
-		//if err != nil {
-		//	fmt.Println(len(Data), Data)
-		//	fmt.Println(hex.EncodeToString(Data))
-		//	panic(err.Error())
+		////switch frame.Ident & hid.Bit0 {
+		////case 0x00:
+		////	fmt.Println("上键值数据结构：")
+		////	break
+		////case 0x01:
+		////	fmt.Println("下键值数据结构：")
+		////	break
+		////}
+		//if frame.Ident&hid.Bit0 == 0 {
+		//
 		//}
-		fmt.Println("键值数据帧：", Data[1:])
-		fmt.Println("键值数据结构：", frame)
-		//self.keyboardMain <- kbreport
+		//fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit5&hid.Bit4, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1, "port:", frame.Ident&hid.Bit0)
+		////kbreport := netSender.KeyboardData2{}
+		////buf := bytes.NewReader(Data[1:])
+		////err := binary.Read(buf, binary.BigEndian, &kbreport)
+		////if err != nil {
+		////	fmt.Println(len(Data), Data)
+		////	fmt.Println(hex.EncodeToString(Data))
+		////	panic(err.Error())
+		////}
+		//fmt.Println("键值数据帧：", Data[1:])
+		//fmt.Println("键值数据结构：", frame)
+		////self.keyboardMain <- kbreport
 		break
 
 	case 0x01:
@@ -140,6 +144,10 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 
 	case 0x02:
 		//go fmt.Println("鼠标数据帧2：", Data[1:5])
+		if len(Data) < 5 {
+			fmt.Println("键盘数据帧：", Data)
+			break
+		}
 		mouseReport := &netSender.MouseData{
 			Resv:       0x01,
 			ButtonBits: Data[1],
@@ -152,6 +160,10 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x04:
+		if len(Data) < 9 {
+			fmt.Println("鼠标数据帧错误-data-err：", Data)
+			break
+		}
 		fmt.Println("鼠标数据帧4：", Data[1:8])
 		break
 
@@ -173,6 +185,10 @@ func (self *ClientRx) Router9239(Data []byte) {
 
 	case 0x81:
 		//fmt.Println("9239:PowerUp:", hex.EncodeToString(Data[2:]))
+		if len(Data) < 5 {
+			fmt.Println("控制器识别错误-data-err：", Data)
+			break
+		}
 		fmt.Print("9239:Version:1.", Data[2]-0x30)
 		if Data[3] == 0x00 {
 			fmt.Print(":控制器识别失败")
@@ -188,6 +204,10 @@ func (self *ClientRx) Router9239(Data []byte) {
 
 	case 0x88:
 		//fmt.Println("键盘数据帧：", hex.EncodeToString(Data[0:]))
+		if len(Data) < 4 {
+			fmt.Println("CmdGetParaCfgRecv-data-err：", Data)
+			break
+		}
 		netSender.CmdGetParaCfgRecv(Data[2:])
 		break
 
@@ -196,6 +216,10 @@ func (self *ClientRx) Router9239(Data []byte) {
 		break
 
 	case 0x8a:
+		if len(Data) < 3 {
+			fmt.Println("键盘产商字符串描述符-data-err：", Data)
+			break
+		}
 		switch Data[2] {
 		//，0x00 表示厂商字符串描述符；0x01 表示产品字符串描述符；
 		//0x02 表示序列号字符串描述符
@@ -215,6 +239,10 @@ func (self *ClientRx) Router9239(Data []byte) {
 		break
 
 	case 0x8b:
+		if len(Data) < 2 {
+			fmt.Println("键盘字符串设定-data-err：", Data)
+			break
+		}
 		if Data[1] == 0x01 {
 			fmt.Println("键盘字符串设定成功")
 		}
