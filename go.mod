@@ -6,11 +6,11 @@ require (
 	github.com/Unknwon/goconfig v1.0.0
 	github.com/afocus/captcha v0.0.0-20191010092841-4bd1f21c8868
 	github.com/bytedance/sonic v1.14.0
-	github.com/feiin/go-xss v1.1.6
-	github.com/gin-contrib/cors v1.7.2
+	github.com/feiin/go-xss v1.3.0
+	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.10.1
 	github.com/go-redis/redis_rate/v10 v10.0.1
-	github.com/go-sql-driver/mysql v1.8.1
+	github.com/go-sql-driver/mysql v1.9.3
 	github.com/gorilla/websocket v1.5.3
 	github.com/redis/go-redis/v9 v9.12.2-0.20250814124845-97817108ddf2
 	github.com/shopspring/decimal v1.4.0
@@ -50,7 +50,7 @@ require (
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	golang.org/x/arch v0.20.0 // indirect
 	golang.org/x/crypto v0.41.0 // indirect
-	golang.org/x/image v0.19.0 // indirect
+	golang.org/x/image v0.30.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
