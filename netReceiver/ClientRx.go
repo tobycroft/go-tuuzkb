@@ -3,11 +3,12 @@ package netReceiver
 import (
 	"encoding/hex"
 	"fmt"
-	"main.go/define/hid"
-	"main.go/netSender"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"main.go/define/hid"
+	"main.go/netSender"
 )
 
 var Crx = &ClientRx{}
