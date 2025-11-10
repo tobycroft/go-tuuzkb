@@ -1,6 +1,8 @@
 package netTcp
 
-import "main.go/netReceiver"
+import (
+	"main.go/netReceiver"
+)
 
 var DataChannel = make(chan []byte, 1)
 

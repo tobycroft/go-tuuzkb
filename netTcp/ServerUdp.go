@@ -2,8 +2,9 @@ package netTcp
 
 import (
 	"bytes"
-	"main.go/netSender"
 	"net"
+
+	"main.go/netSender"
 )
 
 type ServerUDP struct {
