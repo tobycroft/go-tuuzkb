@@ -63,7 +63,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 			fmt.Println("Router9239-data-err：", Data)
 			break
 		}
-		self.Router9239(Data[1:])
+		self.Router9329(Data[1:])
 		break
 
 	case 0x99:
@@ -174,7 +174,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 	}
 }
 
-func (self *ClientRx) Router9239(Data []byte) {
+func (self *ClientRx) Router9329(Data []byte) {
 	if len(Data) < 1 {
 		return
 	}
