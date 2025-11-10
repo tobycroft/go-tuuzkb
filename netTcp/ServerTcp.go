@@ -3,9 +3,10 @@ package netTcp
 import (
 	"bufio"
 	"bytes"
-	"main.go/netSender"
 	"net"
 	"sync"
+
+	"main.go/netSender"
 )
 
 type ServerTcp struct {

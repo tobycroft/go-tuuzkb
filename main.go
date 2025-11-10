@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"net"
+
+	"github.com/gin-gonic/gin"
 	"main.go/action"
 	"main.go/config/app_conf"
 	"main.go/netReceiver"
 	"main.go/netSender"
 	"main.go/netTcp"
 	"main.go/route"
-	"net"
 )
 
 func main() {
@@ -38,8 +39,8 @@ func main() {
 
 	go netTcp.Start()
 	go netTcp.Start()
-	go netTcp.Start()
-	go netTcp.Start()
+	//go netTcp.Start()
+	//go netTcp.Start()
 
 	go route.MainWsRouter()
 	mainroute := gin.Default()
