@@ -60,7 +60,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 
 	case 0x00:
 		if len(Data) < 2 {
-			fmt.Println("Router9239-data-err：", Data)
+			fmt.Println("Router9329-data-err：", Data)
 			break
 		}
 		self.Router9329(Data[1:])
@@ -185,12 +185,12 @@ func (self *ClientRx) Router9329(Data []byte) {
 		break
 
 	case 0x81:
-		//fmt.Println("9239:PowerUp:", hex.EncodeToString(Data[2:]))
+		//fmt.Println("9329:PowerUp:", hex.EncodeToString(Data[2:]))
 		if len(Data) < 5 {
 			fmt.Println("控制器识别错误-data-err：", Data)
 			break
 		}
-		fmt.Print("9239:Version:1.", Data[2]-0x30)
+		fmt.Print("9329:Version:1.", Data[2]-0x30)
 		if Data[3] == 0x00 {
 			fmt.Print(":控制器识别失败")
 		} else {
@@ -250,7 +250,7 @@ func (self *ClientRx) Router9329(Data []byte) {
 		break
 
 	case 0xca, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4:
-		fmt.Println("9239错误：", hex.EncodeToString(Data))
+		fmt.Println("9329错误：", hex.EncodeToString(Data))
 		break
 
 	case 0x8f:
@@ -268,7 +268,7 @@ func (self *ClientRx) Router9329(Data []byte) {
 		break
 
 	default:
-		fmt.Println("9239_unreco:", hex.EncodeToString(Data))
+		fmt.Println("9329_unreco:", hex.EncodeToString(Data))
 
 	}
 }
