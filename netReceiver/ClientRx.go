@@ -87,38 +87,80 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		break
 
 	case 0x88:
-		fmt.Println(Data)
-		fmt.Println("kff", "数据总长度:", len(Data), "按键长度(包含校验):", Data[1], "数据类型：", ParseIDByte(Data[2]))
-		//frame := keyframe{
-		//	DataLength: Data[1],
-		//	Ident:      Data[2],
-		//	KeyData:    Data[3 : int(Data[1])-2], // 根据 DataLength 解析数据
-		//	Index:      Data[int(Data[1])-1],
-		//	Checksum:   Data[int(Data[1])],
+		//fmt.Println(Data)
+		idType := ParseIDByte(Data[2])
+		//Bit2&1 01：HID 2：BIOS 00：未知 3：保留
+		//fmt.Println("idtype", idType)
+		switch idType.Type {
+		//Bit5&4: 01键盘 2鼠标 3多媒体 00其他
+		case 0:
+			//其他
+			break
+
+		case 1:
+			//1键盘
+			//dataLen := len(Data)
+			//fmt.Println("kff", "数据总长度:", dataLen, "按键长度(包含校验):", Data[1], "数据类型：", idType)
+			//fmt.Println(Data)
+			frame := keyframe{
+				DataLength: Data[1],
+				Ident:      idType.Bits21,
+				KeyData:    Data[3:int(Data[1])], // 根据 DataLength 解析数据
+				Index:      Data[int(Data[1])],
+				Checksum:   Data[int(Data[1]+1)],
+			}
+			//fmt.Println("KeyData：", frame.KeyData)
+			kbreport := netSender.KeyboardData2{
+				Ctrl: frame.KeyData[0],
+				Resv: frame.KeyData[1],
+				Button: [6]byte{
+					frame.KeyData[2],
+					frame.KeyData[3],
+					frame.KeyData[4],
+					frame.KeyData[5],
+					frame.KeyData[6],
+					frame.KeyData[7],
+				},
+			}
+			//fmt.Println("键值数据帧：", kbreport)
+			self.keyboardMain <- &kbreport
+			break
+
+		case 2:
+			//2鼠标
+			break
+
+		case 3:
+			//3多媒体
+			fmt.Println("多媒体键盘", Data, "idtype", Data[4], Data[5])
+			netSender.Ctx.CmdSendKbMediaData(netSender.KbMediaData{
+				Mediabyte: [2]byte{Data[4], Data[5]}},
+			)
+			break
+
+		}
+
+		//switch frame.Ident & hid.Bit0 {
+		//case 0x00:
+		//	fmt.Println("上键值数据结构：")
+		//	break
+		//case 0x01:
+		//	fmt.Println("下键值数据结构：")
+		//	break
 		//}
-		////switch frame.Ident & hid.Bit0 {
-		////case 0x00:
-		////	fmt.Println("上键值数据结构：")
-		////	break
-		////case 0x01:
-		////	fmt.Println("下键值数据结构：")
-		////	break
-		////}
 		//if frame.Ident&hid.Bit0 == 0 {
 		//
 		//}
 		//fmt.Println("fma1:", frame.Ident&hid.Bit5, frame.Ident&hid.Bit4, frame.Ident&hid.Bit5&hid.Bit4, "fma2:", frame.Ident&hid.Bit2, frame.Ident&hid.Bit1, "port:", frame.Ident&hid.Bit0)
-		////kbreport := netSender.KeyboardData2{}
-		////buf := bytes.NewReader(Data[1:])
-		////err := binary.Read(buf, binary.BigEndian, &kbreport)
-		////if err != nil {
-		////	fmt.Println(len(Data), Data)
-		////	fmt.Println(hex.EncodeToString(Data))
-		////	panic(err.Error())
-		////}
-		//fmt.Println("键值数据帧：", Data[1:])
-		//fmt.Println("键值数据结构：", frame)
-		////self.keyboardMain <- kbreport
+
+		//buf := bytes.NewReader(Data[1:])
+		//err := binary.Read(buf, binary.BigEndian, &kbreport)
+		//if err != nil {
+		//	fmt.Println(len(Data), Data)
+		//	fmt.Println(hex.EncodeToString(Data))
+		//	panic(err.Error())
+		//}
+
 		break
 
 	case 0x01:
@@ -204,6 +246,10 @@ func (self *ClientRx) Router9329(Data []byte) {
 		//fmt.Println("CMD_SEND_KB_GENERAL_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
 		break
 
+	case 0x83:
+		//fmt.Println("CMD_SEND_KB_MEDIA_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
+		break
+
 	case 0x88:
 		//fmt.Println("键盘数据帧：", hex.EncodeToString(Data[0:]))
 		if len(Data) < 4 {
@@ -270,6 +316,7 @@ func (self *ClientRx) Router9329(Data []byte) {
 
 	default:
 		fmt.Println("9329_unreco:", hex.EncodeToString(Data))
+		//fmt.Println("9329_unreco:", Data)
 
 	}
 }

@@ -18,3 +18,7 @@ type KeyboardData struct {
 	Button4 byte
 	Button5 byte
 }
+
+type KbMediaData struct {
+	Mediabyte [2]byte
+}
