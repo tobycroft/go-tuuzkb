@@ -4,7 +4,7 @@ import (
 	"main.go/netReceiver"
 )
 
-var DataChannel = make(chan []byte, 1)
+var DataChannel = make(chan []byte, 4)
 
 func Start() {
 	for c := range DataChannel {
