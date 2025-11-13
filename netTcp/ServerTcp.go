@@ -2,6 +2,7 @@ package netTcp
 
 import (
 	"bufio"
+	"bytes"
 	"net"
 	"sync"
 
@@ -39,6 +40,7 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
+	buffer := bytes.Buffer{}
 	addr := conn.RemoteAddr().String()
 	for {
 		blen, err := reader.Read(buff)
@@ -47,37 +49,33 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			go addrToLock.Delete(addr)
 			return
 		}
-		//先拼接一下避免原来那种缓冲方法造成拷贝
-		data := append(leftbyte, buff[:blen]...)
-
-		parts := partsPool.Get().([][]byte)[:0]
-		start := 0
-
-		for i := 0; i < len(data)-1; i++ {
-			if data[i] == sep[0] && data[i+1] == sep[1] {
-				if i > start {
-					// 这里是零拷贝切片
-					part := data[start:i]
-					parts = append(parts, part)
+		buffer.Write(buff[:blen])
+		//fmt.Println("bufftcp:", blen, buff[:blen])
+		for {
+			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
+			idx := bytes.Index(data, []byte{0x57, 0xab})
+			//fmt.Println("idx:", idx)
+			if idx == -1 {
+				break
+			} else if idx == 0 {
+				buffer.Next(2)
+				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
+				DataChannel <- buffer.Bytes()
+				//go netReceiver.Crx.MessageRouter(buffer.Bytes())
+				buffer.Next(buffer.Len())
+				break
+			} else {
+				segment := data[:idx]
+				if len(segment) > 0 {
+					//fmt.Println("Processed:", segment)
+					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
+					//if addr.String() == "10.0.0.91:6666" {
+					DataChannel <- segment
+					//go netReceiver.Crx.MessageRouter(segment)
 				}
-				start = i + 2
-				i++
+				buffer.Next(idx) // 跳过 `0x57 0xab` 分隔符
 			}
 		}
-		// 处理最后的残留
-		if start < len(data) {
-			leftbyte = data[start:]
-		} else {
-			leftbyte = leftbyte[:0]
-		}
-
-		// 把每个分片直接丢到 DataChannel（零拷贝）
-		for _, p := range parts {
-			DataChannel <- p
-		}
-
-		// 放回 pool
-		partsPool.Put(parts[:0])
 	}
 }
 
