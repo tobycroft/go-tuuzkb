@@ -88,7 +88,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 
 	case 0x88:
 		fmt.Println(Data)
-		fmt.Println("kff", len(Data), Data[1], Data[2])
+		fmt.Println("kff", "数据总长度:", len(Data), "按键长度(包含校验):", Data[1], "数据类型：", ParseIDByte(Data[2]))
 		//frame := keyframe{
 		//	DataLength: Data[1],
 		//	Ident:      Data[2],
