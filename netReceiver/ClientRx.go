@@ -225,6 +225,10 @@ func (self *ClientRx) Router9329(Data []byte) {
 	}
 	switch Data[0] {
 
+	case 0x98:
+		//fmt.Println("注册包")
+		break
+
 	case 0x99:
 		//fmt.Println("ping")
 		break
