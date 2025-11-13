@@ -66,8 +66,12 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		self.Router9329(Data[1:])
 		break
 
-	case 0x98:
+	case 0x99:
 		//fmt.Println("ping")
+		break
+
+	case 0x98:
+		//fmt.Println("注册包")
 		break
 
 	case 0x81:
