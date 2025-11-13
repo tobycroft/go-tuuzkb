@@ -320,6 +320,10 @@ func (self *ClientRx) Router9329(Data []byte) {
 		fmt.Println("设备CFG设定成功")
 		break
 
+	case 0x00:
+		fmt.Println("初始清屏消息")
+		break
+
 	default:
 		fmt.Println("9329_unreco:", hex.EncodeToString(Data))
 		//fmt.Println("9329_unreco:", Data)
