@@ -133,11 +133,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		case 3:
 			//3多媒体
 			fmt.Println("多媒体键盘", Data, "idtype", Data[4], Data[5])
-			netSender.Ctx.CmdSendKbMediaData(netSender.KbMediaData{
-				Mediabyte1: Data[4],
-				Mediabyte2: Data[5],
-			},
-			)
+			netSender.Ctx.CmdSendKbMediaData([]byte{Data[4], Data[5]})
 			break
 
 		}
@@ -249,7 +245,7 @@ func (self *ClientRx) Router9329(Data []byte) {
 		break
 
 	case 0x83:
-		//fmt.Println("CMD_SEND_KB_MEDIA_DATA键盘执行结果:", hex.EncodeToString(Data[1:]))
+		fmt.Println("CMD_SEND_KB_MEDIA_DATA键盘执行结果:", hex.EncodeToString(Data))
 		break
 
 	case 0x88:
