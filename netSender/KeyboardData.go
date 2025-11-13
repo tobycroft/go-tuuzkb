@@ -20,5 +20,6 @@ type KeyboardData struct {
 }
 
 type KbMediaData struct {
-	Mediabyte [2]byte
+	Mediabyte1 byte
+	Mediabyte2 byte
 }

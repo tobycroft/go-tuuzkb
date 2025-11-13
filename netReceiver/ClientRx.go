@@ -134,7 +134,9 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 			//3多媒体
 			fmt.Println("多媒体键盘", Data, "idtype", Data[4], Data[5])
 			netSender.Ctx.CmdSendKbMediaData(netSender.KbMediaData{
-				Mediabyte: [2]byte{Data[4], Data[5]}},
+				Mediabyte1: Data[4],
+				Mediabyte2: Data[5],
+			},
 			)
 			break
 
