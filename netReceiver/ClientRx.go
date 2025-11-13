@@ -66,7 +66,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		self.Router9329(Data[1:])
 		break
 
-	case 0x99:
+	case 0x98:
 		//fmt.Println("ping")
 		break
 
@@ -133,7 +133,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		case 3:
 			//3多媒体
 			fmt.Println("多媒体键盘", Data, "idtype", Data[4], Data[5])
-			netSender.Ctx.CmdSendKbMediaData([]byte{Data[4], Data[5]})
+			//netSender.Ctx.CmdSendKbMediaData([]byte{0x02, Data[4], Data[5]})
 			break
 
 		}
@@ -157,7 +157,7 @@ func (self *ClientRx) MessageRouter(Data []byte) {
 		//	fmt.Println(len(Data), Data)
 		//	fmt.Println(hex.EncodeToString(Data))
 		//	panic(err.Error())
-		//}
+		//}5
 
 		break
 
