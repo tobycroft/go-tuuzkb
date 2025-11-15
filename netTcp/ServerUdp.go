@@ -16,7 +16,7 @@ type receiverIndex struct {
 	Index int
 }
 
-var receiverMap = make(map[string]*receiverIndex)
+var receiverMap = make(map[string]receiverIndex)
 
 func (self *ServerUDP) Start() *ServerUDP {
 	var err error
@@ -45,7 +45,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 		case 1:
 			recmap, ok := receiverMap[addr.String()]
 			if !ok {
-				recmap = &receiverIndex{
+				recmap = receiverIndex{
 					Bytes: make([]byte, 1024),
 					Index: 0,
 				}
@@ -62,7 +62,7 @@ func (self *ServerUDP) Start() *ServerUDP {
 			if udppack[0] == 0xab {
 				recmap, ok := receiverMap[addr.String()]
 				if !ok {
-					recmap = &receiverIndex{
+					recmap = receiverIndex{
 						Bytes: make([]byte, 1024),
 						Index: 0,
 					}
