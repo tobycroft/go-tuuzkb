@@ -2,7 +2,6 @@ package netTcp
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"net"
 	"sync"
@@ -41,8 +40,7 @@ func (self *ServerTcp) Start() *ServerTcp {
 }
 
 func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
-	buffer := bytes.Buffer{}
-	addr := conn.RemoteAddr().String()
+	addr := conn.RemoteAddr()
 	for {
 		blen, err := reader.Read(buff)
 		if err != nil {
@@ -50,32 +48,54 @@ func (self *ServerTcp) handler(conn net.Conn, reader *bufio.Reader) {
 			go addrToLock.Delete(addr)
 			return
 		}
-		buffer.Write(buff[:blen])
-		fmt.Println("bufftcp:", blen, buff[:blen])
-		for {
-			data := buffer.Bytes() // 获取当前缓冲区中的所有数据
-			idx := bytes.Index(data, []byte{0x57, 0xab})
-			//fmt.Println("idx:", idx)
-			if idx == -1 {
-				break
-			} else if idx == 0 {
-				buffer.Next(2)
-				//fmt.Println("bufftcp-deal:", buffer.Bytes(), buffer.Len())
-				DataChannel <- buffer.Bytes()
-				//go netReceiver.Crx.MessageRouter(buffer.Bytes())
-				buffer.Next(buffer.Len())
-				break
-			} else {
-				segment := data[:idx]
-				if len(segment) > 0 {
-					//fmt.Println("Processed:", segment)
-					//fmt.Println(conn.RemoteAddr().String(), hex.EncodeToString(buff))
-					//if addr.String() == "10.0.0.91:6666" {
-					DataChannel <- segment
-					//go netReceiver.Crx.MessageRouter(segment)
+		//fmt.Println("bufftcp:", blen, buff[:blen])
+
+		//buff[:blen]就已经是究极最少得状态了，不需要额外切分了
+		udppack := buff[:blen]
+		//fmt.Println("buffudp:", blen, udppack, addr.String())
+		switch len(udppack) {
+		case 0:
+			break // 空包，直接丢弃
+		case 1:
+			recmap, ok := receiverMap[addr.String()]
+			if !ok {
+				recmap = receiverIndex{
+					Bytes: make([]byte, 1024),
+					Index: 0,
 				}
-				buffer.Next(idx) // 跳过 `0x57 0xab` 分隔符
+				receiverMap[addr.String()] = recmap
 			}
+			if udppack[0] == 0x57 {
+				copy(recmap.Bytes[recmap.Index:], udppack)
+				recmap.Index = recmap.Index + 1
+				receiverMap[addr.String()] = recmap
+			}
+			break
+
+		default:
+			if udppack[0] == 0xab {
+				recmap, ok := receiverMap[addr.String()]
+				if !ok {
+					recmap = receiverIndex{
+						Bytes: make([]byte, 1024),
+						Index: 0,
+					}
+					receiverMap[addr.String()] = recmap
+				}
+				if recmap.Index == 1 {
+					if recmap.Bytes[0] == 0x57 {
+						recmap.Index = 0
+						DataChannel <- udppack[1:]
+						go fmt.Println("udp拼接数据:", udppack[1:])
+					}
+				} else {
+					recmap.Index = 0
+					receiverMap[addr.String()] = recmap
+				}
+			} else if udppack[0] == 0x57 && udppack[1] == 0xAB {
+				DataChannel <- udppack[2:]
+			}
+			break
 		}
 	}
 }
