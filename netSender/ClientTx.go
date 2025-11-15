@@ -10,10 +10,10 @@ type ClientTx struct {
 }
 
 func (self *ClientTx) Ready() {
-	self.MouseTxChannel = make(chan any, 1)
-	self.TxChannel = make(chan []byte, 1)
-	self.TcpChannel = make(chan []byte, 1)
-	self.UdpChannel = make(chan []byte, 1)
+	self.MouseTxChannel = make(chan any, 4)
+	self.TxChannel = make(chan []byte, 4)
+	self.TcpChannel = make(chan []byte, 4)
+	self.UdpChannel = make(chan []byte, 4)
 	go func() {
 		for c := range self.TxChannel {
 			self.UdpChannel <- c
