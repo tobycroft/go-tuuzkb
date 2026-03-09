@@ -2,9 +2,9 @@ package Input
 
 import (
 	"errors"
-	"github.com/feiin/go-xss"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
+	"github.com/yangyin5127/go-xss"
 	"html/template"
 	"main.go/tuuz/Array"
 	"main.go/tuuz/Date"
