@@ -39,8 +39,8 @@ func main() {
 
 	go netTcp.Start()
 	go netTcp.Start()
-	//go netTcp.Start()
-	//go netTcp.Start()
+	go netTcp.Start()
+	go netTcp.Start()
 
 	go route.MainWsRouter()
 	mainroute := gin.Default()

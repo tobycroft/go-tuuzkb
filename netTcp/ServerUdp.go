@@ -29,6 +29,10 @@ func (self *ServerUDP) Start() *ServerUDP {
 	go self.udpchannel()
 	go self.udpchannel()
 	go self.udpchannel()
+	go self.udpchannel()
+	go self.udpchannel()
+	go self.udpchannel()
+	go self.udpchannel()
 
 	for {
 		blen, addr, err := self.conn.ReadFrom(buff)
