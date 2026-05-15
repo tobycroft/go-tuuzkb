@@ -50,6 +50,7 @@ func main() {
 	mainroute.SetTrustedProxies([]string{"0.0.0.0/0"})
 	mainroute.SecureJsonPrefix(app_conf.SecureJsonPrefix)
 	route.OnRoute(mainroute)
-	mainroute.Run(":80")
+	go mainroute.Run(":80")
+	mainroute.Run(":81")
 
 }
