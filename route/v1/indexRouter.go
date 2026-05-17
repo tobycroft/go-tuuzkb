@@ -11,15 +11,17 @@ func IndexRouter(route *gin.RouterGroup) {
 		netSender.Ctx.CmdGetInfo()
 		MaskBtn := []byte{}
 		MaskCtrl := []byte{}
-		action.Mask.Button.Range(func(key, value interface{}) bool {
-			MaskBtn = append(MaskBtn, key.(byte))
-			return true
-		})
+		action.Mask.ButtonMu.RLock()
+		for key := range action.Mask.Button {
+			MaskBtn = append(MaskBtn, key)
+		}
+		action.Mask.ButtonMu.RUnlock()
 
-		action.Mask.Ctrl.Range(func(key, value interface{}) bool {
-			MaskCtrl = append(MaskCtrl, key.(byte))
-			return true
-		})
+		action.Mask.CtrlMu.RLock()
+		for key := range action.Mask.Ctrl {
+			MaskCtrl = append(MaskCtrl, key)
+		}
+		action.Mask.CtrlMu.RUnlock()
 
 		context.String(200, string(MaskBtn)+string(MaskCtrl))
 	})
