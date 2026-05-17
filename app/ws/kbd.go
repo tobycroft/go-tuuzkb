@@ -2,13 +2,12 @@ package ws
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
 	"main.go/netReceiver"
 	"main.go/netSender"
+	"time"
 )
 
 func Kbd(c *Net.WsData) {
@@ -74,12 +73,8 @@ func Kbd(c *Net.WsData) {
 		break
 
 	case "unbanall":
-		action.Mask.ButtonMu.Lock()
-		action.Mask.Button = make(map[byte]bool)
-		action.Mask.ButtonMu.Unlock()
-		action.Mask.CtrlMu.Lock()
-		action.Mask.Ctrl = make(map[byte]bool)
-		action.Mask.CtrlMu.Unlock()
+		action.Mask.Button.Clear()
+		action.Mask.Ctrl.Clear()
 		go action.Lcd_refresh()
 		break
 

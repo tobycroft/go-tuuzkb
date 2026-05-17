@@ -1,8 +1,8 @@
 package netTcp
 
 import (
+	"fmt"
 	"net"
-	"sync"
 
 	"main.go/netSender"
 )
@@ -16,14 +16,7 @@ type receiverIndex struct {
 	Index int
 }
 
-var receiverMap sync.Map // 改为 sync.Map 保证并发安全
-
-var udpBufferPool = sync.Pool{
-	New: func() interface{} {
-		buf := make([]byte, 10240)
-		return &buf
-	},
-}
+var receiverMap = make(map[string]receiverIndex)
 
 func (self *ServerUDP) Start() *ServerUDP {
 	var err error
@@ -42,69 +35,58 @@ func (self *ServerUDP) Start() *ServerUDP {
 	go self.udpchannel()
 
 	for {
-		localBuff := udpBufferPool.Get().(*[]byte)
-		blen, addr, err := self.conn.ReadFrom(*localBuff)
+		blen, addr, err := self.conn.ReadFrom(buff)
 		if err != nil {
-			udpBufferPool.Put(localBuff)
 			panic(err.Error())
 		}
 
-		//localBuff[:blen]就已经是究极最少得状态了，不需要额外切分了
-		udppack := (*localBuff)[:blen]
+		//buff[:blen]就已经是究极最少得状态了，不需要额外切分了
+		udppack := buff[:blen]
 		//fmt.Println("buffudp:", blen, udppack, addr.String())
 		switch len(udppack) {
 		case 0:
 			break // 空包，直接丢弃
 		case 1:
-			var recmap receiverIndex
-			val, ok := receiverMap.Load(addr.String())
+			recmap, ok := receiverMap[addr.String()]
 			if !ok {
 				recmap = receiverIndex{
 					Bytes: make([]byte, 1024),
 					Index: 0,
 				}
-			} else {
-				recmap = val.(receiverIndex)
+				receiverMap[addr.String()] = recmap
 			}
 			if udppack[0] == 0x57 {
 				copy(recmap.Bytes[recmap.Index:], udppack)
 				recmap.Index = recmap.Index + 1
-				receiverMap.Store(addr.String(), recmap)
+				receiverMap[addr.String()] = recmap
 			}
 			break
 
 		default:
 			if udppack[0] == 0xab {
-				var recmap receiverIndex
-				val, ok := receiverMap.Load(addr.String())
+				recmap, ok := receiverMap[addr.String()]
 				if !ok {
 					recmap = receiverIndex{
 						Bytes: make([]byte, 1024),
 						Index: 0,
 					}
-				} else {
-					recmap = val.(receiverIndex)
+					receiverMap[addr.String()] = recmap
 				}
 				if recmap.Index == 1 {
 					if recmap.Bytes[0] == 0x57 {
 						recmap.Index = 0
-						data := make([]byte, blen-1)
-						copy(data, udppack[1:])
-						DataChannel <- data
-						//fmt.Println("udp拼接数据:", data)
+						DataChannel <- udppack[1:]
+						go fmt.Println("udp拼接数据:", udppack[1:])
 					}
 				} else {
 					recmap.Index = 0
-					receiverMap.Store(addr.String(), recmap)
+					receiverMap[addr.String()] = recmap
 				}
 			} else if udppack[0] == 0x57 && udppack[1] == 0xAB {
-				data := make([]byte, blen-2)
-				copy(data, udppack[2:])
-				DataChannel <- data
+				DataChannel <- udppack[2:]
 			}
 			break
 		}
-		udpBufferPool.Put(localBuff)
 	}
 }
 

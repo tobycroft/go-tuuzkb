@@ -2,9 +2,7 @@ package main
 
 import (
 	"io/ioutil"
-	"math/rand"
 	"net"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"main.go/action"
@@ -16,7 +14,6 @@ import (
 )
 
 func main() {
-	rand.Seed(time.Now().UnixNano()) // 只在初始化时设置一次随机种子
 
 	netSender.Ctx.Ready()
 	netReceiver.Crx.Ready()

@@ -3,7 +3,6 @@ package ws
 import (
 	"encoding/hex"
 	"fmt"
-
 	"github.com/bytedance/sonic"
 	Net "github.com/tobycroft/TuuzNet"
 	"main.go/action"
@@ -13,16 +12,14 @@ import (
 func Info(c *Net.WsData) {
 	action.Key_set_lcd()
 	maskctrl, maskbutton := []string{}, []string{}
-	action.Mask.CtrlMu.RLock()
-	for key := range action.Mask.Ctrl {
-		maskctrl = append(maskctrl, hex.EncodeToString([]byte{key}))
-	}
-	action.Mask.CtrlMu.RUnlock()
-	action.Mask.ButtonMu.RLock()
-	for key := range action.Mask.Button {
-		maskbutton = append(maskbutton, hex.EncodeToString([]byte{key}))
-	}
-	action.Mask.ButtonMu.RUnlock()
+	action.Mask.Ctrl.Range(func(key, value interface{}) bool {
+		maskctrl = append(maskctrl, hex.EncodeToString([]byte{key.(byte)}))
+		return true
+	})
+	action.Mask.Button.Range(func(key, value interface{}) bool {
+		maskbutton = append(maskbutton, hex.EncodeToString([]byte{key.(byte)}))
+		return true
+	})
 	data := map[string]any{
 		"Endpoint_delay":              action.Endpoint_delay.Load(),
 		"Endpoint_BeforeDelay":        action.Endpoint_BeforeDelay.Load(),
