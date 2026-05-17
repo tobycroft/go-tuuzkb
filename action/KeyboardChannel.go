@@ -5,6 +5,7 @@ import (
 	"main.go/define/hid"
 	"main.go/netReceiver"
 	"main.go/netSender"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -18,23 +19,66 @@ var LastPress = &lastKey{}
 var CurrentPress = &lastKey{}
 var OnchangePress = &lastKey{}
 
+// 任务类型
+type taskType int
+
+const (
+	taskKeyMain taskType = iota
+	taskQeMain
+	taskWhelMain
+	taskKbReset
+	taskKbReboot
+)
+
+// 工作池配置
+const (
+	workerCount = 4
+	taskQueueSize = 32
+)
+
+var (
+	taskQueue    chan func()
+	workerPoolOnce sync.Once
+)
+
+// 初始化工作池
+func initWorkerPool() {
+	workerPoolOnce.Do(func() {
+		taskQueue = make(chan func(), taskQueueSize)
+		for i := 0; i < workerCount; i++ {
+			go worker()
+		}
+	})
+}
+
+// 工作协程
+func worker() {
+	for task := range taskQueue {
+		task()
+	}
+}
+
+// 提交任务到工作池
+func submitTask(task func()) {
+	select {
+	case taskQueue <- task:
+	default:
+		// 如果队列已满，直接在当前 goroutine 执行（防止阻塞）
+		task()
+	}
+}
+
 func (self *Action) keyboard_runnable() {
+	initWorkerPool()
 	self.ready()
 	for c := range netReceiver.Crx.KeyboardRxChannel {
 		swap_key(c)
 		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
-		go self.kb_reset()
-		go self.kb_reboot()
-		//go self.kb_unbanall()
-		//go self.kb_test()
-		go self.key_main()
-		go self.qe_main()
-		go self.whel_main()
-		//go self.kb_get_para()
-		//go self.kb_set_para()
-		//go self.kb_get_usbstring()
-		//go self.kb_set_usbstring()
-		//go self.kb_bansomeKeys()
+		submitTask(func() { self.kb_reset() })
+		submitTask(func() { self.kb_reboot() })
+		submitTask(func() { self.key_main() })
+		submitTask(func() { self.qe_main() })
+		submitTask(func() { self.whel_main() })
 		self.SendKbGeneralDataRaw()
 
 	}
