@@ -2,12 +2,11 @@ package action
 
 import (
 	"fmt"
-	"sync/atomic"
-	"time"
-
 	"main.go/define/hid"
 	"main.go/netReceiver"
 	"main.go/netSender"
+	"sync/atomic"
+	"time"
 )
 
 type lastKey struct {
