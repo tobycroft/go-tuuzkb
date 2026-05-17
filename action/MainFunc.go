@@ -40,10 +40,10 @@ func (self *Action) SendKbGeneralDataRaw() {
 }
 
 func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
-	if byte(CurrentPress.Ctrl.Load()) == Ctrl || Ctrl == hid.CmdNone {
+	if CurrentPress.Ctrl.Load() == Ctrl || Ctrl == hid.CmdNone {
 		for _, btn := range Btn {
 			for _, b := range OnchangePress.Button {
-				if byte(b.Load()) == btn {
+				if b.Load() == btn {
 					return true
 				}
 			}
@@ -54,10 +54,10 @@ func (self *Action) checkKeyIsPressedAny(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	if byte(CurrentPress.Ctrl.Load()) == Ctrl {
+	if CurrentPress.Ctrl.Load() == Ctrl {
 		for _, btn := range Btn {
 			for _, b := range CurrentPress.Button {
-				if byte(b.Load()) == btn {
+				if b.Load() == btn {
 					num += 1
 				}
 			}
@@ -72,9 +72,9 @@ func (self *Action) checkKeyIsPressed(Ctrl byte, Btn ...byte) bool {
 
 func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 	num := 0
-	if byte(CurrentPress.Ctrl.Load()) == Ctrl {
+	if CurrentPress.Ctrl.Load() == Ctrl {
 		for i, btn := range Btn {
-			if byte(CurrentPress.Button[i].Load()) == btn {
+			if CurrentPress.Button[i].Load() == btn {
 				num += 1
 			}
 		}
@@ -87,66 +87,49 @@ func (self *Action) checkKeyIsPressedByOrder(Ctrl byte, Btn ...byte) bool {
 }
 
 func (self *Action) kb_washing() (Ctrl byte, Button [6]byte, sum byte) {
-	Mask.ButtonMu.RLock()
 	for i, button := range CurrentPress.Button {
-		_, ok := Mask.Button[byte(button.Load())]
+		_, ok := Mask.Button.Load(button.Load().(byte))
 		if !ok {
-			Button[i] = byte(button.Load())
+			Button[i] = button.Load().(byte)
 		} else {
 			Button[i] = 0
 		}
 		sum += Button[i]
 	}
-	Mask.ButtonMu.RUnlock()
 
-	Mask.CtrlMu.RLock()
-	netReceiver.OriginCtrlMu.RLock()
-	for key := range netReceiver.OriginCtrlMap {
-		_, ok := Mask.Ctrl[key]
+	netReceiver.OriginCtrl.Range(func(key, value interface{}) bool {
+		_, ok := Mask.Ctrl.Load(key.(byte))
 		if !ok {
-			Ctrl += key
+			Ctrl += key.(byte)
 		}
-	}
-	netReceiver.OriginCtrlMu.RUnlock()
-	Mask.CtrlMu.RUnlock()
+		return true
+	})
 	sum += Ctrl
 	return
 }
 
 func kb_add_masking(key byte, is_ctrl bool) {
 	if is_ctrl {
-		Mask.CtrlMu.Lock()
-		Mask.Ctrl[key] = true
-		Mask.CtrlMu.Unlock()
+		Mask.Ctrl.Store(key, true)
 	} else {
-		Mask.ButtonMu.Lock()
-		Mask.Button[key] = true
-		Mask.ButtonMu.Unlock()
+		Mask.Button.Store(key, true)
 	}
 }
 
 func kb_remove_masking(key byte, is_ctrl bool) {
 	if is_ctrl {
-		Mask.CtrlMu.Lock()
-		delete(Mask.Ctrl, key)
-		Mask.CtrlMu.Unlock()
+		Mask.Ctrl.Delete(key)
 	} else {
-		Mask.ButtonMu.Lock()
-		delete(Mask.Button, key)
-		Mask.ButtonMu.Unlock()
+		Mask.Button.Delete(key)
 	}
 }
 
 func kb_chec_mask(key byte, is_ctrl bool) bool {
 	if is_ctrl {
-		Mask.CtrlMu.RLock()
-		_, ok := Mask.Ctrl[key]
-		Mask.CtrlMu.RUnlock()
+		_, ok := Mask.Ctrl.Load(key)
 		return ok
 	} else {
-		Mask.ButtonMu.RLock()
-		_, ok := Mask.Button[key]
-		Mask.ButtonMu.RUnlock()
+		_, ok := Mask.Button.Load(key)
 		return ok
 	}
 }

@@ -2,17 +2,16 @@ package action
 
 import (
 	"fmt"
-	"sync/atomic"
-	"time"
-
 	"main.go/define/hid"
 	"main.go/netReceiver"
 	"main.go/netSender"
+	"sync/atomic"
+	"time"
 )
 
 type lastKey struct {
-	Ctrl   atomic.Uint32
-	Button [6]atomic.Uint32
+	Ctrl   atomic.Value
+	Button [6]atomic.Value
 }
 
 var LastPress = &lastKey{}
@@ -24,18 +23,18 @@ func (self *Action) keyboard_runnable() {
 	for c := range netReceiver.Crx.KeyboardRxChannel {
 		swap_key(c)
 		//fmt.Println("keybaordrecv", c, OnchangePress.Ctrl.Load(), OnchangePress.Button)
-		self.kb_reset()
-		self.kb_reboot()
-		//self.kb_unbanall()
-		//self.kb_test()
-		self.key_main()
-		self.qe_main()
-		self.whel_main()
-		//self.kb_get_para()
-		//self.kb_set_para()
-		//self.kb_get_usbstring()
-		//self.kb_set_usbstring()
-		//self.kb_bansomeKeys()
+		go self.kb_reset()
+		go self.kb_reboot()
+		//go self.kb_unbanall()
+		//go self.kb_test()
+		go self.key_main()
+		go self.qe_main()
+		go self.whel_main()
+		//go self.kb_get_para()
+		//go self.kb_set_para()
+		//go self.kb_get_usbstring()
+		//go self.kb_set_usbstring()
+		//go self.kb_bansomeKeys()
 		self.SendKbGeneralDataRaw()
 
 	}
@@ -43,43 +42,43 @@ func (self *Action) keyboard_runnable() {
 }
 
 func swap_key(c *netSender.KeyboardData2) {
-	if byte(CurrentPress.Ctrl.Load()) == c.Ctrl {
-		OnchangePress.Ctrl.Store(uint32(0))
+	if CurrentPress.Ctrl.Load().(byte) == c.Ctrl {
+		OnchangePress.Ctrl.Store(byte(0))
 	} else {
-		OnchangePress.Ctrl.Store(uint32(c.Ctrl))
+		OnchangePress.Ctrl.Store(c.Ctrl)
 	}
-	LastPress.Ctrl.Store(CurrentPress.Ctrl.Load())
-	CurrentPress.Ctrl.Store(uint32(c.Ctrl))
+	LastPress.Ctrl.Store(CurrentPress.Ctrl.Load().(byte))
+	CurrentPress.Ctrl.Store(c.Ctrl)
 	for i := 0; i < 6; i++ {
-		if c.Button[i] == byte(CurrentPress.Button[i].Load()) {
-			OnchangePress.Button[i].Store(uint32(0))
+		if c.Button[i] == CurrentPress.Button[i].Load() {
+			OnchangePress.Button[i].Store(byte(0))
 		} else {
-			if i < 5 && c.Button[i] == byte(CurrentPress.Button[i+1].Load()) {
-				OnchangePress.Button[i].Store(uint32(0))
+			if i < 5 && c.Button[i] == CurrentPress.Button[i+1].Load() {
+				OnchangePress.Button[i].Store(byte(0))
 			} else {
-				OnchangePress.Button[i].Store(uint32(c.Button[i]))
+				OnchangePress.Button[i].Store(c.Button[i])
 			}
 		}
 	}
 	for i := 0; i < 6; i++ {
-		LastPress.Button[i].Store(CurrentPress.Button[i].Load())
-		CurrentPress.Button[i].Store(uint32(c.Button[i]))
+		LastPress.Button[i].Store(CurrentPress.Button[i].Load().(byte))
+		CurrentPress.Button[i].Store(c.Button[i])
 	}
 }
 
 func (self *Action) ready() {
-	CurrentPress.Ctrl.Store(uint32(0))
-	LastPress.Ctrl.Store(uint32(0))
-	OnchangePress.Ctrl.Store(uint32(0))
+	CurrentPress.Ctrl.Store(byte(0))
+	LastPress.Ctrl.Store(byte(0))
+	OnchangePress.Ctrl.Store(byte(0))
 
 	Endpoint_delay.Store(0)
 	Endpoint_BeforeDelay.Store(50)
 	Endpoint_BeforeDelay_Random.Store(20)
 
 	for i := range OnchangePress.Button {
-		CurrentPress.Button[i].Store(uint32(0))
-		LastPress.Button[i].Store(uint32(0))
-		OnchangePress.Button[i].Store(uint32(0))
+		CurrentPress.Button[i].Store(byte(0))
+		LastPress.Button[i].Store(byte(0))
+		OnchangePress.Button[i].Store(byte(0))
 	}
 }
 
@@ -103,12 +102,8 @@ func (self *Action) kb_bansomeKeys() {
 
 func (self *Action) kb_unbanall() {
 	if self.checkKeyIsPressedByOrder(hid.RightCtrl+hid.RightAlt, hid.CmdPrintScreen, hid.CmdScrollLock, hid.CmdPause) {
-		Mask.ButtonMu.Lock()
-		Mask.Button = make(map[byte]bool)
-		Mask.ButtonMu.Unlock()
-		Mask.CtrlMu.Lock()
-		Mask.Ctrl = make(map[byte]bool)
-		Mask.CtrlMu.Unlock()
+		Mask.Button.Clear()
+		Mask.Ctrl.Clear()
 		go fmt.Println("unbanall")
 		go Lcd_refresh()
 	}

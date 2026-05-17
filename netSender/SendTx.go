@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
-	"sync"
 	"sync/atomic"
 )
 
@@ -25,28 +24,20 @@ type SendTx struct {
 	sumhex   *atomic.Uint32
 }
 
-var (
-	sendTxPool = sync.Pool{
-		New: func() interface{} {
-			return &SendTx{
-				sendData: &sendData{
-					Head: [2]byte{start1, start2},
-				},
-				sendBuf: &bytes.Buffer{},
-				sumhex:  &atomic.Uint32{},
-			}
-		},
-	}
-)
-
 func (self *SendTx) Head(Cmd byte) *SendTx {
-	st := sendTxPool.Get().(*SendTx)
-	st.sendBuf.Reset()
-	st.sumhex.Store(0x00)
-	st.sendData.Addr = 0x00
-	st.sendData.Cmd = Cmd
-	st.sendData.Len = 0x00
-	return st
+	return &SendTx{
+		sendData: &sendData{
+			Head: [2]byte{
+				start1,
+				start2,
+			},
+			Addr: 0x00,
+			Cmd:  Cmd,
+			Len:  0x00,
+		},
+		sendBuf: &bytes.Buffer{},
+		sumhex:  &atomic.Uint32{},
+	}
 }
 
 func (self *SendTx) Data(data any) *SendTx {
@@ -79,8 +70,5 @@ func (self *SendTx) sum() *SendTx {
 
 func (self *SendTx) Send() {
 	self.sum()
-	data := make([]byte, self.sendBuf.Len())
-	copy(data, self.sendBuf.Bytes())
-	Ctx.TxChannel <- data
-	sendTxPool.Put(self)
+	Ctx.TxChannel <- self.sendBuf.Bytes()
 }
