@@ -16,20 +16,24 @@ func (self *ClientRx) RouterKeyboard() {
 
 func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 	num := 0
-	if originCtrl.Load() != c.Ctrl {
+	if byte(originCtrl.Load()) != c.Ctrl {
 		CtrlToMap(c.Ctrl)
-		originCtrl.Store(c.Ctrl)
+		originCtrl.Store(uint32(c.Ctrl))
 		num += 1
 	}
 	for i, button := range c.Button {
 		c.Button[i] = self.banKey(button)
-		if originButton[i].Load() != c.Button[i] {
-			if c.Button[i] > originButton[i].Load().(byte) {
-				OriginalButton.Store(button, true)
-			} else if originButton[i].Load().(byte) > c.Button[i] {
-				OriginalButton.Delete(originButton[i])
+		if byte(originButton[i].Load()) != c.Button[i] {
+			if c.Button[i] > byte(originButton[i].Load()) {
+				OriginalButtonMu.Lock()
+				OriginalButtonMap[button] = true
+				OriginalButtonMu.Unlock()
+			} else if byte(originButton[i].Load()) > c.Button[i] {
+				OriginalButtonMu.Lock()
+				delete(OriginalButtonMap, byte(originButton[i].Load()))
+				OriginalButtonMu.Unlock()
 			}
-			originButton[i].Store(c.Button[i])
+			originButton[i].Store(uint32(c.Button[i]))
 			num += 1
 		}
 	}
@@ -37,57 +41,61 @@ func (self *ClientRx) maskingKeyBoard2(c *netSender.KeyboardData2) int {
 }
 
 func CtrlToMap(ctrl byte) byte {
+	OriginCtrlMu.Lock()
 	if ctrl&hid.LeftCtrl != 0 {
-		OriginCtrl.Store(byte(hid.LeftCtrl), true)
+		OriginCtrlMap[byte(hid.LeftCtrl)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.LeftCtrl))
+		delete(OriginCtrlMap, byte(hid.LeftCtrl))
 	}
 
 	if ctrl&hid.RightCtrl != 0 {
-		OriginCtrl.Store(byte(hid.RightCtrl), true)
+		OriginCtrlMap[byte(hid.RightCtrl)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.RightCtrl))
+		delete(OriginCtrlMap, byte(hid.RightCtrl))
 	}
 
 	if ctrl&hid.LeftShift != 0 {
-		OriginCtrl.Store(byte(hid.LeftShift), true)
+		OriginCtrlMap[byte(hid.LeftShift)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.LeftShift))
+		delete(OriginCtrlMap, byte(hid.LeftShift))
 	}
 
 	if ctrl&hid.RightShift != 0 {
-		OriginCtrl.Store(byte(hid.RightShift), true)
+		OriginCtrlMap[byte(hid.RightShift)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.RightShift))
+		delete(OriginCtrlMap, byte(hid.RightShift))
 	}
 
 	if ctrl&hid.LeftAlt != 0 {
-		OriginCtrl.Store(byte(hid.LeftAlt), true)
+		OriginCtrlMap[byte(hid.LeftAlt)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.LeftAlt))
+		delete(OriginCtrlMap, byte(hid.LeftAlt))
 	}
 
 	if ctrl&hid.RightAlt != 0 {
-		OriginCtrl.Store(byte(hid.RightAlt), true)
+		OriginCtrlMap[byte(hid.RightAlt)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.RightAlt))
+		delete(OriginCtrlMap, byte(hid.RightAlt))
 	}
 
 	if ctrl&hid.LeftWindows != 0 {
-		OriginCtrl.Store(byte(hid.LeftWindows), true)
+		OriginCtrlMap[byte(hid.LeftWindows)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.LeftWindows))
+		delete(OriginCtrlMap, byte(hid.LeftWindows))
 	}
 
 	if ctrl&hid.RightWindows != 0 {
-		OriginCtrl.Store(byte(hid.RightWindows), true)
+		OriginCtrlMap[byte(hid.RightWindows)] = true
 	} else {
-		OriginCtrl.Delete(byte(hid.RightWindows))
+		delete(OriginCtrlMap, byte(hid.RightWindows))
 	}
 
 	if ctrl == hid.CmdNone {
-		OriginCtrl.Clear()
+		for k := range OriginCtrlMap {
+			delete(OriginCtrlMap, k)
+		}
 	}
+	OriginCtrlMu.Unlock()
 
 	return 0
 }

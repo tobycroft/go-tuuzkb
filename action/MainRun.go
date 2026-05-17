@@ -18,8 +18,15 @@ var lastPressSum = &atomic.Value{}
 var Mask = &mask{}
 
 type mask struct {
-	Button sync.Map
-	Ctrl   sync.Map
+	Button map[byte]bool
+	ButtonMu sync.RWMutex
+	Ctrl   map[byte]bool
+	CtrlMu sync.RWMutex
+}
+
+func init() {
+	Mask.Button = make(map[byte]bool)
+	Mask.Ctrl = make(map[byte]bool)
 }
 
 func (self *Action) MainRun() {
